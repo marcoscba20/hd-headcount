@@ -1,0 +1,57 @@
+/// Parámetro de campo DESCONECTADO que alimenta el selector "Abrir por" de la hoja Validación (Turnover). Cambia la dimensión de las filas de la tabla de componentes sin duplicar visuales. No relacionar: el filtro lo aplica el propio motor al proyectar la columna elegida.
+table 'Desglose Turnover'
+	lineageTag: 4e5f6071-0001-4d40-8a04-dd4400000001
+
+	column Desglose
+		dataType: string
+		lineageTag: 4e5f6071-0002-4d40-8a04-dd4400000002
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Desglose Orden'
+
+		relatedColumnDetails
+			groupByColumn: 'Desglose Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Desglose Fields'
+		dataType: string
+		isHidden
+		lineageTag: 4e5f6071-0003-4d40-8a04-dd4400000003
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Desglose Orden'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Desglose Orden'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4e5f6071-0004-4d40-8a04-dd4400000004
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Desglose Turnover' = calculated
+		mode: import
+		source =
+				{
+				    ( "País", NAMEOF ( 'Excel HC Oracle'[País Overview] ), 0 ),
+				    ( "Función (EPM)", NAMEOF ( 'Excel HC Oracle'[EPM Main Function Name] ), 1 ),
+				    ( "Grade", NAMEOF ( 'Excel HC Oracle'[Grade Grupo] ), 2 ),
+				    ( "Nivel", NAMEOF ( 'Excel HC Oracle'[Nivel] ), 3 ),
+				    ( "Entidad Legal", NAMEOF ( 'Excel HC Oracle'[Legal Employer Name] ), 4 ),
+				    ( "Motivo de la baja", NAMEOF ( 'Excel HC Oracle'[Action Name] ), 5 ),
+				    ( "Rango de antigüedad", NAMEOF ( 'Excel HC Oracle'[Rango Antigüedad] ), 6 )
+				}
+
+	annotation PBI_Id = DesgloseTurnover
+

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "función-x-país-pivotTable-30c0e6",
+  "position": {
+    "x": 960,
+    "y": 650,
+    "z": 4000,
+    "height": 390,
+    "width": 920,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Country"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Country",
+              "nativeQueryRef": "Country",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "EPM Main Function Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "nativeQueryRef": "EPM Main Function Name",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Nivel"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Nivel",
+              "nativeQueryRef": "Nivel",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Dotación"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Dotación",
+              "nativeQueryRef": "Dotación"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Excel HC Oracle"
+                  }
+                },
+                "Property": "Dotación"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Función x País'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

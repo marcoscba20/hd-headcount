@@ -1,0 +1,217 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "val-tbl-detalle",
+  "position": {
+    "x": 40,
+    "y": 1626,
+    "z": 0,
+    "height": 400,
+    "width": 1840,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Person Number"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Person Number",
+              "nativeQueryRef": "Person Number"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Display Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Display Name",
+              "nativeQueryRef": "Display Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Termination Date"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Termination Date",
+              "nativeQueryRef": "Termination Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Action Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Action Name",
+              "nativeQueryRef": "Action Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Action Reason"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Action Reason",
+              "nativeQueryRef": "Action Reason"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "País Overview"
+                }
+              },
+              "queryRef": "Excel HC Oracle.País Overview",
+              "nativeQueryRef": "País Overview"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "EPM Main Function Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "nativeQueryRef": "EPM Main Function Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Grade Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Grade Name",
+              "nativeQueryRef": "Grade Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Nivel"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Nivel",
+              "nativeQueryRef": "Nivel"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Bajas"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Bajas",
+              "nativeQueryRef": "Bajas"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Excel HC Oracle"
+                  }
+                },
+                "Property": "Termination Date"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Paso 4 · Las bajas del período, una por una'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

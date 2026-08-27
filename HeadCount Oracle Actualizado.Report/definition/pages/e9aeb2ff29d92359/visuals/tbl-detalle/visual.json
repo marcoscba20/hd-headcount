@@ -1,0 +1,222 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "tbl-detalle",
+  "position": {
+    "x": 1104.8627372340895,
+    "y": 259.49560656587573,
+    "z": 20000,
+    "height": 529.69206288704527,
+    "width": 815.93979384115562,
+    "tabOrder": 19000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Person Number"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Person Number",
+              "nativeQueryRef": "Person Number"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Display Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Display Name",
+              "nativeQueryRef": "Display Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Country"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Country",
+              "nativeQueryRef": "Country"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Legal Employer Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Legal Employer Name",
+              "nativeQueryRef": "Legal Employer Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "EPM Main Function Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "nativeQueryRef": "EPM Main Function Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Grade Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Grade Name",
+              "nativeQueryRef": "Grade Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "National ID"
+                }
+              },
+              "queryRef": "Excel HC Oracle.National ID",
+              "nativeQueryRef": "National ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "ACTIVE"
+                }
+              },
+              "queryRef": "Excel HC Oracle.ACTIVE",
+              "nativeQueryRef": "ACTIVE"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "86.8804194282002D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Excel HC Oracle.Country"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "76.23504132887207D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Excel HC Oracle.Person Number"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "188.58548346731612D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Excel HC Oracle.Display Name"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalles'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

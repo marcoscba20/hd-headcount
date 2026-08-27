@@ -1,0 +1,178 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Tipo de Mano de Obra",
+  "name": "bm3",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "mtx-sitactual",
+      "mtx-country",
+      "mtx-labor",
+      "mtx-funcion",
+      "mtx-grade",
+      "mtx-legal",
+      "mtx-action",
+      "btn1on",
+      "btn2on",
+      "btn3on",
+      "btn4on",
+      "btn5on",
+      "btn6on",
+      "btn7on",
+      "txt1",
+      "txt2",
+      "txt3",
+      "txt4",
+      "txt5",
+      "txt6",
+      "txt7"
+    ],
+    "suppressActiveSection": true,
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.0",
+    "activeSection": "e9aeb2ff29d92359",
+    "sections": {
+      "e9aeb2ff29d92359": {
+        "visualContainers": {
+          "mtx-sitactual": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "mtx-country": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "mtx-labor": {
+            "singleVisual": {}
+          },
+          "mtx-funcion": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "mtx-grade": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "mtx-legal": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "mtx-action": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn1on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn2on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn3on": {
+            "singleVisual": {}
+          },
+          "btn4on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn5on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn6on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "btn7on": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt1": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt2": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt3": {
+            "singleVisual": {}
+          },
+          "txt4": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt5": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt6": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "txt7": {
+            "singleVisual": {
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+/// Tabla auxiliar DESCONECTADA que da el eje de categorías al gráfico de cascada de la hoja Rotación: HC Inicio -> Altas -> Bajas. El total acumulado del waterfall debe cerrar contra [HC Activo Fin]; si no cierra, hay un problema en las medidas de movimiento.
+table 'Movimiento HC'
+	lineageTag: b81c47e0-5d92-4a06-8f31-c72e50194ab3
+
+	/// Valor de cada tramo de la cascada. Las bajas van en negativo para que el waterfall las dibuje hacia abajo.
+	measure 'Valor Movimiento HC' =
+			SWITCH (
+			    SELECTEDVALUE ( 'Movimiento HC'[Orden] ),
+			    1, [HC Activo Inicio],
+			    2, [Altas],
+			    3, -[Bajas]
+			)
+		formatString: #,##0
+		displayFolder: 04 · Rotación (Turnover)
+		lineageTag: 3fb70c95-8a26-41de-b743-05e9182ca67f
+
+	column Concepto
+		dataType: string
+		lineageTag: d5093fa6-4c17-48e2-b096-3a81f7ce2d45
+		summarizeBy: none
+		sourceColumn: [Concepto]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		lineageTag: 7e42c018-6b53-4d97-a2f5-90c34e1867db
+		summarizeBy: none
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Movimiento HC' = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Concepto", STRING,
+				    "Orden", INTEGER,
+				    {
+				        { "HC Inicio", 1 },
+				        { "Altas", 2 },
+				        { "Bajas", 3 }
+				    }
+				)
+
+	annotation PBI_Id = MovimientoHC
+

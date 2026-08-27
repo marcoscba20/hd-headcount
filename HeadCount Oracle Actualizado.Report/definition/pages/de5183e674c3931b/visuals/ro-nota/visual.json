@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "ro-nota",
+  "position": {
+    "x": 40,
+    "y": 1835,
+    "z": 100,
+    "height": 50,
+    "width": 1840,
+    "tabOrder": 100
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Criterio de conteo: el HC (Dotación, HC Activo/Inactivo) cuenta PERSONAS únicas. Altas y Bajas cuentan EVENTOS de ingreso y egreso, por eso una recontratación suma dos altas y una baja: es la lectura correcta para la rotación y hace cerrar la cascada (HC Inicio + Altas − Bajas = HC Fin). Las bajas registradas arrancan en enero de 2025.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#666666"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

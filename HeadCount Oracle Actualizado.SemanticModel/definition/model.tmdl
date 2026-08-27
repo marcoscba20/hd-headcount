@@ -1,0 +1,29 @@
+model Model
+	culture: es-AR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-AR
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["SharePoint","Excel HC Oracle","HC Manual LATAM","Países"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Excel HC Oracle'
+ref table Calendario
+ref table 'HC Manual LATAM'
+ref table Países
+ref table 'Dim Entidad Legal'
+ref table 'Dim Centro de Costo'
+ref table 'Dim Type'
+ref table 'Calendario Ingreso'
+ref table 'Calendario Baja'
+ref table 'Movimiento HC'
+ref table 'Desglose Turnover'
+
+ref cultureInfo es-AR
+

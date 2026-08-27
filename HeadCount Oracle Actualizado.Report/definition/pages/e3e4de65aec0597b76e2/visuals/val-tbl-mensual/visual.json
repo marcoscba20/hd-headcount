@@ -1,0 +1,217 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "val-tbl-mensual",
+  "position": {
+    "x": 40,
+    "y": 656,
+    "z": 0,
+    "height": 420,
+    "width": 1840,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendario"
+                    }
+                  },
+                  "Property": "Año-Mes"
+                }
+              },
+              "queryRef": "Calendario.Año-Mes",
+              "nativeQueryRef": "Año-Mes"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Inicio"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Inicio",
+              "nativeQueryRef": "HC Activo Inicio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Altas"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Altas",
+              "nativeQueryRef": "Altas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Bajas"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Bajas",
+              "nativeQueryRef": "Bajas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Fin"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Fin",
+              "nativeQueryRef": "HC Activo Fin"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Val · HC Fin Teórico"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Val · HC Fin Teórico",
+              "nativeQueryRef": "Val · HC Fin Teórico"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Val · Dif Conciliación"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Val · Dif Conciliación",
+              "nativeQueryRef": "Val · Dif Conciliación"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Promedio"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Promedio",
+              "nativeQueryRef": "HC Activo Promedio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Rotación %"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Rotación %",
+              "nativeQueryRef": "Rotación %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Rotación % 12M Móvil"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Rotación % 12M Móvil",
+              "nativeQueryRef": "Rotación % 12M Móvil"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Calendario"
+                  }
+                },
+                "Property": "Año-Mes"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Paso 2 · La misma cuenta, mes a mes'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

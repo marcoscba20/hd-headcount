@@ -1,0 +1,12 @@
+relationship a05b3134-840b-2566-b6d4-c573a4222bbf
+	fromColumn: 'Excel HC Oracle'.'Enterprise Hire Date'
+	toColumn: 'Calendario Ingreso'.Date
+
+relationship 2856fd3e-c8ca-9a59-84a4-a3c53d06d308
+	fromColumn: 'Excel HC Oracle'.'Country Code'
+	toColumn: Países.'Country Code'
+
+relationship 6c2f81ad-93e5-4b07-a15d-8e0374bc9d26
+	fromColumn: 'Excel HC Oracle'.'Termination Date'
+	toColumn: 'Calendario Baja'.Date
+

@@ -1,0 +1,99 @@
+/// Calendario de FECHA DE BAJA. Relacionado activamente con 'Excel HC Oracle'[Termination Date]. Usar para analizar bajas por mes de egreso. Los empleados activos llevan el sentinel 1900-01-01 y caen en la fila en blanco de esta tabla: filtrar por acá deja solo a los terminados. NO usarlo como eje de rotación: para eso está la tabla 'Calendario' (desconectada). Arranca en 2025-01 porque el export no tiene bajas anteriores.
+table 'Calendario Baja'
+	lineageTag: 7d052ae9-31b6-4c84-95f0-6e2179ca38b4
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd/MM/yyyy
+		lineageTag: 04b3f97c-8e21-4d50-a6b9-c78503e1246f
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		dataType: int64
+		lineageTag: c6820d4f-59a3-4e17-b204-8f31e75c690a
+		summarizeBy: none
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Mes'
+		dataType: int64
+		lineageTag: 3a71e8c5-0d64-49b2-8735-1c059b4e2d78
+		summarizeBy: none
+		sourceColumn: [Nº Mes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: string
+		lineageTag: 58f14b03-a276-4e9d-91c8-30b6e2745af1
+		summarizeBy: none
+		sourceColumn: [Mes]
+		sortByColumn: 'Nº Mes'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año-Mes
+		dataType: string
+		lineageTag: e29c7350-4b18-42f6-8ad0-95172bce6403
+		summarizeBy: none
+		sourceColumn: [Año-Mes]
+		sortByColumn: 'Año-Mes Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Año-Mes Orden'
+		dataType: int64
+		lineageTag: 16de408b-72c9-4a35-bf81-0e6c54a92736
+		summarizeBy: none
+		sourceColumn: [Año-Mes Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nº Trimestre'
+		dataType: int64
+		lineageTag: 9b502f7a-c134-486e-a0d5-27f8e13964bc
+		summarizeBy: none
+		sourceColumn: [Nº Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: string
+		lineageTag: 42a7c916-6f08-4b53-98e1-d740ab35270c
+		summarizeBy: none
+		sourceColumn: [Trimestre]
+		sortByColumn: 'Nº Trimestre'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año-Trimestre
+		dataType: string
+		lineageTag: 0f6b83d2-15e4-4790-b3ca-8259c07de146
+		summarizeBy: none
+		sourceColumn: [Año-Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Calendario Baja' = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+				    CALENDAR(DATE(2025, 1, 1), DATE(YEAR(TODAY()) + 1, 12, 31)),
+				    "Año", YEAR([Date]),
+				    "Nº Mes", MONTH([Date]),
+				    "Mes", FORMAT([Date], "MMM"),
+				    "Año-Mes", FORMAT([Date], "yyyy-MM"),
+				    "Año-Mes Orden", YEAR([Date]) * 100 + MONTH([Date]),
+				    "Nº Trimestre", ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Trimestre", "T" & ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Año-Trimestre", FORMAT([Date], "yyyy") & "-T" & ROUNDUP(MONTH([Date]) / 3, 0)
+				)
+
+	annotation PBI_Id = CalendarioBaja
+

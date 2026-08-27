@@ -1,0 +1,151 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "mtx-sitactual",
+  "position": {
+    "x": 379.53133211055444,
+    "y": 266.28407978724385,
+    "z": 22000,
+    "height": 534.09852784912709,
+    "width": 716.21235253120767,
+    "tabOrder": 20000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "País Overview"
+                }
+              },
+              "queryRef": "Excel HC Oracle.País Overview",
+              "nativeQueryRef": "País Overview",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Grupo Funcional"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Grupo Funcional",
+              "nativeQueryRef": "Grupo Funcional",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Hoy"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Hoy",
+              "nativeQueryRef": "HC Activo Hoy"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Excel HC Oracle"
+                  }
+                },
+                "Property": "Grupo Funcional"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "subTotals": [
+        {
+          "properties": {
+            "rowSubtotalsLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TOTAL HEADCOUNT'"
+                }
+              }
+            },
+            "columnSubtotalsLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Total'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Situación Actual (HC Activo a hoy)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

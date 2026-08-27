@@ -1,0 +1,15 @@
+expression SharePoint =
+		let
+		  Origen = SharePoint.Files("https://hdlaoti.sharepoint.com/sites/People-LATAM/", [ApiVersion = 15]),
+		    #"Filtro Carpeta HC Oracle" = Table.SelectRows(Origen, each ([Folder Path] = "https://hdlaoti.sharepoint.com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/")),
+		    #"Reporte Semanal LATAM xlsx_https://hdlaoti sharepoint com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/" = #"Filtro Carpeta HC Oracle"{[Name="Reporte Semanal LATAM.xlsx",#"Folder Path"="https://hdlaoti.sharepoint.com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/"]}[Content],
+		    #"Libro de Excel importado" = Excel.Workbook(#"Reporte Semanal LATAM xlsx_https://hdlaoti sharepoint com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/"),
+		    #"Se expandió Data" = Table.ExpandTableColumn(#"Libro de Excel importado", "Data", {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15", "Column16", "Column17", "Column18", "Column19", "Column20", "Column21", "Column22", "Column23", "Column24", "Column25", "Column26", "Column27", "Column28", "Column29", "Column30", "Column31", "Column32", "Column33", "Column34", "Column35", "Column36", "Column37", "Column38", "Column39", "Column40", "Column41", "Column42"}, {"Data.Column1", "Data.Column2", "Data.Column3", "Data.Column4", "Data.Column5", "Data.Column6", "Data.Column7", "Data.Column8", "Data.Column9", "Data.Column10", "Data.Column11", "Data.Column12", "Data.Column13", "Data.Column14", "Data.Column15", "Data.Column16", "Data.Column17", "Data.Column18", "Data.Column19", "Data.Column20", "Data.Column21", "Data.Column22", "Data.Column23", "Data.Column24", "Data.Column25", "Data.Column26", "Data.Column27", "Data.Column28", "Data.Column29", "Data.Column30", "Data.Column31", "Data.Column32", "Data.Column33", "Data.Column34", "Data.Column35", "Data.Column36", "Data.Column37", "Data.Column38", "Data.Column39", "Data.Column40", "Data.Column41", "Data.Column42"})
+		in
+		  #"Se expandió Data"
+	lineageTag: fc74a87d-ca04-4dd2-b842-aae266a5519f
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

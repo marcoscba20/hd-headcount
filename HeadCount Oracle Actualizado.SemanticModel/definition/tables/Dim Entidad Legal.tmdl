@@ -1,0 +1,88 @@
+/// Dimensión DESCONECTADA con los códigos de entidad legal (3 dígitos) presentes en Oracle y/o en el archivo Manual. Eje común para comparar dotación por entidad entre ambos orígenes.
+table 'Dim Entidad Legal'
+	lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c840
+
+	/// HC activo de Oracle para la entidad seleccionada.
+	measure 'HC Oracle x Entidad' =
+			CALCULATE (
+			    [HC Activo],
+			    TREATAS ( VALUES ( 'Dim Entidad Legal'[Código] ), 'Excel HC Oracle'[Código Entidad] )
+			)
+		formatString: #,##0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c844
+
+	/// HC del archivo Manual a Jun-2026 para la entidad seleccionada.
+	measure 'HC Manual x Entidad' =
+			CALCULATE (
+			    [HC Manual Jun-2026],
+			    TREATAS ( VALUES ( 'Dim Entidad Legal'[Código] ), 'HC Manual LATAM'[Código Entidad] )
+			)
+		formatString: #,##0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c845
+
+	measure 'Δ Entidad (Oracle - Manual)' = [HC Oracle x Entidad] - [HC Manual x Entidad]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c846
+
+	column Código
+		dataType: string
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c841
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Código]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nombre de la entidad tal como la escribe Oracle ("270 HD Brazil").
+	column 'Entidad Oracle'
+		dataType: string
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c842
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entidad Oracle]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nombre de la entidad tal como la escribe el archivo Manual ("270 - HD Brazil WCP/AP Components").
+	column 'Entidad Manual'
+		dataType: string
+		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c843
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Entidad Manual]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Entidad Legal' = calculated
+		mode: import
+		source =
+				VAR Oracle =
+				    SELECTCOLUMNS ( 'Excel HC Oracle', "Código", 'Excel HC Oracle'[Código Entidad] )
+				VAR Manual =
+				    SELECTCOLUMNS ( 'HC Manual LATAM', "Código", 'HC Manual LATAM'[Código Entidad] )
+				VAR Todos =
+				    DISTINCT ( UNION ( Oracle, Manual ) )
+				RETURN
+				    ADDCOLUMNS (
+				        FILTER ( Todos, NOT [Código] IN { "", "Sin", "Sin Datos", "0" } ),
+				        "Entidad Oracle",
+				            VAR C = [Código]
+				            RETURN
+				                MAXX (
+				                    FILTER ( 'Excel HC Oracle', 'Excel HC Oracle'[Código Entidad] = C ),
+				                    'Excel HC Oracle'[Legal Employer Name]
+				                ),
+				        "Entidad Manual",
+				            VAR C = [Código]
+				            RETURN
+				                MAXX (
+				                    FILTER ( 'HC Manual LATAM', 'HC Manual LATAM'[Código Entidad] = C ),
+				                    'HC Manual LATAM'[Entidad Legal]
+				                )
+				    )
+
+	annotation PBI_Id = 2b96e4170dca385f
+

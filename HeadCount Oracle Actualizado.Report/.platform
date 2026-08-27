@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "HeadCount Oracle Actualizado"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e27bce93-e883-4243-b8a4-6e3c2e8e6185"
+  }
+}

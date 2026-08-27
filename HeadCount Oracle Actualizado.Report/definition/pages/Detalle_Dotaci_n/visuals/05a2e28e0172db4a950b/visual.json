@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "05a2e28e0172db4a950b",
+  "position": {
+    "x": 40.128186582351915,
+    "y": 85.606798042350761,
+    "z": 7000,
+    "height": 77.581160725880366,
+    "width": 1639.9130572999941,
+    "tabOrder": 7000
+  },
+  "visualGroup": {
+    "displayName": "Filtros dotación",
+    "groupMode": "ScaleMode"
+  }
+}

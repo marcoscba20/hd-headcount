@@ -1,0 +1,153 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "cmp-type",
+  "position": {
+    "x": 960,
+    "y": 570,
+    "z": 7000,
+    "height": 380,
+    "width": 900,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Type"
+                    }
+                  },
+                  "Property": "Type"
+                }
+              },
+              "queryRef": "Dim Type.Type",
+              "nativeQueryRef": "Type"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Type"
+                    }
+                  },
+                  "Property": "HC Oracle x Type"
+                }
+              },
+              "queryRef": "Dim Type.HC Oracle x Type",
+              "nativeQueryRef": "HC Oracle x Type"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Type"
+                    }
+                  },
+                  "Property": "HC Manual x Type"
+                }
+              },
+              "queryRef": "Dim Type.HC Manual x Type",
+              "nativeQueryRef": "HC Manual x Type"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Type"
+                    }
+                  },
+                  "Property": "Δ Type (Oracle - Manual)"
+                }
+              },
+              "queryRef": "Dim Type.Δ Type (Oracle - Manual)",
+              "nativeQueryRef": "Δ Type (Oracle - Manual)"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Type (ZBB vs COGS) — Oracle vs Manual'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E6E6'"
+                    }
+                  }
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

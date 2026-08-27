@@ -1,0 +1,185 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "val-tbl-desglose",
+  "position": {
+    "x": 336,
+    "y": 1156,
+    "z": 0,
+    "height": 380,
+    "width": 1544,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Desglose Turnover"
+                    }
+                  },
+                  "Property": "Desglose"
+                }
+              },
+              "queryRef": "Desglose Turnover.Desglose",
+              "nativeQueryRef": "Desglose"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Inicio"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Inicio",
+              "nativeQueryRef": "HC Activo Inicio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Altas"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Altas",
+              "nativeQueryRef": "Altas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Bajas"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Bajas",
+              "nativeQueryRef": "Bajas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Fin"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Fin",
+              "nativeQueryRef": "HC Activo Fin"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "HC Activo Promedio"
+                }
+              },
+              "queryRef": "Excel HC Oracle.HC Activo Promedio",
+              "nativeQueryRef": "HC Activo Promedio"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Rotación %"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Rotación %",
+              "nativeQueryRef": "Rotación %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Rotación Voluntaria %"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Rotación Voluntaria %",
+              "nativeQueryRef": "Rotación Voluntaria %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Rotación Involuntaria %"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Rotación Involuntaria %",
+              "nativeQueryRef": "Rotación Involuntaria %"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Paso 3 · Componentes por dimensión'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

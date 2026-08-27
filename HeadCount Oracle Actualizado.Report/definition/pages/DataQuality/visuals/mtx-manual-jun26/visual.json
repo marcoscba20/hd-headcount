@@ -1,0 +1,176 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "mtx-manual-jun26",
+  "position": {
+    "x": 960,
+    "y": 190,
+    "z": 6000,
+    "height": 340,
+    "width": 880,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HC Manual LATAM"
+                    }
+                  },
+                  "Property": "País Overview"
+                }
+              },
+              "queryRef": "HC Manual LATAM.País Overview",
+              "nativeQueryRef": "País Overview",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HC Manual LATAM"
+                    }
+                  },
+                  "Property": "Grupo Funcional"
+                }
+              },
+              "queryRef": "HC Manual LATAM.Grupo Funcional",
+              "nativeQueryRef": "Grupo Funcional",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "HC Manual LATAM"
+                    }
+                  },
+                  "Property": "HC Manual Jun-2026"
+                }
+              },
+              "queryRef": "HC Manual LATAM.HC Manual Jun-2026",
+              "nativeQueryRef": "HC Manual Jun-2026"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "HC Manual LATAM"
+                  }
+                },
+                "Property": "Grupo Funcional"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "subTotals": [
+        {
+          "properties": {
+            "rowSubtotalsLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "'TOTAL HEADCOUNT'"
+                }
+              }
+            },
+            "columnSubtotalsLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Total'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Situación Actual — Archivo Manual a Junio 2026'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 4,
+                      "Percent": 0.6
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
