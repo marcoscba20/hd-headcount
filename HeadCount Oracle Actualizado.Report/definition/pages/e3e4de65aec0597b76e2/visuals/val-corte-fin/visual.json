@@ -1,5 +1,14 @@
 {
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "val-corte-fin",
+  "position": {
+    "x": 271,
+    "y": 356,
+    "z": 11000,
+    "height": 120,
+    "width": 215,
+    "tabOrder": 6000
+  },
   "visual": {
     "visualType": "card",
     "query": {
@@ -7,7 +16,6 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.Val · Corte HC Fin",
               "field": {
                 "Measure": {
                   "Expression": {
@@ -18,6 +26,7 @@
                   "Property": "Val · Corte HC Fin"
                 }
               },
+              "queryRef": "Excel HC Oracle.Val · Corte HC Fin",
               "nativeQueryRef": "Val · Corte HC Fin"
             }
           ]
@@ -70,7 +79,6 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -105,15 +113,7 @@
           }
         }
       ]
-    }
-  },
-  "position": {
-    "x": 271,
-    "y": 356,
-    "z": 0,
-    "width": 215,
-    "height": 120,
-    "tabOrder": 0
-  },
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

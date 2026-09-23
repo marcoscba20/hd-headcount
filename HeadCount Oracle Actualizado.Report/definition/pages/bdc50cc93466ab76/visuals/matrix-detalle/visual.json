@@ -103,6 +103,20 @@
               },
               "queryRef": "Excel HC Oracle.Rotación %",
               "nativeQueryRef": "Rotación %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "% HC con MBO"
+                }
+              },
+              "queryRef": "Excel HC Oracle.% HC con MBO",
+              "nativeQueryRef": "% HC con MBO"
             }
           ]
         }

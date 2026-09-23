@@ -224,6 +224,34 @@
               },
               "queryRef": "Excel HC Oracle.Edad",
               "nativeQueryRef": "Edad"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Esquema MBO"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "nativeQueryRef": "Esquema MBO"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Bonus Swap"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Bonus Swap",
+              "nativeQueryRef": "Bonus Swap"
             }
           ]
         }

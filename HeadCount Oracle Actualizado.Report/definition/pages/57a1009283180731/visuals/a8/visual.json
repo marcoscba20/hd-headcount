@@ -1,9 +1,9 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "nº-funciones-card-a18e45",
   "position": {
-    "x": 505,
-    "y": 96,
+    "x": 505.25147343120523,
+    "y": 116.70860244878486,
     "z": 6000,
     "height": 104.33,
     "width": 445,

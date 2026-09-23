@@ -851,6 +851,121 @@ table 'Excel HC Oracle'
 		displayFolder: 09 · Validación Turnover
 		lineageTag: 3d4e5f60-0015-4c30-9f03-cc3300000015
 
+	/// Activos que participan del esquema MBO ([Esquema MBO] = "Con MBO").
+	measure 'HC con MBO' = CALCULATE([HC Activo], 'Excel HC Oracle'[Esquema MBO] = "Con MBO")
+		formatString: #,##0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0101-4d40-9004-dd4400000101
+
+	/// Activos alcanzados por el esquema pero marcados explícitamente fuera de él ([Esquema MBO] = "Sin MBO"). No incluye a los "No Aplica".
+	measure 'HC sin MBO' = CALCULATE([HC Activo], 'Excel HC Oracle'[Esquema MBO] = "Sin MBO")
+		formatString: #,##0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0102-4d40-9004-dd4400000102
+
+	/// Penetración del esquema MBO sobre TODO el headcount activo, incluidos los "No Aplica".
+	measure '% HC con MBO' = DIVIDE([HC con MBO], [HC Activo])
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0103-4d40-9004-dd4400000103
+
+	/// Penetración del esquema MBO solo sobre la población que Oracle marca ("Con MBO" + "Sin MBO"), dejando fuera a los "No Aplica". Es la tasa dentro del universo alcanzado.
+	measure '% MBO sobre Alcanzados' = DIVIDE([HC con MBO], [HC con MBO] + [HC sin MBO])
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0104-4d40-9004-dd4400000104
+
+	/// Activos elegibles para el canje de bonus ([Bonus Swap] = "Elegible").
+	measure 'HC Elegible Bonus Swap' = CALCULATE([HC Activo], 'Excel HC Oracle'[Bonus Swap] = "Elegible")
+		formatString: #,##0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0105-4d40-9004-dd4400000105
+
+	/// Cuánto del universo MBO además puede canjear el bonus. El Bonus Swap es un subconjunto del MBO, por eso el denominador es [HC con MBO].
+	measure '% Bonus Swap sobre MBO' = DIVIDE([HC Elegible Bonus Swap], [HC con MBO])
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0106-4d40-9004-dd4400000106
+
+	/// Grade más bajo que participa del esquema MBO en el contexto actual. Muestra dónde arranca de hecho el esquema. Descarta el sentinel 99 ("Sin Grade").
+	measure 'Grade Mínimo con MBO' =
+			CALCULATE (
+			    MIN ( 'Excel HC Oracle'[Grade Nº] ),
+			    'Excel HC Oracle'[Esquema MBO] = "Con MBO",
+			    'Excel HC Oracle'[Grade Nº] <> 99
+			)
+		formatString: 0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0107-4d40-9004-dd4400000107
+
+	/// Porcentaje de las MUJERES activas que participan del esquema MBO. Denominador: solo mujeres.
+	measure '% con MBO · Femenino' =
+			DIVIDE (
+			    CALCULATE ( [HC con MBO], 'Excel HC Oracle'[Género] = "Femenino" ),
+			    CALCULATE ( [HC Activo], 'Excel HC Oracle'[Género] = "Femenino" )
+			)
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0108-4d40-9004-dd4400000108
+
+	/// Porcentaje de los VARONES activos que participan del esquema MBO. Denominador: solo varones.
+	measure '% con MBO · Masculino' =
+			DIVIDE (
+			    CALCULATE ( [HC con MBO], 'Excel HC Oracle'[Género] = "Masculino" ),
+			    CALCULATE ( [HC Activo], 'Excel HC Oracle'[Género] = "Masculino" )
+			)
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0109-4d40-9004-dd4400000109
+
+	/// Brecha de acceso al MBO entre varones y mujeres, en PUNTOS PORCENTUALES. Positivo = los varones acceden más. Conviene leerla dentro de un mismo Grade: buena parte de la brecha total se explica por la composición por grade.
+	measure 'Brecha MBO Género (pp)' = ( [% con MBO · Masculino] - [% con MBO · Femenino] ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0110-4d40-9004-dd4400000110
+
+	/// Bajas del período entre quienes hoy figuran con MBO. Recordar que el esquema es una foto actual: la persona pudo tener otro estado al momento de la baja.
+	measure 'Bajas con MBO' = CALCULATE([Bajas], 'Excel HC Oracle'[Esquema MBO] = "Con MBO")
+		formatString: #,##0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0111-4d40-9004-dd4400000111
+
+	/// Rotación del período dentro de la población con MBO. Numerador y denominador se restringen al mismo segmento.
+	measure 'Rotación % con MBO' =
+			DIVIDE (
+			    [Bajas con MBO],
+			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Esquema MBO] = "Con MBO" )
+			)
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0112-4d40-9004-dd4400000112
+
+	/// Rotación del período en todo el resto de la dotación ("Sin MBO" + "No Aplica"). Es el término de comparación de [Rotación % con MBO].
+	measure 'Rotación % sin MBO' =
+			DIVIDE (
+			    CALCULATE ( [Bajas], 'Excel HC Oracle'[Esquema MBO] <> "Con MBO" ),
+			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Esquema MBO] <> "Con MBO" )
+			)
+		formatString: 0.0%
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0113-4d40-9004-dd4400000113
+
+	/// Diferencia de rotación entre la población con MBO y el resto, en PUNTOS PORCENTUALES. Negativo = el segmento con MBO retiene mejor.
+	measure 'Δ Rotación MBO (pp)' = ( [Rotación % con MBO] - [Rotación % sin MBO] ) * 100
+		formatString: +0.0;-0.0;0.0
+		displayFolder: 12 · Compensación Variable
+		lineageTag: 4e5f6071-0114-4d40-9004-dd4400000114
+
+	/// VALIDACIÓN · Personas con más de una asignación cuyo [MBO Bonus Scheme] difiere entre filas. Debería ser 0; si no, el segmento MBO de esa persona depende de qué fila se lea.
+	measure 'Val · MBO Inconsistente' =
+			SUMX (
+			    VALUES ( 'Excel HC Oracle'[Person Number] ),
+			    IF ( CALCULATE ( DISTINCTCOUNT ( 'Excel HC Oracle'[MBO Bonus Scheme] ) ) > 1, 1 )
+			)
+		formatString: #,##0
+		displayFolder: 08 · Validación (Data Quality)
+		lineageTag: 4e5f6071-0115-4d40-9004-dd4400000115
+
 	column 'Enterprise Hire Date'
 		dataType: dateTime
 		formatString: dd/MM/yyyy
@@ -1049,14 +1164,6 @@ table 'Excel HC Oracle'
 		lineageTag: 7723f020-5de2-4ad3-9f1d-c41183c45173
 		summarizeBy: none
 		sourceColumn: Country
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Cross Charge Entity Name'
-		dataType: string
-		lineageTag: ad49f953-9a91-4609-bc08-4ee083c3a5bc
-		summarizeBy: none
-		sourceColumn: Cross Charge Entity Name
 
 		annotation SummarizationSetBy = Automatic
 
@@ -1367,15 +1474,6 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Código del centro de costo local en Oracle. OJO: hoy el export lo pobla en pocos registros; ver medidas de cobertura en "08 · Validación (Data Quality)".
-	column 'Local Cost Center'
-		dataType: string
-		lineageTag: 6f2c9a41-8d05-4b73-9e18-2a7c4e61b3d9
-		summarizeBy: none
-		sourceColumn: Local Cost Center
-
-		annotation SummarizationSetBy = Automatic
-
 	/// Nivel jerárquico del puesto según Oracle.
 	column Level
 		dataType: string
@@ -1528,6 +1626,84 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Esquema de bonus por objetivos: "Con MBO" / "Sin MBO" / "No Aplica" (campo vacío en Oracle = la persona no participa del esquema). OJO: es una FOTO del estado actual, no un histórico. Al cruzarla con [Bajas] se segmenta por el esquema vigente al momento del export, no al momento de la baja.
+	column 'Esquema MBO' =
+			SWITCH (
+			    'Excel HC Oracle'[MBO Bonus Scheme],
+			    "Yes", "Con MBO",
+			    "No", "Sin MBO",
+			    "No Aplica"
+			)
+		dataType: string
+		lineageTag: 4e5f6071-0003-4d40-9004-dd4400000003
+		summarizeBy: none
+		sortByColumn: 'Orden Esquema MBO'
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Orden de [Esquema MBO]: 1 Con MBO, 2 Sin MBO, 3 No Aplica.
+	column 'Orden Esquema MBO' = SWITCH ( 'Excel HC Oracle'[MBO Bonus Scheme], "Yes", 1, "No", 2, 3 )
+		dataType: int64
+		lineageTag: 4e5f6071-0004-4d40-9004-dd4400000004
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Elegibilidad de Bonus Swap: "Elegible" / "No Elegible" / "No Aplica". Igual que [Esquema MBO], es una foto del estado actual y no un histórico.
+	column 'Bonus Swap' =
+			SWITCH (
+			    'Excel HC Oracle'[Bonus Swap Eligible],
+			    "Yes", "Elegible",
+			    "No", "No Elegible",
+			    "No Aplica"
+			)
+		dataType: string
+		lineageTag: 4e5f6071-0005-4d40-9004-dd4400000005
+		summarizeBy: none
+		sortByColumn: 'Orden Bonus Swap'
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Orden de [Bonus Swap]: 1 Elegible, 2 No Elegible, 3 No Aplica.
+	column 'Orden Bonus Swap' = SWITCH ( 'Excel HC Oracle'[Bonus Swap Eligible], "Yes", 1, "No", 2, 3 )
+		dataType: int64
+		lineageTag: 4e5f6071-0006-4d40-9004-dd4400000006
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Local Cost Center'
+		dataType: string
+		lineageTag: 2cc0952f-69dc-4ab2-b043-213bee6ab773
+		summarizeBy: none
+		sourceColumn: Local Cost Center
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cross Charge Entity Name'
+		dataType: string
+		lineageTag: f423219d-f7b7-4e21-ba4f-21e8e7cb2d3c
+		summarizeBy: none
+		sourceColumn: Cross Charge Entity Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bonus Swap Eligible'
+		dataType: string
+		lineageTag: 4fc1cf2d-5c9b-4719-9b41-5429cba5ace6
+		summarizeBy: none
+		sourceColumn: Bonus Swap Eligible
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MBO Bonus Scheme'
+		dataType: string
+		lineageTag: 715279d8-038b-492d-a1c8-2e811b18becf
+		summarizeBy: none
+		sourceColumn: MBO Bonus Scheme
+
+		annotation SummarizationSetBy = Automatic
+
 	partition 'Excel HC Oracle' = m
 		mode: import
 		source = ```
@@ -1535,7 +1711,9 @@ table 'Excel HC Oracle'
 				    Origen = Excel.Workbook(File.Contents("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\pbi-headcount - Reporte Semanal LATAM.xlsx"), null, true),
 				    #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
 				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
-				    #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"National ID", type text}, {"Person Number", Int64.Type}, {"Display Name", type text}, {"Enterprise Hire Date", type date}, {"Antigüedad (años)", Int64.Type}, {"Position Name", type text}, {"Job Name", type text}, {"ZBB / COGS", type text}, {"Manager Type", type text}, {"Manager Display Name", type text}, {"E-Mail Address", type text}, {"Department Name", type text}, {"Local Cost Center", type text}, {"Level", type text}, {"Position Code", type text}, {"Legal Employer Name", type text}, {"Country", type text}, {"Cross Charge Entity Name", type text}, {"Assignment Status Code", type text}, {"Country Code", type text}, {"Country_1", type text}, {"Legislation Code", type text}, {"Grade Name", type text}, {"Work Email", type text}, {"Labor Type", type text}, {"Base OHI", type text}, {"Parent Manager 01 Person Number", Int64.Type}, {"Parent Manager 01 Name", type text}, {"Parent Manager 01 Work Email", type text}, {"Parent Manager 02 Person Number", Int64.Type}, {"Parent Manager 02 Name", type text}, {"Parent Manager 03 Person Number", Int64.Type}, {"Parent Manager 03 Name", type text}, {"Parent Manager 04 Person Number", Int64.Type}, {"Parent Manager 04 Name", type text}, {"Parent Manager 05 Person Number", Int64.Type}, {"Parent Manager 05 Name", type text}, {"Parent Manager 06 Person Number", Int64.Type}, {"Parent Manager 06 Name", type text}, {"Parent Manager 07 Person Number", Int64.Type}, {"Parent Manager 07 Name", type text}, {"Parent Manager 08 Person Number", Int64.Type}, {"Parent Manager 08 Name", type text}, {"Manager Job Name", type text}, {"EPM Main Function Name", type text}, {"Person Gender", type text}}, "es"),
+				    #"Columnas con nombre cambiado1" = Table.RenameColumns(#"Encabezados promovidos",{{"PER_ASG_DF_BONUS_SWAP_ELIGIBLE_v", "Bonus Swap Eligible"}, {"PER_ASG_DF_MBO_BONUS_SCHEME_v", "MBO Bonus Scheme"}}),
+				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columnas con nombre cambiado1",{{"PER_ASG_DF_LOCAL_COST_CENTER_", "Local Cost Center"}, {"PER_ASG_DF_CRS_CHRG_NTY_N_v", "Cross Charge Entity Name"}}),
+				    #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Columnas con nombre cambiado", {{"National ID", type text}, {"Person Number", Int64.Type}, {"Display Name", type text}, {"Enterprise Hire Date", type date}, {"Antigüedad (años)", Int64.Type}, {"Position Name", type text}, {"Job Name", type text}, {"ZBB / COGS", type text}, {"Manager Type", type text}, {"Manager Display Name", type text}, {"E-Mail Address", type text}, {"Department Name", type text}, {"Local Cost Center", type text}, {"Level", type text}, {"Position Code", type text}, {"Legal Employer Name", type text}, {"Country", type text}, {"Cross Charge Entity Name", type text}, {"Assignment Status Code", type text}, {"Country Code", type text}, {"Country_1", type text}, {"Legislation Code", type text}, {"Grade Name", type text}, {"Work Email", type text}, {"Labor Type", type text}, {"Base OHI", type text}, {"Parent Manager 01 Person Number", Int64.Type}, {"Parent Manager 01 Name", type text}, {"Parent Manager 01 Work Email", type text}, {"Parent Manager 02 Person Number", Int64.Type}, {"Parent Manager 02 Name", type text}, {"Parent Manager 03 Person Number", Int64.Type}, {"Parent Manager 03 Name", type text}, {"Parent Manager 04 Person Number", Int64.Type}, {"Parent Manager 04 Name", type text}, {"Parent Manager 05 Person Number", Int64.Type}, {"Parent Manager 05 Name", type text}, {"Parent Manager 06 Person Number", Int64.Type}, {"Parent Manager 06 Name", type text}, {"Parent Manager 07 Person Number", Int64.Type}, {"Parent Manager 07 Name", type text}, {"Parent Manager 08 Person Number", Int64.Type}, {"Parent Manager 08 Name", type text}, {"Manager Job Name", type text}, {"EPM Main Function Name", type text}, {"Person Gender", type text}, {"Bonus Swap Eligible", type text}, {"MBO Bonus Scheme", type text}}, "es"),
 				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Tipo de columna cambiado",{{"Termination Date", type date}, {"Person Date of Birth", type date}}),
 				
 				    // --- INICIO DEL BLINDAJE DINÁMICO ---
@@ -1577,5 +1755,5 @@ table 'Excel HC Oracle'
 
 	annotation PBI_NavigationStepName = Navegación
 
-	annotation PBI_ResultType = Table
+	annotation PBI_ResultType = Exception
 

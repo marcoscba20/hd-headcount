@@ -1,5 +1,14 @@
 {
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "val-hcfin-teorico",
+  "position": {
+    "x": 40,
+    "y": 496,
+    "z": 19000,
+    "height": 90,
+    "width": 300,
+    "tabOrder": 14000
+  },
   "visual": {
     "visualType": "card",
     "query": {
@@ -7,7 +16,6 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.Val · HC Fin Teórico",
               "field": {
                 "Measure": {
                   "Expression": {
@@ -18,6 +26,7 @@
                   "Property": "Val · HC Fin Teórico"
                 }
               },
+              "queryRef": "Excel HC Oracle.Val · HC Fin Teórico",
               "nativeQueryRef": "Val · HC Fin Teórico"
             }
           ]
@@ -57,7 +66,6 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -92,15 +100,7 @@
           }
         }
       ]
-    }
-  },
-  "position": {
-    "x": 40,
-    "y": 496,
-    "z": 0,
-    "width": 300,
-    "height": 90,
-    "tabOrder": 0
-  },
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

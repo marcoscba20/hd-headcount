@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "slc-entidad",
   "position": {
-    "x": 1672.0099999999998,
+    "x": 1723.17,
     "y": 20,
     "z": 10600,
     "height": 77.581160725880366,
-    "width": 227.39305729999418,
+    "width": 176.23,
     "tabOrder": 10600
   },
   "visual": {

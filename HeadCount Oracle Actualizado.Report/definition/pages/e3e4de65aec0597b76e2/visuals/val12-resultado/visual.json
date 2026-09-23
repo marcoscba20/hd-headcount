@@ -1,5 +1,14 @@
 {
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "val12-resultado",
+  "position": {
+    "x": 1590,
+    "y": 2116,
+    "z": 30000,
+    "height": 120,
+    "width": 290,
+    "tabOrder": 24000
+  },
   "visual": {
     "visualType": "card",
     "query": {
@@ -7,7 +16,6 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.Rotación % 12M Móvil",
               "field": {
                 "Measure": {
                   "Expression": {
@@ -18,6 +26,7 @@
                   "Property": "Rotación % 12M Móvil"
                 }
               },
+              "queryRef": "Excel HC Oracle.Rotación % 12M Móvil",
               "nativeQueryRef": "Rotación % 12M Móvil"
             }
           ]
@@ -57,7 +66,6 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -92,15 +100,7 @@
           }
         }
       ]
-    }
-  },
-  "position": {
-    "x": 1590,
-    "y": 2116,
-    "z": 0,
-    "width": 290,
-    "height": 120,
-    "tabOrder": 0
-  },
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

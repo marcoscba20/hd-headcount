@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "slicer-funcion",
   "position": {
-    "x": 1044.9002694882688,
+    "x": 970.24,
     "y": 20,
     "z": 10300,
     "height": 77.581160725880366,
-    "width": 227.39305729999418,
+    "width": 176.23,
     "tabOrder": 10300
   },
   "visual": {

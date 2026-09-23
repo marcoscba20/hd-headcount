@@ -1,5 +1,14 @@
 {
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "val-formula-rot",
+  "position": {
+    "x": 1100,
+    "y": 20,
+    "z": 15000,
+    "height": 164,
+    "width": 780,
+    "tabOrder": 10000
+  },
   "visual": {
     "visualType": "card",
     "query": {
@@ -7,7 +16,6 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.Val · Fórmula Rotación",
               "field": {
                 "Measure": {
                   "Expression": {
@@ -18,6 +26,7 @@
                   "Property": "Val · Fórmula Rotación"
                 }
               },
+              "queryRef": "Excel HC Oracle.Val · Fórmula Rotación",
               "nativeQueryRef": "Val · Fórmula Rotación"
             }
           ]
@@ -70,7 +79,6 @@
         }
       ]
     },
-    "drillFilterOtherVisuals": true,
     "visualContainerObjects": {
       "title": [
         {
@@ -105,15 +113,7 @@
           }
         }
       ]
-    }
-  },
-  "position": {
-    "x": 1100,
-    "y": 20,
-    "z": 0,
-    "width": 780,
-    "height": 164,
-    "tabOrder": 0
-  },
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+    },
+    "drillFilterOtherVisuals": true
+  }
 }

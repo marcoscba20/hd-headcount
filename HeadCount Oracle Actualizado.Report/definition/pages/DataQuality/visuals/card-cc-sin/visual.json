@@ -3,9 +3,9 @@
   "name": "card-cc-sin",
   "position": {
     "x": 1460,
-    "y": 1160,
+    "y": 1100,
     "z": 10000,
-    "height": 150,
+    "height": 100,
     "width": 400,
     "tabOrder": 10000
   },

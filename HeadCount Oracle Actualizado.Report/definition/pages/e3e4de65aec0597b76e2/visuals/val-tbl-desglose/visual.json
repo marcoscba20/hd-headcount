@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "val-tbl-desglose",
   "position": {
     "x": 336,
     "y": 1156,
-    "z": 0,
+    "z": 21000,
     "height": 380,
     "width": 1544,
-    "tabOrder": 0
+    "tabOrder": 16000
   },
   "visual": {
     "visualType": "tableEx",

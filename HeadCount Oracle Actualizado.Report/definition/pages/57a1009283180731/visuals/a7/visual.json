@@ -1,9 +1,9 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "mano-de-obra-directa-card-f241b8",
   "position": {
-    "x": 970,
-    "y": 96,
+    "x": 970.25147343120534,
+    "y": 116.70860244878486,
     "z": 5000,
     "height": 104.33,
     "width": 445,

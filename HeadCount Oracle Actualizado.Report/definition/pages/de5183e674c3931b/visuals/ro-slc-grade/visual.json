@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "ro-slc-grade",
   "position": {
-    "x": 1287.3943431604889,
+    "x": 1158.48,
     "y": 20,
     "z": 10400,
     "height": 77.581160725880366,
-    "width": 227.39305729999418,
+    "width": 176.23,
     "tabOrder": 10400
   },
   "visual": {
