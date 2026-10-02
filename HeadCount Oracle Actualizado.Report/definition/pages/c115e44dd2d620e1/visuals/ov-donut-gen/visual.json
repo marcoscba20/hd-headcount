@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "ov-donut-gen",
   "position": {
-    "x": 1300,
-    "y": 260,
-    "z": 5900,
-    "height": 340,
-    "width": 580,
+    "x": 39.789575140622645,
+    "y": 1043.7111633040247,
+    "z": 7000,
+    "height": 341.27212524457116,
+    "width": 760.59303249574828,
     "tabOrder": 6000
   },
   "visual": {

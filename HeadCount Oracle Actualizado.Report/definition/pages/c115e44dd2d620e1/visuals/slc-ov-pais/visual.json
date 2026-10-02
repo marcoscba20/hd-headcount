@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "slc-ov-pais",
   "position": {
     "x": 1199.83,
     "y": 30,
-    "z": 8000,
+    "z": 15000,
     "height": 77.581160725880366,
     "width": 227.39305729999418,
     "tabOrder": 15000

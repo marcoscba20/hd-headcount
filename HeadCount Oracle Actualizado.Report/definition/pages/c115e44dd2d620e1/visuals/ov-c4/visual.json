@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "ov-c4",
   "position": {
     "x": 967.99,
     "y": 130,
-    "z": 6970,
+    "z": 11000,
     "height": 110,
     "width": 293.33,
     "tabOrder": 11000

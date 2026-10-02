@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "slc-entidad",
   "position": {
     "x": 1710,
     "y": 200,
-    "z": 9100,
+    "z": 8000,
     "height": 68,
     "width": 190,
     "tabOrder": 7000

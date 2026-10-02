@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "ov-line-hc",
   "position": {
-    "x": 40,
-    "y": 260,
-    "z": 6000,
-    "height": 340,
-    "width": 1240,
+    "x": 832.52034140379692,
+    "y": 257.10187013940788,
+    "z": 8000,
+    "height": 339.74175696993183,
+    "width": 1046.7718998533035,
     "tabOrder": 7000
   },
   "visual": {

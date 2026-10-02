@@ -1680,6 +1680,7 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Entidad cross-charge según Oracle. PARCHE TEMPORAL: para personas Global sin dato en Oracle se completa con la ZONA (GLOBAL, HDNA, GBP...) del archivo Global Employees de HR. Ver [Cross Charge Origen] y docs/parches/cross-charge-global.md.
 	column 'Cross Charge Entity Name'
 		dataType: string
 		lineageTag: f423219d-f7b7-4e21-ba4f-21e8e7cb2d3c
@@ -1701,6 +1702,24 @@ table 'Excel HC Oracle'
 		lineageTag: 715279d8-038b-492d-a1c8-2e811b18becf
 		summarizeBy: none
 		sourceColumn: MBO Bonus Scheme
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Origen del valor de Cross Charge Entity Name: "Oracle", "Parche manual (Global Employees)" o "Sin Datos". Sirve para seguir qué personas aún dependen del parche hasta que se corrijan en Oracle.
+	column 'Cross Charge Origen'
+		dataType: string
+		lineageTag: 8c1d4f7a-2e5b-4a93-b6d0-7f3e9a1c5b24
+		summarizeBy: none
+		sourceColumn: Cross Charge Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Ámbito de trabajo según Cross Charge Entity Name (incluye el parche Global Employees). Local = sin cross charge o cargado a una entidad LATAM que es Legal Employer del export; LATAM = 243 HD LAO o zona LATAM; Global = cualquier otra entidad/zona (Holdings, HDNA, Friar/GBP, Europa, etc.). Se asigna por persona (Global > LATAM > Local): todas las filas de una persona tienen el mismo ámbito.
+	column Ámbito
+		dataType: string
+		lineageTag: 5e2a9c17-4b3d-4f86-a0e1-9d7c3b6f2a58
+		summarizeBy: none
+		sourceColumn: Ámbito
 
 		annotation SummarizationSetBy = Automatic
 
@@ -1741,8 +1760,29 @@ table 'Excel HC Oracle'
 				    // 4. Blindaje extra para Textos: Celdas en blanco ("") que no aparecen como null
 				    #"Blindaje Vacios Textos" = if List.IsEmpty(ColsTextos) then #"Blindaje Nulos Textos" else Table.ReplaceValue(#"Blindaje Nulos Textos", "", "Sin Datos", Replacer.ReplaceValue, ColsTextos),
 				
+				    // Country vacío en Oracle (mayormente bajas en proceso): se completa con Country_1 (país de la legislación de la entidad legal)
+				    #"Country Completado" = Table.ReplaceValue(#"Blindaje Vacios Textos", each [Country], each if List.Contains({"Sin Datos", "None"}, [Country]) and not List.Contains({"Sin Datos", "None"}, [Country_1]) then [Country_1] else [Country], Replacer.ReplaceValue, {"Country"}),
+				
+				    // --- PARCHE TEMPORAL Cross Charge (2026-09-23) - ver docs/parches/cross-charge-global.md ---
+				    // Solo completa personas sin Cross Charge en NINGUNA fila de Oracle; nunca pisa un valor de Oracle.
+				    PersonasConCC = List.Buffer(List.Distinct(Table.SelectRows(#"Blindaje Vacios Textos", each not List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]))[Person Number])),
+				    #"Parche Unido" = Table.NestedJoin(#"Country Completado", {"Person Number"}, #"Parche Cross Charge Global", {"Person Number"}, "Parche", JoinKind.LeftOuter),
+				    #"Parche Expandido" = Table.ExpandTableColumn(#"Parche Unido", "Parche", {"Zona Parche"}),
+				    #"Parche Marcado" = Table.AddColumn(#"Parche Expandido", "Cross Charge Origen", each if [Zona Parche] <> null and [Cross Charge Entity Name] = "Sin Datos" and not List.Contains(PersonasConCC, [Person Number]) then "Parche manual (Global Employees)" else if List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]) then "Sin Datos" else "Oracle", type text),
+				    #"Parche Aplicado" = Table.ReplaceValue(#"Parche Marcado", each [Cross Charge Entity Name], each if [Cross Charge Origen] = "Parche manual (Global Employees)" then [Zona Parche] else [Cross Charge Entity Name], Replacer.ReplaceValue, {"Cross Charge Entity Name"}),
+				    #"Cross Charge Parcheado" = Table.RemoveColumns(#"Parche Aplicado", {"Zona Parche"}),
+				
+				    // Ámbito desde Cross Charge: sin dato -> Local; 243 HD LAO o zona LATAM -> LATAM; entidad que es Legal Employer del export (países LATAM) -> Local; resto -> Global
+				    CodigosLocales = List.Buffer(List.Distinct(List.Transform(#"Blindaje Vacios Textos"[Legal Employer Name], each Text.BeforeDelimiter(Text.Trim(_), " ")))),
+				    #"Ambito Fila" = Table.AddColumn(#"Cross Charge Parcheado", "Ámbito Fila", each let cc = Text.Trim([Cross Charge Entity Name]), cod = Text.BeforeDelimiter(cc, " ") in if List.Contains({"Sin Datos", "None", ""}, cc) then "Local" else if cod = "243" or Text.Upper(cc) = "LATAM" then "LATAM" else if List.Contains(CodigosLocales, cod) then "Local" else "Global", type text),
+				    // Se lleva a nivel persona (prioridad Global > LATAM > Local) para que una persona no quede en dos ámbitos por sus filas sin cross charge
+				    PersonasGlobal = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "Global")[Person Number])),
+				    PersonasLATAM = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "LATAM")[Person Number])),
+				    #"Ambito Persona" = Table.AddColumn(#"Ambito Fila", "Ámbito", each if List.Contains(PersonasGlobal, [Person Number]) then "Global" else if List.Contains(PersonasLATAM, [Person Number]) then "LATAM" else "Local", type text),
+				    #"Ambito Agregado" = Table.RemoveColumns(#"Ambito Persona", {"Ámbito Fila"}),
+				
 				    // Grade Nº: extrae el número de "Grade N" (proxy salarial). "Sin Datos"/errores -> 99
-				    #"Grade Nº Agregado" = Table.AddColumn(#"Blindaje Vacios Textos", "Grade Nº", each try Number.From(Text.AfterDelimiter([Grade Name], "Grade ")) otherwise 99, Int64.Type),
+				    #"Grade Nº Agregado" = Table.AddColumn(#"Ambito Agregado", "Grade Nº", each try Number.From(Text.AfterDelimiter([Grade Name], "Grade ")) otherwise 99, Int64.Type),
 				
 				    // --- Mapeos para la hoja Overview ---
 				    #"Grupo Funcional Agregado" = Table.AddColumn(#"Grade Nº Agregado", "Grupo Funcional", each let f = [EPM Main Function Name] in if f = "Operations" then "Total COGS Functions" else if f = "Selling" then "Total Selling Functions" else if f = "Marketing" then "Total Marketing Functions" else if f = "Research & Development" then "Research & Development" else if f = "General & Administrative" or f = "FP&A" then "Total G&A Functions" else "Sin Definir", type text),

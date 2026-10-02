@@ -1,0 +1,168 @@
+/// Tabla auxiliar DESCONECTADA con las filas de la matriz People Excellence (réplica de la hoja "Template People Excellence KPIs" del Excel Report Países). Solo incluye los KPIs que salen de Oracle: People Costs, Promotions, Laterals e Internal Moves quedan afuera hasta tener fuente de costos e historial de movimientos.
+table 'People Excellence KPI'
+	lineageTag: db691136-d61a-4a64-baac-01486c573b64
+
+	/// Valor del KPI para el período que tenga 'Calendario' en contexto. Stocks (Headcount, SG&A, COGS) = activos al último día del período; flujos (TO, New Hires) = movimientos dentro del período. La matriz lo invoca a través de [Valor People Excellence].
+	measure 'PE · Valor Período' =
+			SWITCH (
+			    SELECTEDVALUE ( 'People Excellence KPI'[KPI] ),
+			    "Headcount", [HC Activo Fin],
+			    "SG&A", CALCULATE ( [HC Activo Fin], 'Excel HC Oracle'[ZBB / COGS] = "ZBB" ),
+			    "COGS", CALCULATE ( [HC Activo Fin], 'Excel HC Oracle'[ZBB / COGS] = "COGS" ),
+			    "Voluntary TO (All)", [Rotación Voluntaria %],
+			    "Involuntary TO (All)", [Rotación Involuntaria %],
+			    "L1 - L4 TO", CALCULATE ( [Rotación %], 'Excel HC Oracle'[Nivel Orden] <= 4 ),
+			    "New Hires L5+", CALCULATE ( [Altas], 'Excel HC Oracle'[Nivel Orden] <= 5 )
+			)
+		isHidden
+		displayFolder: 09 · People Excellence
+		lineageTag: 2d870f5b-9c27-41d4-98b9-ed983b092c8b
+
+	/// Valor de cada celda de la matriz People Excellence. Columnas (Report Países): Actuals año anterior = stock al 31-dic / flujo ene-dic; YTD Actuals = stock al último cierre de mes / flujo ene al último cierre; YTD PY = mismo tramo un año antes; Δ = YTD Actuals - YTD PY. Ignora cualquier filtro de 'Calendario'.
+	measure 'Valor People Excellence' =
+			VAR FinYTD = EOMONTH ( TODAY (), -1 )
+			VAR FinPY = EDATE ( FinYTD, -12 )
+			VAR FY =
+			    CALCULATE (
+			        [PE · Valor Período],
+			        FILTER (
+			            ALL ( 'Calendario'[Date] ),
+			            'Calendario'[Date] >= DATE ( YEAR ( FinYTD ) - 1, 1, 1 )
+			                && 'Calendario'[Date] <= DATE ( YEAR ( FinYTD ) - 1, 12, 31 )
+			        )
+			    )
+			VAR YTD =
+			    CALCULATE (
+			        [PE · Valor Período],
+			        FILTER (
+			            ALL ( 'Calendario'[Date] ),
+			            'Calendario'[Date] >= DATE ( YEAR ( FinYTD ), 1, 1 )
+			                && 'Calendario'[Date] <= FinYTD
+			        )
+			    )
+			VAR PY =
+			    CALCULATE (
+			        [PE · Valor Período],
+			        FILTER (
+			            ALL ( 'Calendario'[Date] ),
+			            'Calendario'[Date] >= DATE ( YEAR ( FinPY ), 1, 1 )
+			                && 'Calendario'[Date] <= FinPY
+			        )
+			    )
+			RETURN
+			    SWITCH (
+			        SELECTEDVALUE ( 'People Excellence Columna'[Orden] ),
+			        1, FY,
+			        2, YTD,
+			        3, PY,
+			        4, IF ( NOT ISBLANK ( YTD ) || NOT ISBLANK ( PY ), YTD - PY )
+			    )
+		displayFolder: 09 · People Excellence
+		lineageTag: db328beb-0b49-485b-80ef-c89812027ff1
+
+		formatStringDefinition =
+				VAR F = SELECTEDVALUE ( 'People Excellence KPI'[Formato], "#,##0" )
+				RETURN
+				    IF (
+				        SELECTEDVALUE ( 'People Excellence Columna'[Orden] ) = 4,
+				        IF ( F = "0.0%", "+0.0%;-0.0%;0.0%", "+#,##0;-#,##0;0" ),
+				        F
+				    )
+
+	/// Fondo de la columna Δ según el sentido favorable del KPI ([Dirección]): verde si mejora, rojo si empeora, gris si el KPI es neutro. Resto de columnas sin color.
+	measure 'Color Δ People Excellence' =
+			VAR Dir = SELECTEDVALUE ( 'People Excellence KPI'[Dirección] )
+			VAR V = [Valor People Excellence]
+			RETURN
+			    IF (
+			        SELECTEDVALUE ( 'People Excellence Columna'[Orden] ) = 4,
+			        SWITCH (
+			            TRUE (),
+			            Dir = 0 || ISBLANK ( V ) || V = 0, "#EDEDED",
+			            V * Dir > 0, "#D9F2D0",
+			            "#F8D0D0"
+			        )
+			    )
+		isHidden
+		displayFolder: 09 · People Excellence
+		lineageTag: e74df836-ad1a-40d0-8f02-66e52fc3d798
+
+	column Pilar
+		dataType: string
+		lineageTag: 6e489bd1-8b01-4067-a9dd-4fc2b19ebbeb
+		summarizeBy: none
+		sourceColumn: [Pilar]
+		sortByColumn: 'Orden Pilar'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Pilar'
+		dataType: int64
+		isHidden
+		lineageTag: b267ec0f-e56d-4d37-ba18-dcb609df7060
+		summarizeBy: none
+		sourceColumn: [Orden Pilar]
+
+		annotation SummarizationSetBy = Automatic
+
+	column KPI
+		dataType: string
+		lineageTag: 17d26f5b-fccf-46ad-8a70-d416e45f2ac8
+		summarizeBy: none
+		sourceColumn: [KPI]
+		sortByColumn: 'Orden KPI'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden KPI'
+		dataType: int64
+		isHidden
+		lineageTag: 8ea79f7e-3f8d-4208-a45c-9847aa6997e2
+		summarizeBy: none
+		sourceColumn: [Orden KPI]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Formato del valor: "#,##0" (cantidades) o "0.0%" (tasas).
+	column Formato
+		dataType: string
+		isHidden
+		lineageTag: 48eb4ea1-0e98-4c96-8410-a279e5afcd99
+		summarizeBy: none
+		sourceColumn: [Formato]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sentido favorable (columna "dir" del Excel): 1 mayor es mejor, -1 menor es mejor, 0 neutro.
+	column Dirección
+		dataType: int64
+		isHidden
+		lineageTag: a2995cdd-e1af-48e4-ac0d-631b671ee115
+		summarizeBy: none
+		sourceColumn: [Dirección]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'People Excellence KPI' = calculated
+		mode: import
+		source =
+				DATATABLE (
+				    "Pilar", STRING,
+				    "Orden Pilar", INTEGER,
+				    "KPI", STRING,
+				    "Orden KPI", INTEGER,
+				    "Formato", STRING,
+				    "Dirección", INTEGER,
+				    {
+				        { "Headcount & People Costs", 1, "Headcount", 1, "#,##0", 0 },
+				        { "Headcount & People Costs", 1, "SG&A", 2, "#,##0", -1 },
+				        { "Headcount & People Costs", 1, "COGS", 3, "#,##0", -1 },
+				        { "Moves #", 2, "Voluntary TO (All)", 4, "0.0%", -1 },
+				        { "Moves #", 2, "Involuntary TO (All)", 5, "0.0%", -1 },
+				        { "Moves #", 2, "L1 - L4 TO", 6, "0.0%", -1 },
+				        { "Recruiting", 3, "New Hires L5+", 7, "#,##0", 0 }
+				    }
+				)
+
+	annotation PBI_Id = PeopleExcellenceKPI
+

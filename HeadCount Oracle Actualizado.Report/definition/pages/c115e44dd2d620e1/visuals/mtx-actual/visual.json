@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "mtx-actual",
   "position": {
-    "x": 40,
-    "y": 1044,
+    "x": 39.789575140622645,
+    "y": 257.10187013940788,
     "z": 0,
-    "height": 340,
-    "width": 760,
+    "height": 339.74175696993183,
+    "width": 760.59303249574828,
     "tabOrder": 0
   },
   "visual": {

@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "mtx-kpi-hc",
   "position": {
     "x": 820,
     "y": 1044,
-    "z": 9000,
+    "z": 18000,
     "height": 340,
     "width": 1060,
     "tabOrder": 18000
