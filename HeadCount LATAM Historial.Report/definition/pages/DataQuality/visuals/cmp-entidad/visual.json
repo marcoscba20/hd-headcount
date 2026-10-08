@@ -1,0 +1,335 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "cmp-entidad",
+  "position": {
+    "x": 40,
+    "y": 570,
+    "z": 5000,
+    "height": 380,
+    "width": 900,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "Código"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.Código",
+              "nativeQueryRef": "Código"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "Entidad Oracle"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.Entidad Oracle",
+              "nativeQueryRef": "Entidad Oracle"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "Entidad Manual"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.Entidad Manual",
+              "nativeQueryRef": "Entidad Manual"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "HC Oracle x Entidad"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.HC Oracle x Entidad",
+              "nativeQueryRef": "HC Oracle x Entidad"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "HC Manual x Entidad"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.HC Manual x Entidad",
+              "nativeQueryRef": "HC Manual x Entidad"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Entidad Legal"
+                    }
+                  },
+                  "Property": "Δ Entidad (Oracle - Manual)"
+                }
+              },
+              "queryRef": "Dim Entidad Legal.Δ Entidad (Oracle - Manual)",
+              "nativeQueryRef": "Δ Entidad (Oracle - Manual)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dim Entidad Legal"
+                  }
+                },
+                "Property": "HC Manual x Entidad"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "98.8015204313628D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.HC Oracle x Entidad"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "87.96748227845558D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.HC Manual x Entidad"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "111.60306742039185D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.Δ Entidad (Oracle - Manual)"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.HC Oracle x Entidad"
+          }
+        },
+        {
+          "properties": {
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.HC Manual x Entidad"
+          }
+        },
+        {
+          "properties": {
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "styleTotal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Entidad Legal.Δ Entidad (Oracle - Manual)"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Empleados por Entidad Legal — Oracle vs Manual'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E6E6'"
+                    }
+                  }
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

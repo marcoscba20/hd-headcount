@@ -1,0 +1,66 @@
+/// Dimensión DESCONECTADA con los valores de Type (ZBB / COGS) presentes en cualquiera de los dos orígenes. Sirve de eje común para comparar Oracle contra el archivo Manual.
+table 'Dim Type'
+	lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f12
+
+	/// HC activo de Oracle para el Type seleccionado. TREATAS empuja el filtro de esta dimensión desconectada sobre 'Excel HC Oracle'[ZBB / COGS].
+	measure 'HC Oracle x Type' =
+			CALCULATE (
+			    [HC Activo],
+			    TREATAS ( VALUES ( 'Dim Type'[Type] ), 'Excel HC Oracle'[ZBB / COGS] )
+			)
+		formatString: #,##0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f15
+
+	/// HC del archivo Manual a Jun-2026 para el Type seleccionado (columna "Type Adjusted").
+	measure 'HC Manual x Type' =
+			CALCULATE (
+			    [HC Manual Jun-2026],
+			    TREATAS ( VALUES ( 'Dim Type'[Type] ), 'HC Manual LATAM'[Type Adjusted] )
+			)
+		formatString: #,##0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f16
+
+	measure 'Δ Type (Oracle - Manual)' = [HC Oracle x Type] - [HC Manual x Type]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 10 · Comparativo Oracle vs Manual
+		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f17
+
+	column Type
+		dataType: string
+		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f13
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Type]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		formatString: 0
+		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f14
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Type' = calculated
+		mode: import
+		source =
+				VAR Oracle =
+				    SELECTCOLUMNS ( 'Excel HC Oracle', "Type", 'Excel HC Oracle'[ZBB / COGS] )
+				VAR Manual =
+				    SELECTCOLUMNS ( 'HC Manual LATAM', "Type", 'HC Manual LATAM'[Type Adjusted] )
+				VAR Todos =
+				    DISTINCT ( UNION ( Oracle, Manual ) )
+				RETURN
+				    ADDCOLUMNS (
+				        FILTER ( Todos, NOT [Type] IN { "", "Sin Datos", "0" } ),
+				        "Orden", SWITCH ( [Type], "ZBB", 1, "COGS", 2, 9 )
+				    )
+
+	annotation PBI_Id = 7f3a1c05e2b94d68
+

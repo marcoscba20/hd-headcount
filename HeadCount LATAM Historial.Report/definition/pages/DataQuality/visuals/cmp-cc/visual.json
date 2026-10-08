@@ -1,0 +1,184 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "cmp-cc",
+  "position": {
+    "x": 40,
+    "y": 990,
+    "z": 8000,
+    "height": 320,
+    "width": 1400,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Centro de Costo"
+                    }
+                  },
+                  "Property": "ID Centro de Costo"
+                }
+              },
+              "queryRef": "Dim Centro de Costo.ID Centro de Costo",
+              "nativeQueryRef": "ID Centro de Costo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Centro de Costo"
+                    }
+                  },
+                  "Property": "HC Oracle x CC"
+                }
+              },
+              "queryRef": "Dim Centro de Costo.HC Oracle x CC",
+              "nativeQueryRef": "HC Oracle x CC"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Centro de Costo"
+                    }
+                  },
+                  "Property": "HC Manual x CC"
+                }
+              },
+              "queryRef": "Dim Centro de Costo.HC Manual x CC",
+              "nativeQueryRef": "HC Manual x CC"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Centro de Costo"
+                    }
+                  },
+                  "Property": "Δ CC (Oracle - Manual)"
+                }
+              },
+              "queryRef": "Dim Centro de Costo.Δ CC (Oracle - Manual)",
+              "nativeQueryRef": "Δ CC (Oracle - Manual)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Centro de Costo"
+                    }
+                  },
+                  "Property": "Estado Cruce CC"
+                }
+              },
+              "queryRef": "Dim Centro de Costo.Estado Cruce CC",
+              "nativeQueryRef": "Estado Cruce CC"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dim Centro de Costo"
+                  }
+                },
+                "Property": "ID Centro de Costo"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ID Centro de Costo (local) — Oracle vs Manual'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E6E6E6'"
+                    }
+                  }
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

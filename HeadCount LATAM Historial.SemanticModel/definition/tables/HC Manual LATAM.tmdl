@@ -1,0 +1,405 @@
+/// Snapshot manual de headcount a Junio 2026 (hoja "2026" del archivo HeadCount Manual LATAM.xlsx). Tabla DESCONECTADA: no tiene relaciones con el resto del modelo.
+table 'HC Manual LATAM'
+	lineageTag: 3f8c1a92-6d47-4b05-9e21-7c4a5b8de013
+
+	/// Headcount del archivo manual a Junio 2026. Cuenta solo las personas con ACT/OFF = "ACT". Zone y País Overview se filtran desde los slicers de la página.
+	measure 'HC Manual Jun-2026' =
+			CALCULATE (
+			    COUNTROWS ( 'HC Manual LATAM' ),
+			    'HC Manual LATAM'[ACT/OFF] = "ACT"
+			)
+		formatString: #,##0
+		displayFolder: 09 · HeadCount Manual (Excel)
+		lineageTag: 5a1e7c33-9b28-4f6a-8c05-1d3e6f2a9b74
+
+	/// Agrupación de países del archivo manual, derivada de BU Adjusted (mismo criterio que la hoja Overview del Excel).
+	column 'País Overview'
+		dataType: string
+		lineageTag: 3c78b1e5-0f46-4297-8a63-d15e94c07b28
+		summarizeBy: none
+		sourceColumn: País Overview
+		sortByColumn: 'Orden País'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden País'
+		dataType: int64
+		lineageTag: 90e2a457-6c13-48fb-9d70-2a58e6c31f04
+		summarizeBy: sum
+		sourceColumn: Orden País
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Grupo funcional del archivo manual, derivado de Function Adjusted (DL/IL/OH/Aprendiz = COGS).
+	column 'Grupo Funcional'
+		dataType: string
+		lineageTag: 8e59b6c0-f3db-4c52-b485-8c3f63d27e32
+		summarizeBy: none
+		sourceColumn: Grupo Funcional
+		sortByColumn: 'Orden Grupo Funcional'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Grupo Funcional'
+		dataType: int64
+		lineageTag: 7a3e0b96-5d84-41c2-8f19-c60b47e2a385
+		summarizeBy: sum
+		sourceColumn: Orden Grupo Funcional
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Snapshot'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a42e1912-0c64-4c69-963e-3a475c69ddb2
+		summarizeBy: none
+		sourceColumn: Fecha Snapshot
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'País Código'
+		dataType: string
+		lineageTag: 981d8c18-b9a0-41f9-8ac0-901023007627
+		summarizeBy: none
+		sourceColumn: País Código
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Nacional'
+		dataType: string
+		lineageTag: fadfbffd-29f6-4f70-a5a3-53a7d84cab60
+		summarizeBy: none
+		sourceColumn: ID Nacional
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Primer Nombre'
+		dataType: string
+		lineageTag: e6427046-01ad-401f-95d7-ca8582cd2f56
+		summarizeBy: none
+		sourceColumn: Primer Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Primer Apellido'
+		dataType: string
+		lineageTag: 3b690b16-83f0-4875-be1b-59d2e2b7585f
+		summarizeBy: none
+		sourceColumn: Primer Apellido
+
+		annotation SummarizationSetBy = Automatic
+
+	column Género
+		dataType: string
+		lineageTag: 7f935b7f-008a-47f3-b95a-7eeb0847f130
+		summarizeBy: none
+		sourceColumn: Género
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Nacimiento'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e811b707-638c-440c-9674-b66f85192935
+		summarizeBy: none
+		sourceColumn: Fecha Nacimiento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Fecha Contratación'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 56472566-a1e9-43e0-9c68-7157cbaa11d7
+		summarizeBy: none
+		sourceColumn: Fecha Contratación
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Entidad Legal'
+		dataType: string
+		lineageTag: 3de3cb2b-c972-4932-970d-7b966262bef0
+		summarizeBy: none
+		sourceColumn: Entidad Legal
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Título de Cargo Local'
+		dataType: string
+		lineageTag: 39395097-d8ec-4373-a5c6-d74e36caba85
+		summarizeBy: none
+		sourceColumn: Título de Cargo Local
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Contrato'
+		dataType: string
+		lineageTag: b9608288-d356-4d2f-9d7e-f65a541b2406
+		summarizeBy: none
+		sourceColumn: Tipo de Contrato
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Correo de Trabajo'
+		dataType: string
+		lineageTag: ac398e47-2805-4e72-a068-be70a3be3bf4
+		summarizeBy: none
+		sourceColumn: Correo de Trabajo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Centro de Costo'
+		dataType: string
+		lineageTag: 10c4a5b5-fa19-470d-b80e-9f60b11d9f2d
+		summarizeBy: none
+		sourceColumn: Centro de Costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Jornada'
+		dataType: string
+		lineageTag: d22f28a5-6e13-4ff5-b4e4-93402ccd81d8
+		summarizeBy: none
+		sourceColumn: Tipo de Jornada
+
+		annotation SummarizationSetBy = Automatic
+
+	column Depto
+		dataType: string
+		lineageTag: 87085869-ee11-4227-be89-c17cf74b345d
+		summarizeBy: none
+		sourceColumn: Depto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub-Depto
+		dataType: string
+		lineageTag: 975fad11-8932-4279-919e-b83595a14f12
+		summarizeBy: none
+		sourceColumn: Sub-Depto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Jefe Directo'
+		dataType: string
+		lineageTag: 58c59a05-6233-4918-b942-4c2731f27362
+		summarizeBy: none
+		sourceColumn: Jefe Directo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Type Adjusted'
+		dataType: string
+		lineageTag: 04ad0896-896c-480c-b0c3-45ca636b550d
+		summarizeBy: none
+		sourceColumn: Type Adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Function Adjusted'
+		dataType: string
+		lineageTag: 7ec7d85c-383b-448d-aac3-f4f5e433e0a4
+		summarizeBy: none
+		sourceColumn: Function Adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'BU Adjusted'
+		dataType: string
+		lineageTag: 7e6e36c2-50f0-4841-9678-f85abdb1d761
+		summarizeBy: none
+		sourceColumn: BU Adjusted
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACT/OFF
+		dataType: string
+		lineageTag: 1c3df58c-969d-4606-a2f5-33759d39712d
+		summarizeBy: none
+		sourceColumn: ACT/OFF
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Salida'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1bdcbfac-4c60-4b72-83d6-9954853c6722
+		summarizeBy: none
+		sourceColumn: Fecha Salida
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Zone
+		dataType: string
+		lineageTag: 14e731cd-c907-4471-9d0f-133c895d7174
+		summarizeBy: none
+		sourceColumn: Zone
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grade
+		dataType: string
+		lineageTag: 791fad2d-2e61-4e58-8be0-a5f33592a643
+		summarizeBy: none
+		sourceColumn: Grade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Level
+		dataType: string
+		lineageTag: 5b93f15f-9cc9-40f3-9e2a-3f57ddec6351
+		summarizeBy: none
+		sourceColumn: Level
+
+		annotation SummarizationSetBy = Automatic
+
+	column Negocio
+		dataType: string
+		lineageTag: ad7895e7-a9c0-43fc-b88e-14afede95935
+		summarizeBy: none
+		sourceColumn: Negocio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Oracle ID'
+		dataType: string
+		lineageTag: 3aa3e4d8-283f-47bc-8f63-55104a6394cc
+		summarizeBy: none
+		sourceColumn: Oracle ID
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Código del centro de costo local (columna "ID Centro de Costo" del Excel Manual). Clave de cruce contra 'Excel HC Oracle'[Local Cost Center].
+	column 'ID Centro de Costo'
+		dataType: string
+		lineageTag: 4d7e9c21-3a68-4f05-b912-7c0e83b45da6
+		summarizeBy: none
+		sourceColumn: ID Centro de Costo
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Código numérico de 3 dígitos de la entidad legal. "TopRoller" y "Panama" no traen código en el Manual, se mapean a mano contra Oracle (283 y 241).
+	column 'Código Entidad' =
+			SWITCH (
+			    'HC Manual LATAM'[Entidad Legal],
+			    "TopRoller", "283",
+			    "Panama", "241",
+			    LEFT ( 'HC Manual LATAM'[Entidad Legal], 3 )
+			)
+		dataType: string
+		lineageTag: 9e35b840-c17f-42a9-85d6-0b4728fe6c31
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'HC Manual LATAM' = m
+		mode: import
+		source = ```
+				let
+				    // 1. BEST PRACTICE & CLOUD: Envolvemos la carga en un try. 
+				    RutaArchivo = "C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\HeadCount Manual LATAM.xlsx",
+				    ArchivoBinario = try File.Contents(RutaArchivo) otherwise null,
+				
+				    // Si el archivo falla o no existe, devolvemos una tabla vacía para no romper el modelo.
+				    Origen = if ArchivoBinario = null then #table({"Error"}, {{"Archivo no encontrado"}}) else Excel.Workbook(ArchivoBinario, null, true),
+				
+				    // 2. NAVEGACIÓN SEGURA
+				    ExisteHoja = try Origen{[Item = "2026", Kind = "Sheet"]}[Data] otherwise #table({}, {}),
+				
+				    // 3. SELECCIÓN DE COLUMNAS
+				    ColumnasRequeridas = {"Column1", "Column2", "Column4", "Column5", "Column7", "Column9", "Column11", "Column12", "Column13", "Column14", "Column15", "Column16", "Column17", "Column18", "Column19", "Column37", "Column38", "Column39", "Column43", "Column44", "Column46", "Column47", "Column48", "Column49", "Column50", "Column53", "Column65", "Column66"},
+				    #"Columnas elegidas" = try Table.SelectColumns(ExisteHoja, ColumnasRequeridas, MissingField.UseNull) otherwise #table(ColumnasRequeridas, {}),
+				
+				    // --- NUEVO CORTAFUEGOS DE ERRORES NATIVOS ---
+				    // Generamos dinámicamente una lista de reemplazo: {{"Col1", null}, {"Col2", null}...}
+				    // Esto plancha cualquier #N/A, #REF!, o #VALOR! nativo de Excel a null antes de que rompa la query.
+				    ListaReemplazoErrores = List.Transform(Table.ColumnNames(#"Columnas elegidas"), each {_, null}),
+				    #"Errores Eliminados" = Table.ReplaceErrorValues(#"Columnas elegidas", ListaReemplazoErrores),
+				
+				    // 4. RENOMBRADO SEGURO
+				    CambiosNombres = {{"Column1", "Fecha Snapshot"}, {"Column2", "País Código"}, {"Column4", "ID Nacional"}, {"Column5", "Primer Nombre"}, {"Column7", "Primer Apellido"}, {"Column9", "Género"}, {"Column11", "Fecha Nacimiento"}, {"Column12", "Fecha Contratación"}, {"Column13", "Entidad Legal"}, {"Column14", "Título de Cargo Local"}, {"Column15", "Tipo de Contrato"}, {"Column16", "Correo de Trabajo"}, {"Column17", "ID Centro de Costo"}, {"Column18", "Centro de Costo"}, {"Column19", "Tipo de Jornada"}, {"Column37", "Depto"}, {"Column38", "Sub-Depto"}, {"Column39", "Jefe Directo"}, {"Column43", "Type Adjusted"}, {"Column44", "Function Adjusted"}, {"Column46", "BU Adjusted"}, {"Column47", "ACT/OFF"}, {"Column48", "Fecha Salida"}, {"Column49", "Zone"}, {"Column50", "Grade"}, {"Column53", "Level"}, {"Column65", "Negocio"}, {"Column66", "Oracle ID"}},
+				    #"Columnas renombradas" = Table.RenameColumns(#"Errores Eliminados", CambiosNombres, MissingField.Ignore),
+				    
+				    // 5. FILTRADO SEGURO: Ignora errores si la celda venía con #N/A.
+				    #"Solo Junio 2026" = Table.SelectRows(#"Columnas renombradas", each (try Date.From(Record.FieldOrDefault(_, "Fecha Snapshot", null)) = #date(2026, 6, 30) otherwise false)),
+				
+				    // --- INICIO DEL BLINDAJE EXTREMO ---
+				    // Funciones internas para limpieza absoluta de Errores, Nulls y Textos "#N/A"
+				    LimpiarTexto = (v) => 
+				        let 
+				            IntentarTexto = try Text.Trim(Text.From(v)) otherwise "0",
+				            Resultado = if IntentarTexto = null or IntentarTexto = "" or IntentarTexto = "#N/A" or IntentarTexto = "#N/D" then "0" else IntentarTexto
+				        in Resultado,
+				        
+				    LimpiarFecha = (v) => 
+				        let 
+				            IntentarFecha = try Date.From(v) otherwise #date(1900, 1, 1),
+				            // Si venía un texto "#N/A", el try de arriba falla y devuelve 1900-01-01. Solo cubrimos si llega nulo explícito:
+				            Resultado = if v = null then #date(1900, 1, 1) else IntentarFecha
+				        in Resultado,
+				
+				    ColumnasActuales = Table.ColumnNames(#"Solo Junio 2026"),
+				    ColsFechas = List.Intersect({{"Fecha Snapshot", "Fecha Nacimiento", "Fecha Contratación", "Fecha Salida"}, ColumnasActuales}),
+				    ColsTextosYNumeros = List.Difference(ColumnasActuales, ColsFechas),
+				
+				    #"Blindaje Fechas" = Table.TransformColumns(#"Solo Junio 2026", List.Transform(ColsFechas, each {_, LimpiarFecha, type date}), null, MissingField.Ignore),
+				    // Al forzar todo lo demás a text con "0", blindas el modelo para que las medidas DAX o relaciones no se rompan por type mismatch.
+				    #"Blindaje Textos" = Table.TransformColumns(#"Blindaje Fechas", List.Transform(ColsTextosYNumeros, each {_, LimpiarTexto, type text}), null, MissingField.Ignore),
+				    // --- FIN DEL BLINDAJE EXTREMO ---
+				
+				    // 6. NORMALIZACIÓN SEGURA
+				    #"Zone Normalizada" = Table.TransformColumns(#"Blindaje Textos", {{"Zone", each try Text.Upper(_) otherwise "0", type text}}, null, MissingField.Ignore),
+				
+				    // 7. AGRUPACIONES (Ya estaban bien estructuradas, solo mantenemos la consistencia)
+				    #"Pais Overview Agregado" = Table.AddColumn(#"Zone Normalizada", "País Overview", each 
+				        let bu = Record.FieldOrDefault(_, "BU Adjusted", "0") in
+				        if List.Contains({"270 - HD Brazil WCP/AP Components", "271 - HD Toldos Do Brasil Ltda", "272 - Persianas en Casa Ltda", "274 - Elubel Industria e Comercio Ltda", "270 - HD Brazil"}, bu) then "Brazil"
+				        else if List.Contains({"503 - HD Chile", "280 - Persianas Andina Ltda.", "TopRoller", "260 - HD Peru"}, bu) then "Chile & Perú"
+				        else if bu = "502 - HD Mexico" then "Mexico"
+				        else if List.Contains({"230 - HD Colombia", "231 - HD Colombia", "Panama"}, bu) then "Colombia & Panamá"
+				        else if bu = "285 - HD Argentina" then "Argentina"
+				        else if bu = "HD LAO" then "Corporate Latam"
+				        else "Sin Definir", type text),
+				
+				    #"Orden Pais Agregado" = Table.AddColumn(#"Pais Overview Agregado", "Orden País", each 
+				        let p = Record.FieldOrDefault(_, "País Overview", "0") in
+				        if p = "Argentina" then 1
+				        else if p = "Brazil" then 2
+				        else if p = "Mexico" then 3
+				        else if p = "Chile & Perú" then 4
+				        else if p = "Colombia & Panamá" then 5
+				        else if p = "Corporate Latam" then 6
+				        else 9, Int64.Type),
+				
+				    #"Grupo Funcional Agregado" = Table.AddColumn(#"Orden Pais Agregado", "Grupo Funcional", each 
+				        let f = Record.FieldOrDefault(_, "Function Adjusted", "0") in
+				        if List.Contains({"DL", "IL", "OH", "Aprendiz"}, f) then "Total COGS Functions"
+				        else if f = "Selling" then "Total Selling Functions"
+				        else if f = "Marketing" then "Total Marketing Functions"
+				        else if f = "Research & Development" then "Research & Development"
+				        else if f = "General & Administrative" then "Total G&A Functions"
+				        else "Sin Definir", type text),
+				
+				    #"Orden Grupo Agregado" = Table.AddColumn(#"Grupo Funcional Agregado", "Orden Grupo Funcional", each 
+				        let g = Record.FieldOrDefault(_, "Grupo Funcional", "0") in
+				        if g = "Total COGS Functions" then 1
+				        else if g = "Total Selling Functions" then 2
+				        else if g = "Total Marketing Functions" then 3
+				        else if g = "Research & Development" then 4
+				        else if g = "Total G&A Functions" then 5
+				        else 6, Int64.Type)
+				in
+				    #"Orden Grupo Agregado"
+				```
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

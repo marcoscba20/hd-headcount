@@ -1,0 +1,152 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "ce552f0e-eef8-4118-88bd-3a8a1bd3a08a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 326,
+            "y": 0
+          },
+          "nodeIndex": "Excel HC Oracle",
+          "nodeLineageTag": "bf125006-48c8-47d6-8c24-a4fa9ce54e0c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 610,
+            "y": 0
+          },
+          "nodeIndex": "HC Manual LATAM",
+          "nodeLineageTag": "3f8c1a92-6d47-4b05-9e21-7c4a5b8de013",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 116.39999389648438,
+            "y": 327
+          },
+          "nodeIndex": "Países",
+          "nodeLineageTag": "b1838203-4402-42e3-9e12-7db03cfef2b5",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 894,
+            "y": 79.5
+          },
+          "nodeIndex": "Dim Centro de Costo",
+          "nodeLineageTag": "5a17c982-4b60-4e37-8d25-9c31f0e6ab74",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1178,
+            "y": 115.5
+          },
+          "nodeIndex": "Dim Entidad Legal",
+          "nodeLineageTag": "3c8e50b1-7a24-4d69-9f13-6e02ab75c840",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1462,
+            "y": 127.5
+          },
+          "nodeIndex": "Dim Type",
+          "nodeLineageTag": "b1f0d4a7-2e93-4c58-9a61-3d70b8e45f12",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1746,
+            "y": 79.5
+          },
+          "nodeIndex": "Calendario Baja",
+          "nodeLineageTag": "7d052ae9-31b6-4c84-95f0-6e2179ca38b4",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2030,
+            "y": 79.5
+          },
+          "nodeIndex": "Calendario Ingreso",
+          "nodeLineageTag": "3f8a25c1-64b7-4e09-a3d5-91c47e026b8f",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2314,
+            "y": 151.5
+          },
+          "nodeIndex": "Movimiento HC",
+          "nodeLineageTag": "b81c47e0-5d92-4a06-8f31-c72e50194ab3",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

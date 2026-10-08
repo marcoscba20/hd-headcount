@@ -1,0 +1,78 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "txt-aviso",
+  "position": {
+    "x": 40,
+    "y": 1320,
+    "z": 11000,
+    "height": 60,
+    "width": 1820,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "El export de Oracle trae el campo \"Local Cost Center\" poblado sólo en una minoría de los registros activos, así que la mayoría de los códigos van a figurar como \"Solo Manual\". El cruce se hace por código, no por nombre: Oracle usa códigos numéricos y el Manual usa además nombres, que no son comparables entre sí.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8A6D00"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

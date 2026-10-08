@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e3e4de65aec0597b76e2",
+  "displayName": "Validación (Turnover)",
+  "displayOption": "FitToWidth",
+  "height": 2400,
+  "width": 1920
+}

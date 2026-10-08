@@ -1,0 +1,1093 @@
+/// Historial de asignaciones Oracle (SCD2). Una fila por asignación y versión efectiva vigente entre Effective Start Date y Effective End Date (4712-12-31 = vigente hoy). Historia confiable desde 2024-12-31. Medidas: carpeta '11 · Historial (PIT)'; controles: '12 · Validación Historial'.
+table 'Asignaciones Historial'
+	lineageTag: 791b6432-7b46-4a67-966d-e130d9174711
+
+	/// Personas con asignación activa al último día del período, según la versión efectiva de Oracle a esa fecha. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	measure 'HC Hist Fin' =
+			VAR D = MAX ( 'Calendario'[Date] )
+			RETURN
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Asignaciones Historial'[Person Number] ),
+			    'Asignaciones Historial'[Effective Latest Change] = "Yes",
+			    'Asignaciones Historial'[Effective Start Date] <= D,
+			    'Asignaciones Historial'[Fin Vigencia HC] >= D,
+			    'Asignaciones Historial'[Assignment Status Type] = "Active",
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: de6a8a91-90ca-4cb5-bb2d-df511ce8c89d
+
+	/// Personas activas el día previo al inicio del período (historial). Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	measure 'HC Hist Inicio' =
+			VAR D = MIN ( 'Calendario'[Date] ) - 1
+			RETURN
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Asignaciones Historial'[Person Number] ),
+			    'Asignaciones Historial'[Effective Latest Change] = "Yes",
+			    'Asignaciones Historial'[Effective Start Date] <= D,
+			    'Asignaciones Historial'[Fin Vigencia HC] >= D,
+			    'Asignaciones Historial'[Assignment Status Type] = "Active",
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: f8cee8da-c727-4537-a537-001f623ccab9
+
+	/// Promedio inicio/fin del período (historial). Denominador de las tasas de rotación históricas.
+	measure 'HC Hist Promedio' = DIVIDE ( [HC Hist Inicio] + [HC Hist Fin], 2 )
+		formatString: #,##0.0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 15415bc6-4110-401d-8232-5cae92d8a8c4
+
+	/// HC al cierre de cada mes COMPLETO con atributos de esa fecha (evolución con 'Calendario'[Año-Mes] en el eje). Equivalente histórico de [HC Activo PIT]. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	measure 'HC Hist PIT' =
+			VAR FinCerrado = EOMONTH ( TODAY (), -1 )
+			VAR D = MIN ( MAX ( 'Calendario'[Date] ), FinCerrado )
+			RETURN
+			    IF (
+			        MIN ( 'Calendario'[Date] ) <= FinCerrado,
+			        CALCULATE (
+			            DISTINCTCOUNT ( 'Asignaciones Historial'[Person Number] ),
+			            'Asignaciones Historial'[Effective Latest Change] = "Yes",
+			            'Asignaciones Historial'[Effective Start Date] <= D,
+			            'Asignaciones Historial'[Fin Vigencia HC] >= D,
+			            'Asignaciones Historial'[Assignment Status Type] = "Active",
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			        )
+			    )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 1e75d689-5c72-4218-a79b-19a5507395d9
+
+	/// HC un año antes del cierre del período. En blanco antes de 2024-12-31 (el historial empieza ahí).
+	measure 'HC Hist Hace 12M' =
+			VAR D = EDATE ( MAX ( 'Calendario'[Date] ), -12 )
+			RETURN
+			    IF (
+			        D >= DATE ( 2024, 12, 31 ),
+			        CALCULATE (
+			            DISTINCTCOUNT ( 'Asignaciones Historial'[Person Number] ),
+			            'Asignaciones Historial'[Effective Latest Change] = "Yes",
+			            'Asignaciones Historial'[Effective Start Date] <= D,
+			            'Asignaciones Historial'[Fin Vigencia HC] >= D,
+			            'Asignaciones Historial'[Assignment Status Type] = "Active",
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			        )
+			    )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 52e8b11b-fb1b-4518-9c7c-786105acea05
+
+	/// Variación del HC histórico contra 12 meses antes.
+	measure 'Δ HC Hist vs 12M' = IF ( NOT ISBLANK ( [HC Hist Hace 12M] ), [HC Hist Fin] - [HC Hist Hace 12M] )
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 3351f65a-7c23-4c84-8391-0a5bb379f3c6
+
+	/// Eventos del período (altas, bajas, promociones, cambios de puesto y de manager), uno por asignación, fecha y tipo. Abrir por 'Asignaciones Historial'[Tipo Evento]. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	measure 'Eventos Hist' =
+			VAR Ini = MIN ( 'Calendario'[Date] )
+			VAR Fin = MAX ( 'Calendario'[Date] )
+			RETURN
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Asignaciones Historial'[Clave Evento] ),
+			    'Asignaciones Historial'[Fecha Evento] >= Ini,
+			    'Asignaciones Historial'[Fecha Evento] <= Fin,
+			    KEEPFILTERS ( 'Asignaciones Historial'[Tipo Evento] <> "Otro" ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: f8978296-e003-4e93-836d-69cb246b53a0
+
+	/// Ingresos reales del período (Hire, Rehire, Add Contingent Worker). Excluye las asignaciones efímeras (abiertas y cerradas sin evento de baja).
+	measure 'Altas Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Alta" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 8279b965-41ab-4a48-8b37-58d00a503076
+
+	/// Bajas reales del período (Terminate Work Relationship), fechadas en el último día trabajado. Excluye asignaciones efímeras.
+	measure 'Bajas Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Baja" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 4301d4a6-da98-40aa-a7fa-d9107201969c
+
+	/// Bajas voluntarias del período según 'Tipo de baja' de Oracle.
+	measure 'Bajas Voluntarias Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Baja", 'Asignaciones Historial'[Tipo de baja] = "Voluntary" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: bce87d91-0b83-421c-ad09-432afe5f343e
+
+	/// Bajas involuntarias del período según 'Tipo de baja' de Oracle.
+	measure 'Bajas Involuntarias Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Baja", 'Asignaciones Historial'[Tipo de baja] = "Involuntary" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 1ede143b-3735-49cf-a97c-9f79766daacc
+
+	/// Promociones (acción Promote) del período.
+	measure 'Promociones Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Promoción" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 3947777a-0297-421a-b747-18b432bf7b0b
+
+	/// Cambios de asignación (Change Employment) del período.
+	measure 'Cambios de Puesto Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Cambio de puesto" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 7cefe09b-a774-47f1-abc0-60912e5d4162
+
+	/// Cambios de manager del período.
+	measure 'Cambios de Manager Hist' = CALCULATE ( [Eventos Hist], 'Asignaciones Historial'[Tipo Evento] = "Cambio de manager" )
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 3a81b673-45a2-4dcc-b8a8-057de435713b
+
+	/// Movimientos internos del período: promociones + cambios de puesto + cambios de manager.
+	measure 'Movimientos Internos Hist' = [Promociones Hist] + [Cambios de Puesto Hist] + [Cambios de Manager Hist]
+		formatString: #,##0
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 0edc95b9-da58-4de3-8085-2ecfec4d8498
+
+	/// Bajas reales / HC promedio histórico.
+	measure 'Rotación % Hist' = DIVIDE ( [Bajas Hist], [HC Hist Promedio] )
+		formatString: 0.0%
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 450e8285-4618-49fb-b2be-1fd005ac7e0e
+
+	/// Bajas voluntarias / HC promedio histórico.
+	measure 'Rotación Voluntaria % Hist' = DIVIDE ( [Bajas Voluntarias Hist], [HC Hist Promedio] )
+		formatString: 0.0%
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 1f9245ae-96cb-4fde-82fc-649a54786a17
+
+	/// Bajas involuntarias / HC promedio histórico.
+	measure 'Rotación Involuntaria % Hist' = DIVIDE ( [Bajas Involuntarias Hist], [HC Hist Promedio] )
+		formatString: 0.0%
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 976cf72a-0fb0-4ba6-9e97-47264c4fea82
+
+	/// Altas reales / HC promedio histórico.
+	measure 'Tasa Contratación % Hist' = DIVIDE ( [Altas Hist], [HC Hist Promedio] )
+		formatString: 0.0%
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: d95201b7-5034-4a62-bda9-449901df970d
+
+	/// Promociones / HC promedio histórico.
+	measure 'Tasa Promoción % Hist' = DIVIDE ( [Promociones Hist], [HC Hist Promedio] )
+		formatString: 0.0%
+		displayFolder: 11 · Historial (PIT)
+		lineageTag: 6bc73529-45c9-4674-8b1f-e949476b1c1e
+
+	/// Debe ser ~0 sin slicers de atributos: el corte por fechas de ingreso/baja y el historial coinciden salvo personas con varias asignaciones. Con slicers puede diferir porque el historial usa los atributos de cada fecha.
+	measure 'Val · Δ HC Fin Hist vs Actual' = [HC Hist Fin] - [HC Activo Fin]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 12 · Validación Historial
+		lineageTag: 6af47b0c-28ed-4cc1-9bf3-f5ccc04f3ea4
+
+	/// Diferencia de altas. Negativa: [Altas] cuenta las asignaciones efímeras como ingresos.
+	measure 'Val · Δ Altas Hist vs Actual' = [Altas Hist] - [Altas]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 12 · Validación Historial
+		lineageTag: 8522765e-cacf-4dc8-87fd-4f71e7a6957f
+
+	/// Diferencia de bajas. Negativa: [Bajas] cuenta como baja el cierre de asignaciones efímeras.
+	measure 'Val · Δ Bajas Hist vs Actual' = [Bajas Hist] - [Bajas]
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 12 · Validación Historial
+		lineageTag: 7846c419-485d-4312-9853-c715ee5ed936
+
+	/// Asignaciones cerradas en el período sin evento de baja (pending workers / asignaciones administrativas abiertas y cerradas casi en el día). Explican la diferencia de [Bajas] contra [Bajas Hist].
+	measure 'Val · Asignaciones Efímeras' =
+			VAR Ini = MIN ( 'Calendario'[Date] )
+			VAR Fin = MAX ( 'Calendario'[Date] )
+			RETURN
+			CALCULATE (
+			    DISTINCTCOUNT ( 'Asignaciones Historial'[Assignment Number] ),
+			    'Asignaciones Historial'[Asignación Efímera] = "Sí",
+			    'Asignaciones Historial'[Termination Date] >= Ini,
+			    'Asignaciones Historial'[Termination Date] <= Fin,
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 12 · Validación Historial
+		lineageTag: b69c5d3a-4e2c-462a-8af0-c308be6e29da
+
+	/// HC Fin - (Inicio + Altas - Bajas) con el historial. Diferencias chicas = personas con más de una asignación (transferencias entre entidades, reingresos).
+	measure 'Val · Conciliación Hist' = [HC Hist Fin] - ( [HC Hist Inicio] + [Altas Hist] - [Bajas Hist] )
+		formatString: +#,##0;-#,##0;0
+		displayFolder: 12 · Validación Historial
+		lineageTag: a8638be7-66eb-4a23-9fe7-90dab3d73a10
+
+	column 'Enterprise Hire Date'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 4a228c86-f14d-444e-b178-e098c6394d5a
+		summarizeBy: none
+		sourceColumn: Enterprise Hire Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Person Number'
+		dataType: int64
+		lineageTag: f48b6e9c-af75-40eb-892d-ca3e75797100
+		summarizeBy: distinctCount
+		sourceColumn: Person Number
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Antigüedad (años)'
+		dataType: double
+		lineageTag: ba132804-025d-4202-9a22-345d3c1d5504
+		summarizeBy: sum
+		sourceColumn: Antigüedad (años)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 01 Person Number'
+		dataType: double
+		lineageTag: f76a95e9-3242-4ef7-86ee-12dd0ba183d8
+		summarizeBy: sum
+		sourceColumn: Parent Manager 01 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 02 Person Number'
+		dataType: double
+		lineageTag: a0c14a77-839c-421b-96d3-0abff8e10162
+		summarizeBy: sum
+		sourceColumn: Parent Manager 02 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 03 Person Number'
+		dataType: double
+		lineageTag: 9d4a2e7a-32fc-4434-bb05-a6a558da12ae
+		summarizeBy: sum
+		sourceColumn: Parent Manager 03 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 04 Person Number'
+		dataType: double
+		lineageTag: cf82ca52-5c1a-492c-ab6e-3cc84d3dc1b0
+		summarizeBy: sum
+		sourceColumn: Parent Manager 04 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 05 Person Number'
+		dataType: double
+		lineageTag: 1e0da095-80ad-42fa-a672-df6866707896
+		summarizeBy: sum
+		sourceColumn: Parent Manager 05 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 06 Person Number'
+		dataType: double
+		lineageTag: b66b7a2f-e26b-4759-8d8c-d77173c2ffcb
+		summarizeBy: sum
+		sourceColumn: Parent Manager 06 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 07 Person Number'
+		dataType: double
+		lineageTag: 42686114-607d-4497-ab51-98915e4e3553
+		summarizeBy: sum
+		sourceColumn: Parent Manager 07 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Parent Manager 08 Person Number'
+		dataType: double
+		lineageTag: bff8bcf0-eba4-4c8b-99bc-9f9a2338d299
+		summarizeBy: sum
+		sourceColumn: Parent Manager 08 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'National ID'
+		dataType: string
+		lineageTag: 3bae007d-d3fd-43de-8ab1-569c77f9c687
+		summarizeBy: none
+		sourceColumn: National ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Display Name'
+		dataType: string
+		lineageTag: 87bcff19-5195-4e7a-87cb-0861e2913091
+		summarizeBy: none
+		sourceColumn: Display Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Position Name'
+		dataType: string
+		lineageTag: bb134605-93b4-4755-a4a9-74df51569074
+		summarizeBy: none
+		sourceColumn: Position Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Name'
+		dataType: string
+		lineageTag: f4a2f283-3bf7-47c1-9c90-67a83b734aba
+		summarizeBy: none
+		sourceColumn: Job Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ZBB / COGS'
+		dataType: string
+		lineageTag: 9f836844-8fc9-42a9-b49c-10554abaca5e
+		summarizeBy: none
+		sourceColumn: ZBB / COGS
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manager Type'
+		dataType: string
+		lineageTag: 5015298c-f2a5-48de-88de-608b6d6416ea
+		summarizeBy: none
+		sourceColumn: Manager Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manager Display Name'
+		dataType: string
+		lineageTag: c3bdaa41-8967-424c-bb7c-c4997b3e7d96
+		summarizeBy: none
+		sourceColumn: Manager Display Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'E-Mail Address'
+		dataType: string
+		lineageTag: a9c23278-4706-4873-b938-75b2aee5c450
+		summarizeBy: none
+		sourceColumn: E-Mail Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Department Name'
+		dataType: string
+		lineageTag: 319f2ed5-a5b6-4bed-8ba7-4394c8f2f6eb
+		summarizeBy: none
+		sourceColumn: Department Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legal Employer Name'
+		dataType: string
+		lineageTag: 4008238c-c4dd-4cbd-9e2d-8d2283e8c4c1
+		summarizeBy: none
+		sourceColumn: Legal Employer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 0560e6c9-32cf-4972-99e9-8dd92395154c
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Assignment Status Code'
+		dataType: string
+		lineageTag: ee5477c3-dd6f-44af-b0bb-f74ba5bb174d
+		summarizeBy: none
+		sourceColumn: Assignment Status Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Code'
+		dataType: string
+		lineageTag: 1ea3ae04-9fc1-41a5-8866-a88e9a26aa83
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country_1
+		dataType: string
+		lineageTag: a811ee92-d1c8-468c-bc14-e40ffd8252ef
+		summarizeBy: none
+		sourceColumn: Country_1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legislation Code'
+		dataType: string
+		lineageTag: e163affd-1520-42a2-bc39-e00662844e60
+		summarizeBy: none
+		sourceColumn: Legislation Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Grade Name'
+		dataType: string
+		lineageTag: ffe6de36-f820-4895-871a-ef9b1c874173
+		summarizeBy: none
+		sourceColumn: Grade Name
+		sortByColumn: 'Grade Nº'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Work Email'
+		dataType: string
+		lineageTag: cb43b949-7cb6-41ec-8414-1cd3b3d393fc
+		summarizeBy: none
+		sourceColumn: Work Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Labor Type'
+		dataType: string
+		lineageTag: 0ad863ea-0bcc-4ea7-8f59-8b2200e04cd7
+		summarizeBy: none
+		sourceColumn: Labor Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Base OHI'
+		dataType: string
+		lineageTag: f33c3aa6-40f6-4fc0-9925-52db2a6595e7
+		summarizeBy: none
+		sourceColumn: Base OHI
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 01 Name'
+		dataType: string
+		lineageTag: 8643a5b1-fbcd-4e60-ac1d-6aae1c85e121
+		summarizeBy: none
+		sourceColumn: Parent Manager 01 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 01 Work Email'
+		dataType: string
+		lineageTag: ad33e719-35bb-47e5-b0c7-96f4b7263e94
+		summarizeBy: none
+		sourceColumn: Parent Manager 01 Work Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 02 Name'
+		dataType: string
+		lineageTag: 71d80282-539d-4945-b52f-7c23db75907c
+		summarizeBy: none
+		sourceColumn: Parent Manager 02 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 03 Name'
+		dataType: string
+		lineageTag: a20b5f65-2171-4bd3-aa1d-76911aad6d4c
+		summarizeBy: none
+		sourceColumn: Parent Manager 03 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 04 Name'
+		dataType: string
+		lineageTag: ee029d15-deb6-4627-ae5d-e648e2aea731
+		summarizeBy: none
+		sourceColumn: Parent Manager 04 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 05 Name'
+		dataType: string
+		lineageTag: 25328859-af0f-4bef-be28-00ddec069b4f
+		summarizeBy: none
+		sourceColumn: Parent Manager 05 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 06 Name'
+		dataType: string
+		lineageTag: c2edbf17-8713-492c-91d2-a13f0495823a
+		summarizeBy: none
+		sourceColumn: Parent Manager 06 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 07 Name'
+		dataType: string
+		lineageTag: 150872d5-96f6-478e-8bbd-a08a2b5ce52c
+		summarizeBy: none
+		sourceColumn: Parent Manager 07 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 08 Name'
+		dataType: string
+		lineageTag: d943d3b2-aa61-4fca-9bcf-a87e114cf8e9
+		summarizeBy: none
+		sourceColumn: Parent Manager 08 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manager Job Name'
+		dataType: string
+		lineageTag: 2ef56bf0-45f6-4f47-a315-45fe64d8cde3
+		summarizeBy: none
+		sourceColumn: Manager Job Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'EPM Main Function Name'
+		dataType: string
+		lineageTag: e2de05a8-2005-45ea-b419-481fe7227dc0
+		summarizeBy: none
+		sourceColumn: EPM Main Function Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Termination Date'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: e3717846-4c59-4d7a-833c-e48efa4ccb31
+		summarizeBy: none
+		sourceColumn: Termination Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Business Unit Name'
+		dataType: string
+		lineageTag: 4a004858-cbd1-43b8-9f61-51b0e624ec45
+		summarizeBy: none
+		sourceColumn: Business Unit Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACTIVE
+		dataType: string
+		lineageTag: e684e1db-911c-43a9-8b66-2c69a0f003f0
+		summarizeBy: none
+		sourceColumn: ACTIVE
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Name'
+		dataType: string
+		lineageTag: 3535172d-903c-4ff6-a9d4-2ec23552105f
+		summarizeBy: none
+		sourceColumn: Action Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Reason'
+		dataType: string
+		lineageTag: 2d56222a-9760-4cd2-9981-b707adce7990
+		summarizeBy: none
+		sourceColumn: Action Reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Grade Nº'
+		dataType: int64
+		lineageTag: 0fb4b30a-0ba1-4dbd-b44a-d465d57504f4
+		summarizeBy: sum
+		sourceColumn: Grade Nº
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Grupo Funcional'
+		dataType: string
+		lineageTag: f71e9c25-8499-4d78-8f45-25fe367fc3db
+		summarizeBy: none
+		sourceColumn: Grupo Funcional
+		sortByColumn: 'Orden Grupo Funcional'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Grupo Funcional'
+		dataType: int64
+		lineageTag: 73c03b0a-5d09-4b8c-a402-8381d20ac5f9
+		summarizeBy: sum
+		sourceColumn: Orden Grupo Funcional
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'País Overview'
+		dataType: string
+		lineageTag: 4451748f-e615-4533-972a-0de55928a395
+		summarizeBy: none
+		sourceColumn: País Overview
+		sortByColumn: 'Orden País'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden País'
+		dataType: int64
+		lineageTag: e1f2136b-e7f4-44ed-b548-3a90d6e12fc2
+		summarizeBy: sum
+		sourceColumn: Orden País
+
+		annotation SummarizationSetBy = Automatic
+
+	column Level
+		dataType: string
+		lineageTag: 7edbe689-84b7-49eb-a542-5a8789a3d4dd
+		summarizeBy: none
+		sourceColumn: Level
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Position Code'
+		dataType: string
+		lineageTag: 3eb67d1c-75fc-4eef-8f1a-88715639144f
+		summarizeBy: none
+		sourceColumn: Position Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Person Gender'
+		dataType: string
+		isHidden
+		lineageTag: 5423eb7a-52dc-4223-b772-960cc7ed648a
+		summarizeBy: none
+		sourceColumn: Person Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Person Date of Birth'
+		dataType: dateTime
+		isHidden
+		formatString: dd/MM/yyyy
+		lineageTag: a220c76a-ae5e-4fb4-abac-e17de955fc01
+		summarizeBy: none
+		sourceColumn: Person Date of Birth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Local Cost Center'
+		dataType: string
+		lineageTag: 1f473f35-d497-4cd1-ba4c-25f45e826c3d
+		summarizeBy: none
+		sourceColumn: Local Cost Center
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cross Charge Entity Name'
+		dataType: string
+		lineageTag: 26b9e43a-aeda-4c02-b326-62bf3640ea10
+		summarizeBy: none
+		sourceColumn: Cross Charge Entity Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bonus Swap Eligible'
+		dataType: string
+		lineageTag: 92240d76-0e52-47bc-ace1-eb501047deb6
+		summarizeBy: none
+		sourceColumn: Bonus Swap Eligible
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'MBO Bonus Scheme'
+		dataType: string
+		lineageTag: ba425da9-9487-4452-a221-981bf2051d3e
+		summarizeBy: none
+		sourceColumn: MBO Bonus Scheme
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cross Charge Origen'
+		dataType: string
+		lineageTag: 93243fee-2947-4892-85de-2a3013dce3c5
+		summarizeBy: none
+		sourceColumn: Cross Charge Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ámbito
+		dataType: string
+		lineageTag: 29cac60f-715f-41c3-9708-2caab9df4393
+		summarizeBy: none
+		sourceColumn: Ámbito
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Assignment Number'
+		dataType: string
+		lineageTag: 0c0d47aa-c356-4851-a9df-217422ae8705
+		summarizeBy: none
+		sourceColumn: Assignment Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Primary Assignment Flag'
+		dataType: string
+		lineageTag: 9d615275-8a3e-43f2-9bc0-38d937e2a65d
+		summarizeBy: none
+		sourceColumn: Primary Assignment Flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Effective Start Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 79fe3f39-17aa-4b4b-8dfb-2fb3ca8aec80
+		summarizeBy: none
+		sourceColumn: Effective Start Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Effective End Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: fddb5c48-6d39-4f01-9315-db7b6465ea6a
+		summarizeBy: none
+		sourceColumn: Effective End Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Effective Sequence'
+		dataType: double
+		formatString: 0
+		lineageTag: 6e778f80-0a8d-43ff-8660-dc44ef3be88f
+		summarizeBy: sum
+		sourceColumn: Effective Sequence
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Effective Latest Change'
+		dataType: string
+		lineageTag: aa6bf31f-061d-4845-a032-7740e5c8965a
+		summarizeBy: none
+		sourceColumn: Effective Latest Change
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Code'
+		dataType: string
+		lineageTag: b91f3944-e3fc-4ca7-bd4b-cfb18a909634
+		summarizeBy: none
+		sourceColumn: Action Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Type'
+		dataType: string
+		lineageTag: cf4e8f6e-445e-4b75-b529-51b1bbd391a5
+		summarizeBy: none
+		sourceColumn: Action Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Reason Code'
+		dataType: string
+		lineageTag: 38628f9c-d112-4b8b-9dec-8efecdc040c7
+		summarizeBy: none
+		sourceColumn: Action Reason Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Assignment Status'
+		dataType: string
+		lineageTag: 92592798-433f-4734-80f4-b7c8e8acfae5
+		summarizeBy: none
+		sourceColumn: Assignment Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Assignment Status Type'
+		dataType: string
+		lineageTag: 8c39cf56-4273-4567-b775-2f192f33db53
+		summarizeBy: none
+		sourceColumn: Assignment Status Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Hire Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: de76a8d0-1ef9-44ec-aa65-c599445a9ad6
+		summarizeBy: none
+		sourceColumn: Hire Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Original Hire Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0070394c-814e-4adc-8ebe-1bedbe212ec6
+		summarizeBy: none
+		sourceColumn: Original Hire Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Tipo de baja'
+		dataType: string
+		lineageTag: ac34a437-1d9d-472c-bf0e-651cdd525515
+		summarizeBy: none
+		sourceColumn: Tipo de baja
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rehire Recommendation'
+		dataType: string
+		lineageTag: f3e82ad4-adae-4b86-8e3c-a2419b5f8f57
+		summarizeBy: none
+		sourceColumn: Rehire Recommendation
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legal Employer Code'
+		dataType: string
+		lineageTag: e85990cb-a985-4c71-8092-b8573f4c6c2d
+		summarizeBy: none
+		sourceColumn: Legal Employer Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Job
+		dataType: string
+		lineageTag: 7d326eb3-db2c-496d-859e-887e369ce67f
+		summarizeBy: none
+		sourceColumn: Job
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Job Code'
+		dataType: string
+		lineageTag: 2e9e7050-4744-441c-bb8b-75680f64b4b1
+		summarizeBy: none
+		sourceColumn: Job Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		dataType: string
+		lineageTag: 2895c586-7c66-4d13-8109-bea7c089263a
+		summarizeBy: none
+		sourceColumn: Location
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Grade Code'
+		dataType: string
+		lineageTag: 95013fce-41ba-4d36-9a0b-e9c307132daa
+		summarizeBy: none
+		sourceColumn: Grade Code
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Effective End Date ajustada: si la versión siguiente es la baja, termina el día anterior (la persona deja de contar el día de su Termination Date, igual que en [HC Activo Fin]).
+	column 'Fin Vigencia HC'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 24a1d3a1-6a52-4ebd-8ea9-e40e30521fe1
+		summarizeBy: none
+		sourceColumn: Fin Vigencia HC
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Fecha del evento de la versión: Effective Start Date, salvo bajas (Start - 1 = último día trabajado = Termination Date).
+	column 'Fecha Evento'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 4973bc20-db33-4590-af7f-9624bd3568fe
+		summarizeBy: none
+		sourceColumn: Fecha Evento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Sí = asignación con Termination Date pero sin evento Terminate (pending worker o asignación administrativa abierta y cerrada casi en el día). No es alta ni baja real.
+	column 'Asignación Efímera'
+		dataType: string
+		lineageTag: 2b222b59-293e-4abe-b5ae-8b5bc3fd1645
+		summarizeBy: none
+		sourceColumn: Asignación Efímera
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Alta / Baja / Promoción / Cambio de puesto / Cambio de manager / Otro (sincronizaciones de posición, pending workers, efímeras).
+	column 'Tipo Evento'
+		dataType: string
+		lineageTag: c723c469-e794-4447-be81-a139e15babc8
+		summarizeBy: none
+		sourceColumn: Tipo Evento
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Assignment Number | Fecha Evento | Tipo Evento. Deduplica eventos repetidos el mismo día.
+	column 'Clave Evento'
+		dataType: string
+		lineageTag: 75334b32-1fe9-4f85-b517-cb6dc40fcd15
+		summarizeBy: none
+		sourceColumn: Clave Evento
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nivel a la fecha de la versión ("L1".."L9" / "Sin Nivel"). Misma regla que 'Excel HC Oracle'[Nivel].
+	column Nivel =
+			VAR L = 'Asignaciones Historial'[Level]
+			RETURN
+			    IF ( L IN { "0", "", "Sin Datos" } || ISBLANK ( L ), "Sin Nivel", "L" & L )
+		dataType: string
+		lineageTag: bf494556-e880-4a6d-b6d4-88d217822114
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Agrupación de Grade a la fecha de la versión. Misma regla que 'Excel HC Oracle'[Grade Grupo].
+	column 'Grade Grupo' =
+			SWITCH (
+			    TRUE (),
+			    'Asignaciones Historial'[Grade Nº] = 99, "Sin Grade",
+			    'Asignaciones Historial'[Grade Nº] >= 8, "G8+",
+			    "G1-G7"
+			)
+		dataType: string
+		lineageTag: 259c0948-54e5-446f-b592-160d669eb642
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Esquema MBO a la fecha de la versión. Misma regla que 'Excel HC Oracle'[Esquema MBO].
+	column 'Esquema MBO' =
+			SWITCH (
+			    'Asignaciones Historial'[MBO Bonus Scheme],
+			    "Yes", "Con MBO",
+			    "No", "Sin MBO",
+			    "No Aplica"
+			)
+		dataType: string
+		lineageTag: 4572a223-d1ac-4dff-a86e-0c6e034bf0d4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Asignaciones Historial' = m
+		mode: import
+		source =
+				let
+				    Tipos = Table.TransformColumnTypes(#"Fuente Historial Asignaciones", {{"Assignment Number", type text}, {"Primary Assignment Flag", type text}, {"Effective Start Date", type date}, {"Effective End Date", type date}, {"Effective Sequence", Int64.Type}, {"Effective Latest Change", type text}, {"Action Code", type text}, {"Action Type", type text}, {"Action Reason Code", type text}, {"Assignment Status", type text}, {"Assignment Status Type", type text}, {"Hire Date", type date}, {"Original Hire Date", type date}, {"Tipo de baja", type text}, {"Rehire Recommendation", type text}, {"Legal Employer Code", type text}, {"Job", type text}, {"Job Code", type text}, {"Location", type text}, {"Grade Code", type text}}),
+				    SinVacias = Table.RemoveColumns(Tipos, {"Management Level"}, MissingField.Ignore),
+				    Limpia = #"Limpiar HC"(SinVacias),
+				
+				    // Bajas: la versión Terminate arranca el día siguiente a la Termination Date
+				    FilasBaja = Table.SelectRows(Limpia, each [Action Type] = "Terminate Work Relationship"),
+				    ClavesBaja = List.Buffer(List.Transform(Table.ToRecords(FilasBaja), each [Assignment Number] & "|" & Text.From(Number.From([Effective Start Date])))),
+				    AsigConBaja = List.Buffer(List.Distinct(FilasBaja[Assignment Number])),
+				    TiposAlta = {"Hire an Employee", "Rehire an Employee", "Add Contingent Worker"},
+				
+				    #"Fin Vigencia" = Table.AddColumn(Limpia, "Fin Vigencia HC", each if List.Contains(ClavesBaja, [Assignment Number] & "|" & Text.From(Number.From([Effective End Date]) + 1)) then Date.AddDays([Effective End Date], -1) else [Effective End Date], type date),
+				    #"Fecha Evento" = Table.AddColumn(#"Fin Vigencia", "Fecha Evento", each if [Action Type] = "Terminate Work Relationship" then Date.AddDays([Effective Start Date], -1) else [Effective Start Date], type date),
+				    // Efímera: cerrada (Termination Date real) sin evento Terminate -> no es alta ni baja real
+				    Efimera = Table.AddColumn(#"Fecha Evento", "Asignación Efímera", each if [Termination Date] <> #date(1900, 1, 1) and not List.Contains(AsigConBaja, [Assignment Number]) then "Sí" else "No", type text),
+				    #"Tipo Evento" = Table.AddColumn(Efimera, "Tipo Evento", each let a = [Action Type] in if a = "Terminate Work Relationship" then "Baja" else if List.Contains(TiposAlta, a) and [Asignación Efímera] = "No" then "Alta" else if a = "Promote" then "Promoción" else if a = "Change Employment" then "Cambio de puesto" else if a = "Change Manager" then "Cambio de manager" else "Otro", type text),
+				    #"Clave Evento" = Table.AddColumn(#"Tipo Evento", "Clave Evento", each [Assignment Number] & "|" & Text.From(Number.From([Fecha Evento])) & "|" & [Tipo Evento], type text)
+				in
+				    #"Clave Evento"
+
+	annotation PBI_ResultType = Table
+

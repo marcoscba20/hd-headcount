@@ -1,0 +1,49 @@
+/// Tabla auxiliar DESCONECTADA con las columnas de la matriz People Excellence: año (encabezado superior) y tipo de corte. Los años se calculan al refrescar a partir del último cierre de mes (EOMONTH(TODAY(),-1)).
+table 'People Excellence Columna'
+	lineageTag: b8805932-ad99-46bb-aacd-d06ada5c9537
+
+	column Año
+		dataType: string
+		lineageTag: e3dbb0f4-f5f1-46b2-b0eb-3401f87df55f
+		summarizeBy: none
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Columna
+		dataType: string
+		lineageTag: 1a77cb45-ad52-44cf-b2b0-139585526ba8
+		summarizeBy: none
+		sourceColumn: [Columna]
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		lineageTag: 9a285976-54c1-4ec1-a629-68d7ea0f29d1
+		summarizeBy: none
+		sourceColumn: [Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'People Excellence Columna' = calculated
+		mode: import
+		source =
+				VAR A = YEAR ( EOMONTH ( TODAY (), -1 ) )
+				RETURN
+				    SELECTCOLUMNS (
+				        {
+				            ( FORMAT ( A - 1, "0" ), "Actuals", 1 ),
+				            ( FORMAT ( A, "0" ), "YTD Actuals", 2 ),
+				            ( FORMAT ( A, "0" ), "YTD PY", 3 ),
+				            ( FORMAT ( A, "0" ), "Δ", 4 )
+				        },
+				        "Año", [Value1],
+				        "Columna", [Value2],
+				        "Orden", [Value3]
+				    )
+
+	annotation PBI_Id = PeopleExcellenceColumna
+

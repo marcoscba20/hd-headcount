@@ -1,0 +1,277 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "003f8bbf457e31070d8e",
+  "position": {
+    "x": 40.128186582351915,
+    "y": 296.94858070940421,
+    "z": 0,
+    "height": 743.70905799292223,
+    "width": 1839.2085516911295,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Display Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Display Name",
+              "nativeQueryRef": "Display Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Position Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Position Name",
+              "nativeQueryRef": "Position Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Job Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Job Name",
+              "nativeQueryRef": "Job Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Grade Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Grade Name",
+              "nativeQueryRef": "Grade Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Nivel"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Nivel",
+              "nativeQueryRef": "Nivel"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "EPM Main Function Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "nativeQueryRef": "EPM Main Function Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Department Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Department Name",
+              "nativeQueryRef": "Department Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Legal Employer Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Legal Employer Name",
+              "nativeQueryRef": "Legal Employer Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Country"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Country",
+              "nativeQueryRef": "Country"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Cross Charge Entity Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Cross Charge Entity Name",
+              "nativeQueryRef": "Cross Charge Entity Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Manager Display Name"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Manager Display Name",
+              "nativeQueryRef": "Manager Display Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Enterprise Hire Date"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Enterprise Hire Date",
+              "nativeQueryRef": "Enterprise Hire Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Antigüedad (años)"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Antigüedad (años)",
+              "nativeQueryRef": "Antigüedad (años)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Género"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Género",
+              "nativeQueryRef": "Género"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Edad"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Edad",
+              "nativeQueryRef": "Edad"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Esquema MBO"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "nativeQueryRef": "Esquema MBO"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Excel HC Oracle"
+                    }
+                  },
+                  "Property": "Bonus Swap"
+                }
+              },
+              "queryRef": "Excel HC Oracle.Bonus Swap",
+              "nativeQueryRef": "Bonus Swap"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalle Dotación LATAM'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
