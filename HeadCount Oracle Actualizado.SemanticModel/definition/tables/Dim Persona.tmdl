@@ -1,0 +1,106 @@
+/// Puente de personas (un Person Number por fila) entre Excel HC Oracle y las tablas de compensación.
+table 'Dim Persona'
+	lineageTag: ec53350e-cd3a-4c01-9903-5845106a26ab
+
+	/// Clave única de persona. -1 = fila de salarios que no cruzó con Oracle.
+	column 'Person Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: b5c87541-6d98-4063-8316-c2ad77d00f0c
+		summarizeBy: none
+		sourceColumn: Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre
+		dataType: string
+		lineageTag: c7e860f9-abab-455f-ac6c-be20357cc713
+		summarizeBy: none
+		sourceColumn: Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Nacional Oracle'
+		dataType: string
+		lineageTag: 98134d90-bba7-4af7-9a98-07155d3c26f5
+		summarizeBy: none
+		sourceColumn: ID Nacional Oracle
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ámbito
+		dataType: string
+		lineageTag: b4298828-4f29-4b41-b803-d536188a5080
+		summarizeBy: none
+		sourceColumn: Ámbito
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'País Overview'
+		dataType: string
+		lineageTag: a2ccbaa6-3cbd-4583-bbb6-e061d62b1511
+		summarizeBy: none
+		sourceColumn: País Overview
+		sortByColumn: 'Orden País'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden País'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 14e76e64-00b0-4e84-adaf-70bf8358daea
+		summarizeBy: none
+		sourceColumn: Orden País
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Costo'
+		dataType: string
+		lineageTag: 973b3248-ef11-4500-853a-d8952ccbf7eb
+		summarizeBy: none
+		sourceColumn: Tipo de Costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Departamento
+		dataType: string
+		lineageTag: 3595bea8-e9f4-4223-a9d1-107ea2e71401
+		summarizeBy: none
+		sourceColumn: Departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Puesto
+		dataType: string
+		lineageTag: ce288348-9f81-4035-9f3e-1df121dd08e9
+		summarizeBy: none
+		sourceColumn: Puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grade
+		dataType: string
+		lineageTag: a72f9ff2-298c-4337-8fac-96206b275416
+		summarizeBy: none
+		sourceColumn: Grade
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Persona' = m
+		mode: import
+		source =
+				let
+				    Sel = Table.SelectColumns(#"Oracle Persona Unica", {"Person Number", "Display Name", "National ID", "Ámbito", "País Overview", "Orden País", "ZBB / COGS", "Department Name", "Job Name", "Grade Name"}),
+				    Ren = Table.RenameColumns(Sel, {{"Display Name", "Nombre"}, {"National ID", "ID Nacional Oracle"}, {"Department Name", "Departamento"}, {"Job Name", "Puesto"}, {"Grade Name", "Grade"}}),
+				    // ZBB = SG&A
+				    Costo = Table.AddColumn(Ren, "Tipo de Costo", each let z = Text.Upper(Text.Trim(Text.From([#"ZBB / COGS"]))) in if z = "ZBB" then "SG&A" else if z = "COGS" then "COGS" else "Sin dato", type text),
+				    SinZbb = Table.RemoveColumns(Costo, {"ZBB / COGS"}),
+				    Tipos = Table.TransformColumnTypes(SinZbb, {{"Person Number", Int64.Type}, {"Nombre", type text}, {"ID Nacional Oracle", type text}, {"Ámbito", type text}, {"País Overview", type text}, {"Orden País", Int64.Type}, {"Departamento", type text}, {"Puesto", type text}, {"Grade", type text}}),
+				    SinCruce = #table(type table [Person Number = Int64.Type, Nombre = text, #"ID Nacional Oracle" = text, #"Ámbito" = text, #"País Overview" = text, #"Orden País" = Int64.Type, Departamento = text, Puesto = text, Grade = text, #"Tipo de Costo" = text], {{-1, "Sin cruce con Oracle", null, "Sin cruce", "Sin cruce", 99, null, null, null, "Sin cruce"}}),
+				    Final = Table.Combine({Tipos, SinCruce})
+				in
+				    Final
+
+	annotation PBI_ResultType = Table
+

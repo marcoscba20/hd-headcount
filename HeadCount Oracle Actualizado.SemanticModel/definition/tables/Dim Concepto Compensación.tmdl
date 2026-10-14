@@ -1,0 +1,44 @@
+/// Conceptos de compensación. Hoy solo importes fijos; los variables (incentivo, MBO) quedan fuera por ahora.
+table 'Dim Concepto Compensación'
+	lineageTag: 5647a212-cb4c-43ec-8a95-3222aadb7dda
+
+	column Concepto
+		dataType: string
+		lineageTag: 313fbd33-daac-4722-b011-c6e66f4c9a48
+		summarizeBy: none
+		sourceColumn: Concepto
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		dataType: string
+		lineageTag: 053ea72b-0f33-4f22-a338-739ac94811fa
+		summarizeBy: none
+		sourceColumn: Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		lineageTag: 7f9c4f4a-5879-41f2-a6b2-d046a8e6ba60
+		summarizeBy: none
+		sourceColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Concepto Compensación' = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [Concepto = text, Grupo = text, Orden = Int64.Type], {
+				        {"Salario Base", "Fijo", 1},
+				        {"Asignación Transporte", "Fijo", 2},
+				        {"Asignación Alimentación", "Fijo", 3}
+				    })
+				in
+				    Origen
+
+	annotation PBI_ResultType = Table
+

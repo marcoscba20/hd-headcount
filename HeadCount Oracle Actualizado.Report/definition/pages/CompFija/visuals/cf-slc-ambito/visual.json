@@ -1,59 +1,60 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "c3bf4871c8060039b806",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "cf-slc-ambito",
   "position": {
-    "x": 40,
-    "y": 516,
-    "z": 9100,
-    "height": 64,
-    "width": 1860,
-    "tabOrder": 9100
+    "x": 1194,
+    "y": 20,
+    "z": 2000,
+    "height": 78,
+    "width": 227,
+    "tabOrder": 2000
   },
   "visual": {
-    "visualType": "card",
+    "visualType": "slicer",
     "query": {
       "queryState": {
         "Values": {
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Cortes Pilar Headcount"
+                  "Property": "Ámbito"
                 }
               },
-              "queryRef": "Excel HC Oracle.Cortes Pilar Headcount",
-              "nativeQueryRef": "Cortes Pilar Headcount"
+              "queryRef": "Dim Persona.Ámbito",
+              "nativeQueryRef": "Ámbito",
+              "active": true
             }
           ]
         }
       }
     },
     "objects": {
-      "categoryLabels": [
+      "data": [
         {
           "properties": {
-            "show": {
+            "mode": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "'Dropdown'"
                 }
               }
             }
           }
         }
       ],
-      "labels": [
+      "header": [
         {
           "properties": {
-            "fontSize": {
+            "show": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "false"
                 }
               }
             }
@@ -75,27 +76,21 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Fechas de corte del pilar'"
+                  "Value": "'Global / Local / LATAM'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "''Segoe UI Semibold', wf_segoe-ui_semibold, helvetica, arial, sans-serif'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+                  "Value": "15D"
                 }
               }
             }

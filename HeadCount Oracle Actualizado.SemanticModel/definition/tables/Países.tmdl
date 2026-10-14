@@ -3,7 +3,7 @@ table Países
 
 	column 'Country Code'
 		dataType: string
-		lineageTag: 1b6c3622-641b-42b0-85b3-80c08679d285
+		lineageTag: 8ea9b3f0-bd02-466d-bf9f-433d4547500c
 		summarizeBy: none
 		sourceColumn: Country Code
 
@@ -11,9 +11,27 @@ table Países
 
 	column Country
 		dataType: string
-		lineageTag: ace68624-a18c-4ca1-94e3-96f2b6d49d6b
+		lineageTag: 8ded0cba-6ad9-43d9-b69c-18c96529192c
 		summarizeBy: none
 		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Código de país del archivo de salarios (ARG, BRA, CHI, COL, MXC, PER, PAN).
+	column 'Código Manual'
+		dataType: string
+		lineageTag: 65658d14-8297-44b0-82a0-6fefccd8dc1a
+		summarizeBy: none
+		sourceColumn: Código Manual
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Moneda local (ISO) del país; une con Tipo de Cambio.
+	column Moneda
+		dataType: string
+		lineageTag: ad42d952-d2de-48a8-84a6-f109600873e3
+		summarizeBy: none
+		sourceColumn: Moneda
 
 		annotation SummarizationSetBy = Automatic
 
@@ -21,9 +39,17 @@ table Países
 		mode: import
 		source =
 				let
-				  Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcgxS0lFyLEpPzSvJzEtUitWJVnICCTkVJVZl5oD5zj5AvnNGZk4qhOsP4ubn5OcmZUI0+EYARXwPr6zITM5Xio0FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Country Code" = _t, Country = _t])
+				    Origen = #table(type table [#"Country Code" = text, Country = text, #"Código Manual" = text, Moneda = text], {
+				        {"AR", "Argentina", "ARG", "ARS"},
+				        {"BR", "Brazil", "BRA", "BRL"},
+				        {"CL", "Chile", "CHI", "CLP"},
+				        {"CO", "Colombia", "COL", "COP"},
+				        {"MX", "México", "MXC", "MXN"},
+				        {"PE", "Peru", "PER", "PEN"},
+				        {"PA", "Panama", "PAN", "USD"}
+				    })
 				in
-				  Origen
+				    Origen
 
 	annotation PBI_NavigationStepName = Navegación
 

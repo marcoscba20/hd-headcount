@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
-  "name": "e8d1c21a6c0503a72c7c",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "cf-title",
   "position": {
     "x": 20,
     "y": 20,
-    "z": 4000,
-    "height": 120,
-    "width": 480,
-    "tabOrder": 6000
+    "z": 0,
+    "height": 60,
+    "width": 700,
+    "tabOrder": 0
   },
   "visual": {
     "visualType": "textbox",
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Overview",
+                    "value": "Compensación Fija · Salario en USD",
                     "textStyle": {
                       "fontSize": "24pt"
                     }

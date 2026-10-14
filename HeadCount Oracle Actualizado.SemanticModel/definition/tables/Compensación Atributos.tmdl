@@ -1,0 +1,250 @@
+/// Atributos y beneficios (indicadores) por persona y corte, del archivo de salarios. Fuente confidencial.
+table 'Compensación Atributos'
+	lineageTag: 18eea52a-5863-4434-9a47-75542a33ccb8
+
+	/// Filas del archivo de salarios en el contexto (una por persona y corte).
+	measure 'HC con Salario' = COUNTROWS ( 'Compensación Atributos' )
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: dbe25a59-b02e-4eae-9023-6dc659656bf7
+
+	measure '% con Seguro de Salud' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Seguro Salud] = "Sí" ),
+			    COUNTROWS ( 'Compensación Atributos' )
+			)
+		formatString: 0.0%
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 71cf0c71-3b60-4807-a5a0-1ecc7ae2d8bf
+
+	measure '% con Seguro de Vida' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Seguro Vida] = "Sí" ),
+			    COUNTROWS ( 'Compensación Atributos' )
+			)
+		formatString: 0.0%
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 9adade05-95dd-4bfe-b95f-072c835aef0d
+
+	measure '% con Línea Compañía' =
+			DIVIDE (
+			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Línea Compañía] = "Sí" ),
+			    COUNTROWS ( 'Compensación Atributos' )
+			)
+		formatString: 0.0%
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 30feabbe-5422-4ff7-8a22-2556e5e5f480
+
+	/// Salarios que no cruzaron ni por Oracle ID ni por ID Nacional.
+	measure 'Filas sin cruce' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Método Cruce] = "Sin cruce" )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: b2d7702d-80c4-4b1c-9f95-5bd3546a79f0
+
+	/// Filas rescatadas por el fallback (sin Oracle ID válido).
+	measure 'Filas cruzadas por ID Nacional' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Método Cruce] = "ID Nacional" )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: 2800a1ef-029d-4793-b085-cdc6bbffa19a
+
+	/// Cruzaron por Oracle ID pero el ID Nacional difiere entre archivos.
+	measure 'Cant ID Nacional discrepante' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[ID Nacional Discrepante] = TRUE () )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: 9947ab74-417c-440a-9799-d223a9569c3b
+
+	/// Filas cuyo Oracle ID aparece más de una vez en el mismo corte.
+	measure 'Cant Oracle ID duplicado' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Oracle ID Duplicado] = TRUE () )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: e60d2b09-4ce4-4f5c-a44d-7bb857332200
+
+	/// Filas con Cantidad de Salarios en 0 o vacía aun después del fallback (el anual queda en blanco).
+	measure 'Sin Cantidad de Salarios' =
+			COUNTROWS (
+			    FILTER ( 'Compensación Atributos', 'Compensación Atributos'[Cantidad de Salarios] = 0 )
+			)
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: 97d07c06-0312-4292-9bf8-d9d927bc3476
+
+	/// Personas activas en Oracle sin fila de salario en el corte seleccionado.
+	measure 'Activos Oracle sin salario' =
+			VAR Activos =
+			    CALCULATETABLE (
+			        VALUES ( 'Excel HC Oracle'[Person Number] ),
+			        'Excel HC Oracle'[Assignment Status Code] = "ACTIVE_PROCESS"
+			    )
+			VAR ConSalario = VALUES ( 'Compensación Atributos'[Person Number Resuelto] )
+			RETURN
+			    COUNTROWS ( EXCEPT ( Activos, ConSalario ) )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: 0e3949f4-18df-4413-b258-3fe067b39462
+
+	/// Filas con Cantidad de Salarios completada desde la tabla por país.
+	measure 'Cantidad de Salarios por fallback' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Origen Cantidad Salarios] = "Tabla por país" )
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: a2b42796-7d73-4f3a-9c31-9bdb2feb67d2
+
+	column 'Id Fila'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 404c0597-14ac-42fe-bef0-26c40550ce1e
+		summarizeBy: none
+		sourceColumn: Id Fila
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Corte'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 7c942ea4-5882-4c99-8830-a8018bfb470e
+		summarizeBy: none
+		sourceColumn: Fecha Corte
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Person Number Resuelto'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fcb4a675-ac17-44bb-a1da-0ec15446e7ef
+		summarizeBy: none
+		sourceColumn: Person Number Resuelto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Método Cruce'
+		dataType: string
+		lineageTag: d954b5d8-038d-483f-a49e-88a95d5cf832
+		summarizeBy: none
+		sourceColumn: Método Cruce
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Oracle ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e087d25b-d7fb-4081-a359-2b6d29c5174f
+		summarizeBy: none
+		sourceColumn: Oracle ID
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicador Sí/No/Sin dato (no es un importe).
+	column 'Línea Compañía'
+		dataType: string
+		lineageTag: ea5ad857-b96b-44c0-ab4f-d77fc1712e13
+		summarizeBy: none
+		sourceColumn: Línea Compañía
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Seguro Salud'
+		dataType: string
+		lineageTag: 0e19b5dd-2a26-48c7-8771-5f9faa25176c
+		summarizeBy: none
+		sourceColumn: Seguro Salud
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Seguro Vida'
+		dataType: string
+		lineageTag: 60f32850-47c0-4129-95d2-8ba4ce117b72
+		summarizeBy: none
+		sourceColumn: Seguro Vida
+
+		annotation SummarizationSetBy = Automatic
+
+	column FTE
+		dataType: double
+		formatString: 0.00
+		lineageTag: b9ca088a-d8a3-4070-9399-88594a5058aa
+		summarizeBy: sum
+		sourceColumn: FTE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACT/OFF
+		dataType: string
+		lineageTag: 16a7d40b-7287-40ba-b6f4-a68772c6f64e
+		summarizeBy: none
+		sourceColumn: ACT/OFF
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Columna del Excel; si viene vacía o en 0 se completa con 'Salarios Anuales por País'.
+	column 'Cantidad de Salarios'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 79bd01c2-c254-4b89-aebb-32e8b0bb0d67
+		summarizeBy: none
+		sourceColumn: Cantidad de Salarios
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Nacional Discrepante'
+		dataType: boolean
+		lineageTag: 12c03bbf-cb6b-41db-a242-9eddbd676856
+		summarizeBy: none
+		sourceColumn: ID Nacional Discrepante
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Oracle ID Duplicado'
+		dataType: boolean
+		lineageTag: 828b71d8-2847-4d34-ae22-0df6443128db
+		summarizeBy: none
+		sourceColumn: Oracle ID Duplicado
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'País Origen'
+		dataType: string
+		lineageTag: 37d9dd19-4d40-4718-b905-0e5b401c97aa
+		summarizeBy: none
+		sourceColumn: País Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Moneda
+		dataType: string
+		lineageTag: 53389a15-e92a-4bb0-a8bf-6654d4c5cabd
+		summarizeBy: none
+		sourceColumn: Moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Nacional'
+		dataType: string
+		lineageTag: c5e0b168-d716-480c-866f-61faf421b2ca
+		summarizeBy: none
+		sourceColumn: ID Nacional
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Archivo / Tabla por país / Sin dato.
+	column 'Origen Cantidad Salarios'
+		dataType: string
+		lineageTag: 4adfa06e-6b04-48d2-808f-f9b2cf4299d7
+		summarizeBy: none
+		sourceColumn: Origen Cantidad Salarios
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Compensación Atributos' = m
+		mode: import
+		source =
+				let
+				    Base = #"Compensación Base",
+				    Final = Table.SelectColumns(Base, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "ID Nacional", "País Origen", "Moneda", "Línea Compañía", "Seguro Salud", "Seguro Vida", "FTE", "ACT/OFF", "Cantidad de Salarios", "Origen Cantidad Salarios", "ID Nacional Discrepante", "Oracle ID Duplicado"})
+				in
+				    Final
+
+	annotation PBI_ResultType = Table
+

@@ -10,3 +10,28 @@ relationship 6c2f81ad-93e5-4b07-a15d-8e0374bc9d26
 	fromColumn: 'Excel HC Oracle'.'Termination Date'
 	toColumn: 'Calendario Baja'.Date
 
+relationship 0989377f-7ddc-44f3-8ff1-3eba4d6ae8d9
+	fromColumn: 'Compensación Atributos'.'Person Number Resuelto'
+	toColumn: 'Dim Persona'.'Person Number'
+
+relationship 27338c36-50f4-4626-981c-e666d017b436
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Excel HC Oracle'.'Person Number'
+	toColumn: 'Dim Persona'.'Person Number'
+
+relationship d9ab8e09-ce2f-444f-a970-6f0ab06bd2bb
+	fromColumn: 'Compensación Atributos'.'Fecha Corte'
+	toColumn: Calendario.Date
+
+relationship b48d35ba-934d-40c3-bea6-cc6b28964d39
+	fromColumn: 'Fact Compensación'.'Clave TC'
+	toColumn: 'Tipo de Cambio'.'Clave TC'
+
+relationship 5f6a8291-3cf7-4987-98d5-acbd40222e25
+	fromColumn: 'Fact Compensación'.Concepto
+	toColumn: 'Dim Concepto Compensación'.Concepto
+
+relationship 77dc9134-c403-4176-9648-3c3f1168fefd
+	fromColumn: 'Fact Compensación'.'Id Fila'
+	toColumn: 'Compensación Atributos'.'Id Fila'
+

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "a87854bdb54012592a3b",
+  "position": {
+    "x": 38.259206865983316,
+    "y": 693.25682841161768,
+    "z": 18000,
+    "height": 394.83501485694779,
+    "width": 928.93354270607483,
+    "tabOrder": 18000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Compensación Atributos"
+                    }
+                  },
+                  "Property": "País Origen"
+                }
+              },
+              "queryRef": "Compensación Atributos.País Origen",
+              "nativeQueryRef": "País Origen"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Mensual Fijo LC"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Mensual Fijo LC",
+              "nativeQueryRef": "Salario Mensual Fijo LC"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Mensual Fijo USD"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Mensual Fijo USD",
+              "nativeQueryRef": "Salario Mensual Fijo USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Anual Fijo USD"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Anual Fijo USD",
+              "nativeQueryRef": "Salario Anual Fijo USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "TC USD x LC Aplicado"
+                }
+              },
+              "queryRef": "Fact Compensación.TC USD x LC Aplicado",
+              "nativeQueryRef": "TC USD x LC Aplicado"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Anual Fijo LC"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Anual Fijo LC",
+              "nativeQueryRef": "Salario Anual Fijo LC"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Fact Compensación"
+                  }
+                },
+                "Property": "Salario Mensual Fijo LC"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Detalle por País· cómo se forma el Salario Fijo USD'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

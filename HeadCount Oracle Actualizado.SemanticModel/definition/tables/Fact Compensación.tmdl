@@ -1,0 +1,278 @@
+/// Importes fijos de compensación en moneda local, formato largo (una fila por persona, mes y concepto). Fuente confidencial.
+table 'Fact Compensación'
+	lineageTag: c550220a-c0e7-4a64-ae34-3df3a79707fb
+
+	/// Moneda local del contexto; 'Varias' si hay más de una.
+	measure 'Moneda Seleccionada' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    VALUES ( 'Compensación Atributos'[Moneda] ),
+			    "Varias"
+			)
+		formatString: General
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: cb825459-9879-4746-9ed3-f1cecdca49e0
+
+	/// Salario base mensual convertido a USD con el tipo de cambio del año de la fecha de corte.
+	measure 'Salario Base USD' =
+			CALCULATE (
+			    SUMX ( 'Fact Compensación', 'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ),
+			    'Fact Compensación'[Concepto] = "Salario Base"
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 3eb9bac9-f944-476b-b7a6-b0ba2da6ab4c
+
+	/// Salario base + asignaciones fijas (transporte, alimentación) en USD.
+	measure 'Salario Mensual Fijo USD' =
+			CALCULATE (
+			    SUMX ( 'Fact Compensación', 'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ),
+			    'Dim Concepto Compensación'[Grupo] = "Fijo"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: a87c27bb-43d3-45e5-b8a4-18184e563b6e
+
+	/// Importes fijos en moneda local. Solo se muestra cuando el contexto tiene una única moneda.
+	measure 'Salario Mensual Fijo LC' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    CALCULATE (
+			        SUM ( 'Fact Compensación'[Importe LC] ),
+			        'Dim Concepto Compensación'[Grupo] = "Fijo"
+			    )
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: ddfcfa3e-8e55-46fb-afdc-4042d1b40630
+
+	/// Fijo mensual x Cantidad de Salarios (del Excel o, si falta, de la tabla por país). En blanco si queda en 0.
+	measure 'Salario Anual Fijo USD' =
+			CALCULATE (
+			    SUMX (
+			        FILTER ( 'Fact Compensación', 'Fact Compensación'[Cantidad de Salarios] > 0 ),
+			        'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) * 'Fact Compensación'[Cantidad de Salarios]
+			    ),
+			    'Dim Concepto Compensación'[Grupo] = "Fijo"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: fcb02ff6-e942-45dc-b2b7-e4a3e6f381ce
+
+	measure 'Promedio Fijo x HC USD' = DIVIDE ( [Salario Mensual Fijo USD], [HC con Salario] )
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: e5c839bd-65b6-42a7-95ec-d3649e3b987d
+
+	measure 'Promedio Fijo x FTE USD' = DIVIDE ( [Salario Mensual Fijo USD], SUM ( 'Compensación Atributos'[FTE] ) )
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 16b2df5b-d5ca-4213-ae2e-580bed06e8e3
+
+	/// Variación % del fijo mensual en USD del último corte en contexto contra el corte anterior disponible.
+	measure 'Variación Fijo vs Mes Anterior' =
+			VAR Corte = MAX ( 'Compensación Atributos'[Fecha Corte] )
+			VAR CorteAnt =
+			    CALCULATE ( MAX ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( Calendario ), 'Compensación Atributos'[Fecha Corte] < Corte )
+			VAR Ant =
+			    CALCULATE ( [Salario Mensual Fijo USD], REMOVEFILTERS ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( Calendario ), 'Compensación Atributos'[Fecha Corte] = CorteAnt )
+			VAR Act =
+			    CALCULATE ( [Salario Mensual Fijo USD], 'Compensación Atributos'[Fecha Corte] = Corte )
+			RETURN
+			    IF ( NOT ISBLANK ( CorteAnt ), DIVIDE ( Act - Ant, Ant ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 2e8fd216-6dad-412f-ad26-09500fc49bf7
+
+	/// Filas de la fact sin tipo de cambio (moneda no mapeada o año sin FX).
+	measure 'Filas sin TC' =
+			COUNTROWS (
+			    FILTER ( 'Fact Compensación', ISBLANK ( RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ) )
+			)
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: 808d225a-dc97-4cc6-af6d-6c233984f614
+
+	/// Salario base en moneda local (solo con una única moneda en contexto).
+	measure 'Salario Base LC' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Salario Base" )
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 4f1bc012-fcbd-4eec-b216-2dd9c94205c2
+
+	/// Asignación transporte en moneda local (solo con una única moneda en contexto).
+	measure 'Asignación Transporte LC' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Asignación Transporte" )
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 2819fb34-0d62-4e72-b19f-f4d426287726
+
+	/// Asignación alimentación en moneda local (solo con una única moneda en contexto).
+	measure 'Asignación Alimentación LC' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Asignación Alimentación" )
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 02d04158-6258-4c32-aa63-c96fac9cdb35
+
+	/// Fijo mensual en moneda local x Cantidad de Salarios (solo con una única moneda en contexto).
+	measure 'Salario Anual Fijo LC' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    CALCULATE (
+			        SUMX (
+			            FILTER ( 'Fact Compensación', 'Fact Compensación'[Cantidad de Salarios] > 0 ),
+			            'Fact Compensación'[Importe LC] * 'Fact Compensación'[Cantidad de Salarios]
+			        ),
+			        'Dim Concepto Compensación'[Grupo] = "Fijo"
+			    )
+			)
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: f153f77d-6600-45be-9cf1-50d3a381c2d3
+
+	/// Fijo mensual promedio por persona en moneda local.
+	measure 'Promedio Fijo x HC LC' = DIVIDE ( [Salario Mensual Fijo LC], [HC con Salario] )
+		formatString: #,##0
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: aac9e75f-37d2-47a3-918d-74b7099480a0
+
+	/// Tipo de cambio USD por unidad de moneda local usado en la conversión.
+	measure 'TC USD x LC Aplicado' =
+			IF (
+			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    MAXX ( 'Fact Compensación', RELATED ( 'Tipo de Cambio'[TC USD x LC] ) )
+			)
+		formatString: 0.000000
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: 0dfc08c8-1164-4484-9060-c51ac7729e6d
+
+	column 'Id Fila'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db11d028-10a7-4df8-8097-07169d58e821
+		summarizeBy: none
+		sourceColumn: Id Fila
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Corte'
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: a8598d1f-2170-4704-989f-7f41bad508b4
+		summarizeBy: none
+		sourceColumn: Fecha Corte
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Person Number Resuelto'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 844cb41e-4096-41e6-bd33-b9cacb374a83
+		summarizeBy: none
+		sourceColumn: Person Number Resuelto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Método Cruce'
+		dataType: string
+		isHidden
+		lineageTag: fb01260a-6ff8-4647-8e86-d3bd9168ffbf
+		summarizeBy: none
+		sourceColumn: Método Cruce
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Oracle ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 719c0bc0-a21f-412a-91f6-1571b233eff9
+		summarizeBy: none
+		sourceColumn: Oracle ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'País Origen'
+		dataType: string
+		isHidden
+		lineageTag: b373a318-202b-4e4b-970e-1ca06e7df2bc
+		summarizeBy: none
+		sourceColumn: País Origen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Moneda
+		dataType: string
+		isHidden
+		lineageTag: 07eb9bbf-fb63-4e0e-8b58-1f679f1ecdeb
+		summarizeBy: none
+		sourceColumn: Moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cantidad de Salarios'
+		dataType: double
+		isHidden
+		formatString: 0.00
+		lineageTag: 73a4c17e-bb10-4cd3-a820-6c1239e58323
+		summarizeBy: none
+		sourceColumn: Cantidad de Salarios
+
+		annotation SummarizationSetBy = Automatic
+
+	column Concepto
+		dataType: string
+		lineageTag: 3fdd9dc4-e605-482f-b195-050f74026b9b
+		summarizeBy: none
+		sourceColumn: Concepto
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Importe en moneda local. No sumar entre monedas: usar las medidas USD.
+	column 'Importe LC'
+		dataType: double
+		formatString: #,##0
+		lineageTag: abc5f477-aa42-4cdc-91dc-938411230dc5
+		summarizeBy: none
+		sourceColumn: Importe LC
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Clave TC'
+		dataType: string
+		isHidden
+		lineageTag: 9402ef47-8976-4f6d-a1d4-8569d27e47ea
+		summarizeBy: none
+		sourceColumn: Clave TC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fact Compensación' = m
+		mode: import
+		source =
+				let
+				    Base = #"Compensación Base",
+				    Sel = Table.SelectColumns(Base, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "País Origen", "Moneda", "Cantidad de Salarios", "Salario Base", "Asignación Transporte", "Asignación Alimentación"}),
+				    Largo = Table.UnpivotOtherColumns(Sel, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "País Origen", "Moneda", "Cantidad de Salarios"}, "Concepto", "Importe LC"),
+				    SinNulos = Table.SelectRows(Largo, each [Importe LC] <> null),
+				    Clave = Table.AddColumn(SinNulos, "Clave TC", each if [Moneda] = null then null else [Moneda] & "|" & Number.ToText(Date.Year([Fecha Corte]), "0", "en-US"), type text),
+				    Tipos = Table.TransformColumnTypes(Clave, {{"Importe LC", type number}, {"Concepto", type text}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

@@ -1795,5 +1795,5 @@ table 'Excel HC Oracle'
 
 	annotation PBI_NavigationStepName = Navegación
 
-	annotation PBI_ResultType = Exception
+	annotation PBI_ResultType = Table
 

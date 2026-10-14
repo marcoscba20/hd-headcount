@@ -1,0 +1,63 @@
+/// Tipo de cambio presupuestario (archivo FX BGT) en USD por unidad de moneda local, por año y moneda.
+table 'Tipo de Cambio'
+	lineageTag: b48f2228-c69f-4342-ad07-e3382c0368b2
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 797bc1b3-bdf2-4861-a2c9-dc6f056ff735
+		summarizeBy: none
+		sourceColumn: Año
+
+		annotation SummarizationSetBy = Automatic
+
+	column Moneda
+		dataType: string
+		lineageTag: 8ae798cd-1bad-488b-a8b5-fcaabb56d25f
+		summarizeBy: none
+		sourceColumn: Moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	/// USD por 1 unidad de moneda local (se multiplica). Fuente: FX BGT.
+	column 'TC USD x LC'
+		dataType: double
+		formatString: 0.000000000
+		lineageTag: 31393344-e3ea-4180-97e6-931d5b9f90eb
+		summarizeBy: none
+		sourceColumn: TC USD x LC
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Clave TC'
+		dataType: string
+		isHidden
+		lineageTag: b2ea4116-6346-4496-a3d2-4236c09dfaf0
+		summarizeBy: none
+		sourceColumn: Clave TC
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Tipo de Cambio' = m
+		mode: import
+		source =
+				let
+				    Archivos = Table.SelectRows(Folder.Files("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\"), each Text.StartsWith([Name], "FX BGT") and Text.EndsWith([Name], ".xlsx") and not Text.StartsWith([Name], "~$")),
+				    Ultimo = Table.Sort(Archivos, {{"Name", Order.Descending}}){0}[Content],
+				    Libro = Excel.Workbook(Ultimo, null, true),
+				    Hoja = Table.SelectRows(Libro, each [Kind] = "Sheet"){0}[Data],
+				    Anio = Int64.From(Hoja{0}[Column2]),
+				    Filas = Table.SelectRows(Table.Skip(Hoja, 1), each [Column1] <> null and [Column3] <> null and Text.Upper(Text.Trim(Text.From([Column1]))) <> "AREAS EXPENSES"),
+				    ToNum = (v as any) as nullable number => try (if v is number then v else Number.FromText(Text.Replace(Text.Trim(Text.From(v)), "=", ""), "en-US")) otherwise null,
+				    Sel = Table.SelectColumns(Filas, {"Column3", "Column2"}),
+				    Ren = Table.RenameColumns(Sel, {{"Column3", "Moneda"}, {"Column2", "TC USD x LC"}}),
+				    Tipos = Table.TransformColumns(Ren, {{"Moneda", each Text.Upper(Text.Trim(Text.From(_))), type text}, {"TC USD x LC", ToNum, type number}}),
+				    SinDup = Table.Distinct(Table.SelectRows(Tipos, each [#"TC USD x LC"] <> null), {"Moneda"}),
+				    ConAnio = Table.AddColumn(SinDup, "Año", each Anio, Int64.Type),
+				    Clave = Table.AddColumn(ConAnio, "Clave TC", each [Moneda] & "|" & Number.ToText([Año], "0", "en-US"), type text),
+				    Final = Table.SelectColumns(Clave, {"Año", "Moneda", "TC USD x LC", "Clave TC"})
+				in
+				    Final
+
+	annotation PBI_ResultType = Table
+

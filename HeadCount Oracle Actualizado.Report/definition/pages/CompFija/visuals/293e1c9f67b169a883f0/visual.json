@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "293e1c9f67b169a883f0",
+  "position": {
+    "x": 1262.7778963977423,
+    "y": 691.55943246178776,
+    "z": 16000,
+    "height": 328.93198063727726,
+    "width": 442.85476417506595,
+    "tabOrder": 16000
+  },
+  "visual": {
+    "visualType": "advancedSlicerVisual",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Compensación Atributos"
+                    }
+                  },
+                  "Property": "País Origen"
+                }
+              },
+              "queryRef": "Compensación Atributos.País Origen",
+              "nativeQueryRef": "País Origen"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
