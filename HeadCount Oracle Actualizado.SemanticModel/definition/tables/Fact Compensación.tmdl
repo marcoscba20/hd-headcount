@@ -25,9 +25,13 @@ table 'Fact Compensación'
 
 	/// Salario base + asignaciones fijas (transporte, alimentación) en USD.
 	measure 'Salario Mensual Fijo USD' =
-			CALCULATE (
-			    SUMX ( 'Fact Compensación', 'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ),
-			    'Dim Concepto Compensación'[Grupo] = "Fijo"
+			-- Guarda: evita el producto cruzado con columnas de Asignaciones (relación de una sola dirección)
+			IF (
+			    NOT ISEMPTY ( Asignaciones ),
+			    CALCULATE (
+			        SUMX ( 'Fact Compensación', 'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ),
+			        'Dim Concepto Compensación'[Grupo] = "Fijo"
+			    )
 			)
 		formatString: \$#,0;(\$#,0);\$#,0
 		displayFolder: 13 · Compensación (USD)
@@ -48,12 +52,16 @@ table 'Fact Compensación'
 
 	/// Fijo mensual x Cantidad de Salarios (hoja TC; si falta, columna del archivo o tabla por país). En blanco si queda en 0.
 	measure 'Salario Anual Fijo USD' =
-			CALCULATE (
-			    SUMX (
-			        FILTER ( 'Fact Compensación', 'Fact Compensación'[Cantidad de Salarios] > 0 ),
-			        'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) * 'Fact Compensación'[Cantidad de Salarios]
-			    ),
-			    'Dim Concepto Compensación'[Grupo] = "Fijo"
+			-- Guarda: evita el producto cruzado con columnas de Asignaciones (relación de una sola dirección)
+			IF (
+			    NOT ISEMPTY ( Asignaciones ),
+			    CALCULATE (
+			        SUMX (
+			            FILTER ( 'Fact Compensación', 'Fact Compensación'[Cantidad de Salarios] > 0 ),
+			            'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) * 'Fact Compensación'[Cantidad de Salarios]
+			        ),
+			        'Dim Concepto Compensación'[Grupo] = "Fijo"
+			    )
 			)
 		formatString: \$#,0;(\$#,0);\$#,0
 		displayFolder: 13 · Compensación (USD)
