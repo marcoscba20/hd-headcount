@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Dim Persona.País Overview",
               "nativeQueryRef": "País Overview",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bajas con MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bajas con MBO",
+              "queryRef": "Asignaciones.Bajas con MBO",
               "nativeQueryRef": "Bajas con MBO"
             },
             {
@@ -53,13 +53,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % con MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % con MBO",
+              "queryRef": "Asignaciones.Rotación % con MBO",
               "nativeQueryRef": "Rotación % con MBO"
             },
             {
@@ -67,13 +67,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % sin MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % sin MBO",
+              "queryRef": "Asignaciones.Rotación % sin MBO",
               "nativeQueryRef": "Rotación % sin MBO"
             },
             {
@@ -81,13 +81,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Δ Rotación MBO (pp)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Δ Rotación MBO (pp)",
+              "queryRef": "Asignaciones.Δ Rotación MBO (pp)",
               "nativeQueryRef": "Δ Rotación MBO (pp)"
             }
           ]
@@ -100,7 +100,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Bajas con MBO"

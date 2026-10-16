@@ -1,88 +1,60 @@
-/// Dimensión DESCONECTADA con los códigos de entidad legal (3 dígitos) presentes en Oracle y/o en el archivo Manual. Eje común para comparar dotación por entidad entre ambos orígenes.
+/// Entidades legales (código de 3 dígitos) presentes en Oracle y/o en el archivo Manual. Relacionada con Dim Persona y con HC Manual LATAM.
 table 'Dim Entidad Legal'
-	lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c840
+	lineageTag: 73c88731-154c-4c0c-aad2-7a69eaa81f7c
 
 	/// HC activo de Oracle para la entidad seleccionada.
-	measure 'HC Oracle x Entidad' =
-			CALCULATE (
-			    [HC Activo],
-			    TREATAS ( VALUES ( 'Dim Entidad Legal'[Código] ), 'Excel HC Oracle'[Código Entidad] )
-			)
-		formatString: #,##0
+	measure 'HC Oracle x Entidad' = CALCULATE ( [HC Activo], KEEPFILTERS ( NOT ISBLANK ( 'Dim Entidad Legal'[Código] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c844
+		lineageTag: 2151d07f-02fe-4e82-9c10-a3b94dff2563
 
-	/// HC del archivo Manual a Jun-2026 para la entidad seleccionada.
-	measure 'HC Manual x Entidad' =
-			CALCULATE (
-			    [HC Manual Jun-2026],
-			    TREATAS ( VALUES ( 'Dim Entidad Legal'[Código] ), 'HC Manual LATAM'[Código Entidad] )
-			)
-		formatString: #,##0
+	/// HC del archivo Manual (último snapshot) para la entidad seleccionada.
+	measure 'HC Manual x Entidad' = CALCULATE ( [HC Manual], KEEPFILTERS ( NOT ISBLANK ( 'Dim Entidad Legal'[Código] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c845
+		lineageTag: 247b0e42-7da4-4e02-8110-08a857edcc32
 
 	measure 'Δ Entidad (Oracle - Manual)' = [HC Oracle x Entidad] - [HC Manual x Entidad]
-		formatString: +#,##0;-#,##0;0
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c846
+		lineageTag: ebe47b08-f807-4b5e-a501-06e1ac1e5cb3
 
+	/// Código de 3 dígitos.
 	column Código
 		dataType: string
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c841
+		lineageTag: 10aeeeb1-5980-414e-b300-56e6ad6aceac
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Código]
+		sourceColumn: Código
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Nombre de la entidad tal como la escribe Oracle ("270 HD Brazil").
+	/// Nombre de la entidad como la escribe Oracle ("270 HD Brazil").
 	column 'Entidad Oracle'
 		dataType: string
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c842
+		lineageTag: 0f2e1e0f-c631-4cfc-bf95-1b814856f101
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Entidad Oracle]
+		sourceColumn: Entidad Oracle
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Nombre de la entidad tal como la escribe el archivo Manual ("270 - HD Brazil WCP/AP Components").
+	/// Nombre de la entidad como la escribe el archivo Manual ("270 - HD Brazil WCP/AP Components").
 	column 'Entidad Manual'
 		dataType: string
-		lineageTag: 3c8e50b1-7a24-4d69-9f13-6e02ab75c843
+		lineageTag: 1475c1cd-98d1-4c33-8596-f4561f13bea7
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Entidad Manual]
+		sourceColumn: Entidad Manual
 
 		annotation SummarizationSetBy = Automatic
 
-	partition 'Dim Entidad Legal' = calculated
+	partition 'Dim Entidad Legal' = m
 		mode: import
 		source =
-				VAR Oracle =
-				    SELECTCOLUMNS ( 'Excel HC Oracle', "Código", 'Excel HC Oracle'[Código Entidad] )
-				VAR Manual =
-				    SELECTCOLUMNS ( 'HC Manual LATAM', "Código", 'HC Manual LATAM'[Código Entidad] )
-				VAR Todos =
-				    DISTINCT ( UNION ( Oracle, Manual ) )
-				RETURN
-				    ADDCOLUMNS (
-				        FILTER ( Todos, NOT [Código] IN { "", "Sin", "Sin Datos", "0" } ),
-				        "Entidad Oracle",
-				            VAR C = [Código]
-				            RETURN
-				                MAXX (
-				                    FILTER ( 'Excel HC Oracle', 'Excel HC Oracle'[Código Entidad] = C ),
-				                    'Excel HC Oracle'[Legal Employer Name]
-				                ),
-				        "Entidad Manual",
-				            VAR C = [Código]
-				            RETURN
-				                MAXX (
-				                    FILTER ( 'HC Manual LATAM', 'HC Manual LATAM'[Código Entidad] = C ),
-				                    'HC Manual LATAM'[Entidad Legal]
-				                )
-				    )
+				let
+				    Limpiar = (t as table, c as text) as table => Table.Distinct(Table.SelectRows(Table.TransformColumns(t, {{c, each if _ = null then null else Text.Trim(Text.From(_)), type text}}), each Record.Field(_, c) <> null and not List.Contains({"", "Sin", "Sin Datos", "0"}, Record.Field(_, c))), {c, Comparer.OrdinalIgnoreCase}),
+				    Ora = Table.AddColumn(Table.Distinct(Table.SelectColumns(#"Oracle Base", {"Legal Employer Name"})), "Código", each Text.Start(Text.From([Legal Employer Name]), 3), type text),
+				    Man = Table.Distinct(Table.SelectColumns(#"HC Manual LATAM", {"Código Entidad", "Entidad Legal"})),
+				    Codigos = Limpiar(Table.Combine({Table.SelectColumns(Ora, {"Código"}), Table.RenameColumns(Table.SelectColumns(Man, {"Código Entidad"}), {{"Código Entidad", "Código"}})}), "Código"),
+				    ConOracle = Table.AddColumn(Codigos, "Entidad Oracle", (r) => List.Max(Table.SelectRows(Ora, each [Código] = r[Código])[Legal Employer Name]), type text),
+				    ConManual = Table.AddColumn(ConOracle, "Entidad Manual", (r) => List.Max(Table.SelectRows(Man, each [Código Entidad] = r[Código])[Entidad Legal]), type text)
+				in
+				    ConManual
 
-	annotation PBI_Id = 2b96e4170dca385f
+	annotation PBI_ResultType = Table
 

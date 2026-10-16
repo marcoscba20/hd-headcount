@@ -1,66 +1,50 @@
-/// Dimensión DESCONECTADA con los valores de Type (ZBB / COGS) presentes en cualquiera de los dos orígenes. Sirve de eje común para comparar Oracle contra el archivo Manual.
+/// Type (ZBB / COGS) presente en Oracle y/o en el archivo Manual. Relacionada con Asignaciones[ZBB / COGS] y HC Manual LATAM[Type Adjusted].
 table 'Dim Type'
-	lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f12
+	lineageTag: 3b54382b-7a17-4d43-ab04-ebc1c4e355a2
 
-	/// HC activo de Oracle para el Type seleccionado. TREATAS empuja el filtro de esta dimensión desconectada sobre 'Excel HC Oracle'[ZBB / COGS].
-	measure 'HC Oracle x Type' =
-			CALCULATE (
-			    [HC Activo],
-			    TREATAS ( VALUES ( 'Dim Type'[Type] ), 'Excel HC Oracle'[ZBB / COGS] )
-			)
-		formatString: #,##0
+	/// HC activo de Oracle para el Type seleccionado.
+	measure 'HC Oracle x Type' = CALCULATE ( [HC Activo], KEEPFILTERS ( NOT ISBLANK ( 'Dim Type'[Type] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f15
+		lineageTag: 6f6c44c7-8b59-4528-959f-01fe0b9d29e1
 
-	/// HC del archivo Manual a Jun-2026 para el Type seleccionado (columna "Type Adjusted").
-	measure 'HC Manual x Type' =
-			CALCULATE (
-			    [HC Manual Jun-2026],
-			    TREATAS ( VALUES ( 'Dim Type'[Type] ), 'HC Manual LATAM'[Type Adjusted] )
-			)
-		formatString: #,##0
+	/// HC del archivo Manual (último snapshot) para el Type seleccionado (columna Type Adjusted).
+	measure 'HC Manual x Type' = CALCULATE ( [HC Manual], KEEPFILTERS ( NOT ISBLANK ( 'Dim Type'[Type] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f16
+		lineageTag: 71635972-31b4-4096-aee9-eee6befa3d00
 
 	measure 'Δ Type (Oracle - Manual)' = [HC Oracle x Type] - [HC Manual x Type]
-		formatString: +#,##0;-#,##0;0
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f17
+		lineageTag: 5edcc106-d3c8-4581-8ddf-ec750412b2c7
 
 	column Type
 		dataType: string
-		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f13
+		lineageTag: 4ea1af2c-2737-409a-850c-b7d8f99c565a
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Type]
+		sourceColumn: Type
 		sortByColumn: Orden
 
 		annotation SummarizationSetBy = Automatic
 
 	column Orden
 		dataType: int64
-		formatString: 0
-		lineageTag: b1f0d4a7-2e93-4c58-9a61-3d70b8e45f14
+		isHidden
+		lineageTag: fb5738fa-54f4-4d02-a29f-001a4d8e59fe
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Orden]
+		sourceColumn: Orden
 
 		annotation SummarizationSetBy = Automatic
 
-	partition 'Dim Type' = calculated
+	partition 'Dim Type' = m
 		mode: import
 		source =
-				VAR Oracle =
-				    SELECTCOLUMNS ( 'Excel HC Oracle', "Type", 'Excel HC Oracle'[ZBB / COGS] )
-				VAR Manual =
-				    SELECTCOLUMNS ( 'HC Manual LATAM', "Type", 'HC Manual LATAM'[Type Adjusted] )
-				VAR Todos =
-				    DISTINCT ( UNION ( Oracle, Manual ) )
-				RETURN
-				    ADDCOLUMNS (
-				        FILTER ( Todos, NOT [Type] IN { "", "Sin Datos", "0" } ),
-				        "Orden", SWITCH ( [Type], "ZBB", 1, "COGS", 2, 9 )
-				    )
+				let
+				    Limpiar = (t as table, c as text) as table => Table.Distinct(Table.SelectRows(Table.TransformColumns(t, {{c, each if _ = null then null else Text.Trim(Text.From(_)), type text}}), each Record.Field(_, c) <> null and not List.Contains({"", "Sin", "Sin Datos", "0"}, Record.Field(_, c))), {c, Comparer.OrdinalIgnoreCase}),
+				    Ora = Table.RenameColumns(Table.SelectColumns(#"Oracle Base", {"ZBB / COGS"}), {{"ZBB / COGS", "Type"}}),
+				    Man = Table.RenameColumns(Table.SelectColumns(#"HC Manual LATAM", {"Type Adjusted"}), {{"Type Adjusted", "Type"}}),
+				    Tipos = Limpiar(Table.Combine({Ora, Man}), "Type"),
+				    Orden = Table.AddColumn(Tipos, "Orden", each if [Type] = "ZBB" then 1 else if [Type] = "COGS" then 2 else 9, Int64.Type)
+				in
+				    Orden
 
-	annotation PBI_Id = 7f3a1c05e2b94d68
+	annotation PBI_ResultType = Table
 

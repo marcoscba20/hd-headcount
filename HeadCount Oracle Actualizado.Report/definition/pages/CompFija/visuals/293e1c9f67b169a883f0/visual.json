@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Compensación Atributos"
+                      "Entity": "Dim País"
                     }
                   },
                   "Property": "País Origen"
                 }
               },
-              "queryRef": "Compensación Atributos.País Origen",
+              "queryRef": "Dim País.País Origen",
               "nativeQueryRef": "País Origen"
             }
           ]

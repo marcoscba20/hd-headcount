@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación Voluntaria %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación Voluntaria %",
+              "queryRef": "Asignaciones.Rotación Voluntaria %",
               "nativeQueryRef": "Rotación Voluntaria %"
             }
           ]

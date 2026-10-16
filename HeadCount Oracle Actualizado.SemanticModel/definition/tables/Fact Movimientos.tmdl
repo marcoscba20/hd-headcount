@@ -1,0 +1,92 @@
+/// Altas y egresos reales (una fila por evento de persona), derivados del export de Oracle. Alta = la persona pasa de no tener asignaciones activas a tener una; Baja = deja de tener asignaciones activas. Una asignación que se cierra y se reemplaza por otra (reasignación) no genera alta ni baja. Cada evento apunta a la asignación que lo origina (Id Asignación), así que se abre por los atributos de esa asignación.
+table 'Fact Movimientos'
+	lineageTag: 8180cf68-8a50-42a1-a416-c64df187b3b0
+
+	column 'Id Asignación'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a037d6e0-4071-49fe-9b72-dfc53be99cd1
+		summarizeBy: none
+		sourceColumn: Id Asignación
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b2e9ea58-42fa-4008-b46f-7484776ba8d2
+		summarizeBy: none
+		sourceColumn: Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 284ccdf5-3c12-40d5-9abb-46d18d18ac5f
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Alta / Baja.
+	column Tipo
+		dataType: string
+		lineageTag: 39dcd100-1388-4c87-b869-4211521dc87a
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Acción de Oracle de la asignación que origina el evento (en bajas: Voluntary / Involuntary Termination).
+	column 'Action Name'
+		dataType: string
+		lineageTag: ca48298e-e6c2-48b6-941a-58b987c0727c
+		summarizeBy: none
+		sourceColumn: Action Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Action Reason'
+		dataType: string
+		lineageTag: 91c697e8-36ac-41ef-bcf2-feb34bb430a1
+		summarizeBy: none
+		sourceColumn: Action Reason
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fact Movimientos' = m
+		mode: import
+		source =
+				let
+				    Sentinel = #date(1900, 1, 1),
+				    Base = Table.SelectRows(Table.SelectColumns(#"Oracle Base", {"Id Asignación", "Person Number", "Enterprise Hire Date", "Termination Date", "Action Name", "Action Reason"}), each [Person Number] <> 99),
+				    // Períodos de asignación por persona: {ingreso, baja}; baja = Sentinel si sigue abierta
+				    Periodos = Table.Group(Base, {"Person Number"}, {{"P", each List.Buffer(List.Zip({[Enterprise Hire Date], [Termination Date]})), type list}}),
+				    RecP = Record.FromList(Periodos[P], List.Transform(Periodos[Person Number], Text.From)),
+				    // Activa el día d: ingreso <= d y (sin baja o baja > d). Mismo criterio que las medidas de HC.
+				    ActivaEn = (pn as number, d as date) as logical => List.AnyTrue(List.Transform(Record.Field(RecP, Text.From(pn)), each _{0} <> Sentinel and _{0} <= d and (_{1} = Sentinel or _{1} > d))),
+				    // Bajas: la persona no queda activa en ninguna asignación el día de la baja
+				    ConBaja = Table.SelectRows(Base, each [Termination Date] <> Sentinel),
+				    BajasReales = Table.SelectRows(ConBaja, each not ActivaEn([Person Number], [Termination Date])),
+				    BajasOrden = Table.Sort(Table.AddColumn(BajasReales, "Pri", each if List.Contains({"Voluntary Termination", "Involuntary Termination"}, [Action Name]) then 0 else 1, Int64.Type), {{"Pri", Order.Ascending}, {"Id Asignación", Order.Ascending}}),
+				    Bajas = Table.AddColumn(Table.Distinct(Table.Buffer(BajasOrden), {"Person Number", "Termination Date"}), "Tipo", each "Baja", type text),
+				    BajasF = Table.RenameColumns(Table.SelectColumns(Bajas, {"Id Asignación", "Person Number", "Termination Date", "Tipo", "Action Name", "Action Reason"}), {{"Termination Date", "Fecha"}}),
+				    // Altas: la persona no estaba activa en ninguna asignación el día anterior al ingreso
+				    ConAlta = Table.SelectRows(Base, each [Enterprise Hire Date] <> Sentinel),
+				    AltasReales = Table.SelectRows(ConAlta, each not ActivaEn([Person Number], Date.AddDays([Enterprise Hire Date], -1))),
+				    // Si varias asignaciones comparten la fecha de ingreso, el alta va a la original (la primera en cerrarse)
+				    AltasOrden = Table.Sort(Table.AddColumn(AltasReales, "FinOrden", each if [Termination Date] = Sentinel then #date(9999, 12, 31) else [Termination Date], type date), {{"FinOrden", Order.Ascending}, {"Id Asignación", Order.Ascending}}),
+				    Altas = Table.AddColumn(Table.Distinct(Table.Buffer(AltasOrden), {"Person Number", "Enterprise Hire Date"}), "Tipo", each "Alta", type text),
+				    AltasF = Table.RenameColumns(Table.SelectColumns(Altas, {"Id Asignación", "Person Number", "Enterprise Hire Date", "Tipo"}), {{"Enterprise Hire Date", "Fecha"}}),
+				    Todo = Table.Combine({AltasF, BajasF}),
+				    Tipos = Table.TransformColumnTypes(Todo, {{"Id Asignación", Int64.Type}, {"Person Number", Int64.Type}, {"Fecha", type date}, {"Tipo", type text}, {"Action Name", type text}, {"Action Reason", type text}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

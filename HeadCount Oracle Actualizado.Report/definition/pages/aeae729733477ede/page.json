@@ -13,7 +13,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "Excel HC Oracle"
+                "Entity": "Asignaciones"
               }
             },
             "Property": "ACTIVE"
@@ -26,7 +26,7 @@
           "From": [
             {
               "Name": "d",
-              "Entity": "Excel HC Oracle",
+              "Entity": "Asignaciones",
               "Type": 0
             }
           ],

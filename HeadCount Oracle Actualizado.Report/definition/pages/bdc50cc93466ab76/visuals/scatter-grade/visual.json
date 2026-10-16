@@ -20,14 +20,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Grade Name"
+                  "Property": "Grade"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
-              "nativeQueryRef": "Grade Name"
+              "queryRef": "Dim Persona.Grade",
+              "nativeQueryRef": "Grade",
+              "displayName": "Grade Name"
             }
           ]
         },
@@ -38,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             }
           ]
@@ -56,13 +57,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Promedio"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Promedio",
+              "queryRef": "Asignaciones.Grade Promedio",
               "nativeQueryRef": "Grade Promedio",
               "active": true
             }
@@ -75,13 +76,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Promedio Activos"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad Promedio Activos",
+              "queryRef": "Asignaciones.Antigüedad Promedio Activos",
               "nativeQueryRef": "Antigüedad Promedio Activos"
             }
           ]
@@ -94,7 +95,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Grade Promedio"

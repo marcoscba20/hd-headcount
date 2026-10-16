@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% Nuevas Incorporaciones"
                 }
               },
-              "queryRef": "Excel HC Oracle.% Nuevas Incorporaciones",
+              "queryRef": "Asignaciones.% Nuevas Incorporaciones",
               "nativeQueryRef": "% Nuevas Incorporaciones"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "% Nuevas Incorporaciones"

@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Rango Antigüedad"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rango Antigüedad",
+              "queryRef": "Dim Persona.Rango Antigüedad",
               "nativeQueryRef": "Rango Antigüedad",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% del Total HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.% del Total HC Activo",
+              "queryRef": "Asignaciones.% del Total HC Activo",
               "nativeQueryRef": "% del Total HC Activo"
             }
           ]
@@ -58,7 +58,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Dim Persona"
                   }
                 },
                 "Property": "Rango Antigüedad Orden"

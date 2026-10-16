@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Ámbito"
                 }
               },
-              "queryRef": "Excel HC Oracle.Ámbito",
+              "queryRef": "Dim Persona.Ámbito",
               "nativeQueryRef": "Ámbito",
               "active": true
             }
@@ -69,8 +69,8 @@
                 "Version": 2,
                 "From": [
                   {
-                    "Name": "e",
-                    "Entity": "Excel HC Oracle",
+                    "Name": "dp",
+                    "Entity": "Dim Persona",
                     "Type": 0
                   }
                 ],
@@ -83,7 +83,7 @@
                             "Column": {
                               "Expression": {
                                 "SourceRef": {
-                                  "Source": "e"
+                                  "Source": "dp"
                                 }
                               },
                               "Property": "Ámbito"

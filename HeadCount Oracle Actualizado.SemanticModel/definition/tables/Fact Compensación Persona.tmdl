@@ -1,17 +1,17 @@
-/// Atributos y beneficios (indicadores) por persona y corte, del archivo de salarios. Fuente confidencial.
-table 'Compensación Atributos'
+/// Fact a nivel persona x corte del archivo de salarios: FTE, cantidad de salarios, beneficios (indicadores Sí/No) y calidad del cruce con Oracle. Se filtra por las mismas dimensiones que 'Fact Compensación' (Dim Persona, Calendario, Dim País); no hay vínculo directo entre las dos facts. Fuente confidencial.
+table 'Fact Compensación Persona'
 	lineageTag: 18eea52a-5863-4434-9a47-75542a33ccb8
 
 	/// Filas del archivo de salarios en el contexto (una por persona y corte).
-	measure 'HC con Salario' = COUNTROWS ( 'Compensación Atributos' )
+	measure 'HC con Salario' = COUNTROWS ( 'Fact Compensación Persona' )
 		formatString: #,##0
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: dbe25a59-b02e-4eae-9023-6dc659656bf7
 
 	measure '% con Seguro de Salud' =
 			DIVIDE (
-			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Seguro Salud] = "Sí" ),
-			    COUNTROWS ( 'Compensación Atributos' )
+			    CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Seguro Salud] = "Sí" ),
+			    COUNTROWS ( 'Fact Compensación Persona' )
 			)
 		formatString: 0.0%
 		displayFolder: 13 · Compensación (USD)
@@ -19,8 +19,8 @@ table 'Compensación Atributos'
 
 	measure '% con Seguro de Vida' =
 			DIVIDE (
-			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Seguro Vida] = "Sí" ),
-			    COUNTROWS ( 'Compensación Atributos' )
+			    CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Seguro Vida] = "Sí" ),
+			    COUNTROWS ( 'Fact Compensación Persona' )
 			)
 		formatString: 0.0%
 		displayFolder: 13 · Compensación (USD)
@@ -28,33 +28,33 @@ table 'Compensación Atributos'
 
 	measure '% con Línea Compañía' =
 			DIVIDE (
-			    CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Línea Compañía] = "Sí" ),
-			    COUNTROWS ( 'Compensación Atributos' )
+			    CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Línea Compañía] = "Sí" ),
+			    COUNTROWS ( 'Fact Compensación Persona' )
 			)
 		formatString: 0.0%
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: 30feabbe-5422-4ff7-8a22-2556e5e5f480
 
 	/// Salarios que no cruzaron ni por Oracle ID ni por ID Nacional.
-	measure 'Filas sin cruce' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Método Cruce] = "Sin cruce" )
+	measure 'Filas sin cruce' = CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Método Cruce] = "Sin cruce" )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: b2d7702d-80c4-4b1c-9f95-5bd3546a79f0
 
 	/// Filas rescatadas por el fallback (sin Oracle ID válido).
-	measure 'Filas cruzadas por ID Nacional' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Método Cruce] = "ID Nacional" )
+	measure 'Filas cruzadas por ID Nacional' = CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Método Cruce] = "ID Nacional" )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: 2800a1ef-029d-4793-b085-cdc6bbffa19a
 
 	/// Cruzaron por Oracle ID pero el ID Nacional difiere entre archivos.
-	measure 'Cant ID Nacional discrepante' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[ID Nacional Discrepante] = TRUE () )
+	measure 'Cant ID Nacional discrepante' = CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[ID Nacional Discrepante] = TRUE () )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: 9947ab74-417c-440a-9799-d223a9569c3b
 
 	/// Filas cuyo Oracle ID aparece más de una vez en el mismo corte.
-	measure 'Cant Oracle ID duplicado' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Oracle ID Duplicado] = TRUE () )
+	measure 'Cant Oracle ID duplicado' = CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Oracle ID Duplicado] = TRUE () )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: e60d2b09-4ce4-4f5c-a44d-7bb857332200
@@ -62,7 +62,7 @@ table 'Compensación Atributos'
 	/// Filas con Cantidad de Salarios en 0 o vacía aun después del fallback (el anual queda en blanco).
 	measure 'Sin Cantidad de Salarios' =
 			COUNTROWS (
-			    FILTER ( 'Compensación Atributos', 'Compensación Atributos'[Cantidad de Salarios] = 0 )
+			    FILTER ( 'Fact Compensación Persona', 'Fact Compensación Persona'[Cantidad de Salarios] = 0 )
 			)
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
@@ -72,31 +72,21 @@ table 'Compensación Atributos'
 	measure 'Activos Oracle sin salario' =
 			VAR Activos =
 			    CALCULATETABLE (
-			        VALUES ( 'Excel HC Oracle'[Person Number] ),
-			        'Excel HC Oracle'[Assignment Status Code] = "ACTIVE_PROCESS"
+			        VALUES ( 'Asignaciones'[Person Number] ),
+			        'Asignaciones'[Assignment Status Code] = "ACTIVE_PROCESS"
 			    )
-			VAR ConSalario = VALUES ( 'Compensación Atributos'[Person Number Resuelto] )
+			VAR ConSalario = VALUES ( 'Fact Compensación Persona'[Person Number Resuelto] )
 			RETURN
 			    COUNTROWS ( EXCEPT ( Activos, ConSalario ) )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: 0e3949f4-18df-4413-b258-3fe067b39462
 
-	/// Filas con Cantidad de Salarios completada desde la tabla por país.
-	measure 'Cantidad de Salarios por fallback' = CALCULATE ( COUNTROWS ( 'Compensación Atributos' ), 'Compensación Atributos'[Origen Cantidad Salarios] = "Tabla por país" )
+	/// Filas con Cantidad de Salarios completada desde la tabla por país (ni la hoja TC ni el archivo la traen).
+	measure 'Cantidad de Salarios por fallback' = CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), 'Fact Compensación Persona'[Origen Cantidad Salarios] = "Tabla por país" )
 		formatString: #,##0
 		displayFolder: 14 · Calidad Compensación
 		lineageTag: a2b42796-7d73-4f3a-9c31-9bdb2feb67d2
-
-	column 'Id Fila'
-		dataType: int64
-		isHidden
-		formatString: 0
-		lineageTag: 404c0597-14ac-42fe-bef0-26c40550ce1e
-		summarizeBy: none
-		sourceColumn: Id Fila
-
-		annotation SummarizationSetBy = Automatic
 
 	column 'Fecha Corte'
 		dataType: dateTime
@@ -178,7 +168,7 @@ table 'Compensación Atributos'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Columna del Excel; si viene vacía o en 0 se completa con 'Salarios Anuales por País'.
+	/// Hoja TC del archivo (entidad legal o país); si falta, la columna del Excel y, si viene vacía o en 0, 'Dim País'[Sueldos Anuales]. Ver 'Origen Cantidad Salarios'.
 	column 'Cantidad de Salarios'
 		dataType: double
 		formatString: 0.00
@@ -206,6 +196,7 @@ table 'Compensación Atributos'
 
 	column 'País Origen'
 		dataType: string
+		isHidden
 		lineageTag: 37d9dd19-4d40-4718-b905-0e5b401c97aa
 		summarizeBy: none
 		sourceColumn: País Origen
@@ -237,12 +228,12 @@ table 'Compensación Atributos'
 
 		annotation SummarizationSetBy = Automatic
 
-	partition 'Compensación Atributos' = m
+	partition 'Fact Compensación Persona' = m
 		mode: import
 		source =
 				let
 				    Base = #"Compensación Base",
-				    Final = Table.SelectColumns(Base, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "ID Nacional", "País Origen", "Moneda", "Línea Compañía", "Seguro Salud", "Seguro Vida", "FTE", "ACT/OFF", "Cantidad de Salarios", "Origen Cantidad Salarios", "ID Nacional Discrepante", "Oracle ID Duplicado"})
+				    Final = Table.SelectColumns(Base, {"Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "ID Nacional", "País Origen", "Moneda", "Línea Compañía", "Seguro Salud", "Seguro Vida", "FTE", "ACT/OFF", "Cantidad de Salarios", "Origen Cantidad Salarios", "ID Nacional Discrepante", "Oracle ID Duplicado"})
 				in
 				    Final
 

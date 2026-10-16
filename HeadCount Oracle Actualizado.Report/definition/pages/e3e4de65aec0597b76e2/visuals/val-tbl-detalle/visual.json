@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Person Number"
                 }
               },
-              "queryRef": "Excel HC Oracle.Person Number",
+              "queryRef": "Asignaciones.Person Number",
               "nativeQueryRef": "Person Number"
             },
             {
@@ -34,27 +34,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Display Name"
+                  "Property": "Nombre"
                 }
               },
-              "queryRef": "Excel HC Oracle.Display Name",
-              "nativeQueryRef": "Display Name"
+              "queryRef": "Dim Persona.Nombre",
+              "nativeQueryRef": "Nombre",
+              "displayName": "Display Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Termination Date"
                 }
               },
-              "queryRef": "Excel HC Oracle.Termination Date",
+              "queryRef": "Asignaciones.Termination Date",
               "nativeQueryRef": "Termination Date"
             },
             {
@@ -62,13 +63,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Action Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Action Name",
+              "queryRef": "Asignaciones.Action Name",
               "nativeQueryRef": "Action Name"
             },
             {
@@ -76,13 +77,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Action Reason"
                 }
               },
-              "queryRef": "Excel HC Oracle.Action Reason",
+              "queryRef": "Asignaciones.Action Reason",
               "nativeQueryRef": "Action Reason"
             },
             {
@@ -90,13 +91,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Asignaciones.País Overview",
               "nativeQueryRef": "País Overview"
             },
             {
@@ -104,13 +105,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "EPM Main Function Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "queryRef": "Asignaciones.EPM Main Function Name",
               "nativeQueryRef": "EPM Main Function Name"
             },
             {
@@ -118,13 +119,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
+              "queryRef": "Asignaciones.Grade Name",
               "nativeQueryRef": "Grade Name"
             },
             {
@@ -132,13 +133,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Asignaciones.Nivel",
               "nativeQueryRef": "Nivel"
             },
             {
@@ -146,13 +147,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bajas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bajas",
+              "queryRef": "Asignaciones.Bajas",
               "nativeQueryRef": "Bajas"
             }
           ]
@@ -165,7 +166,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Termination Date"

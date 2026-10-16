@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Grade Name"
+                  "Property": "Grade"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
-              "nativeQueryRef": "Grade Name",
-              "active": true
+              "queryRef": "Dim Persona.Grade",
+              "nativeQueryRef": "Grade",
+              "active": true,
+              "displayName": "Grade Name"
             }
           ]
         },
@@ -39,13 +40,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             },
             {
@@ -53,13 +54,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% del Total Dotación"
                 }
               },
-              "queryRef": "Excel HC Oracle.% del Total Dotación",
+              "queryRef": "Asignaciones.% del Total Dotación",
               "nativeQueryRef": "% del Total Dotación"
             },
             {
@@ -67,13 +68,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Promedio Activos"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad Promedio Activos",
+              "queryRef": "Asignaciones.Antigüedad Promedio Activos",
               "nativeQueryRef": "Antigüedad Promedio Activos"
             },
             {
@@ -81,13 +82,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bajas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bajas",
+              "queryRef": "Asignaciones.Bajas",
               "nativeQueryRef": "Bajas"
             },
             {
@@ -95,13 +96,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación %",
+              "queryRef": "Asignaciones.Rotación %",
               "nativeQueryRef": "Rotación %"
             },
             {
@@ -109,13 +110,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% HC con MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.% HC con MBO",
+              "queryRef": "Asignaciones.% HC con MBO",
               "nativeQueryRef": "% HC con MBO"
             }
           ]
@@ -128,7 +129,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo"

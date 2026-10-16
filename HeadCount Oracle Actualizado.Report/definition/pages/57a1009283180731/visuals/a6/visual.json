@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Country"
+                  "Property": "País"
                 }
               },
-              "queryRef": "Excel HC Oracle.Country",
+              "queryRef": "Dim Persona.País",
               "nativeQueryRef": "Country",
-              "active": true
+              "active": true,
+              "displayName": "Country"
             }
           ]
         },
@@ -39,28 +40,29 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "EPM Main Function Name"
+                  "Property": "Función"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
-              "nativeQueryRef": "EPM Main Function Name",
-              "active": true
+              "queryRef": "Dim Persona.Función",
+              "nativeQueryRef": "Función",
+              "active": true,
+              "displayName": "EPM Main Function Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Dim Persona.Nivel",
               "nativeQueryRef": "Nivel",
               "active": false
             }
@@ -73,13 +75,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Dotación"
                 }
               },
-              "queryRef": "Excel HC Oracle.Dotación",
+              "queryRef": "Asignaciones.Dotación",
               "nativeQueryRef": "Dotación"
             }
           ]
@@ -92,7 +94,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Dotación"

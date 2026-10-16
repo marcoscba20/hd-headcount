@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "EPM Main Function Name"
+                  "Property": "Función"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
-              "nativeQueryRef": "EPM Main Function Name",
-              "active": true
+              "queryRef": "Dim Persona.Función",
+              "nativeQueryRef": "Función",
+              "active": true,
+              "displayName": "EPM Main Function Name"
             }
           ]
         },
@@ -39,13 +40,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Promedio (años)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad Promedio (años)",
+              "queryRef": "Asignaciones.Antigüedad Promedio (años)",
               "nativeQueryRef": "Antigüedad Promedio (años)"
             }
           ]
@@ -58,7 +59,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Antigüedad Promedio (años)"

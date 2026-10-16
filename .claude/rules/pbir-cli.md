@@ -11,3 +11,4 @@
 - Las `card` clásicas no envuelven texto: para medidas que devuelven frases hay que fijar `labels.fontSize` bajo (11-15) y `categoryLabels.show=false`.
 - Field parameters en TMDL: si la partición calculada es una lista de tuplas anónimas `{ ("X", NAMEOF(...), 0), ... }`, las columnas son `[Value1]`, `[Value2]`, `[Value3]` y NO llevan `isNameInferred`. La columna visible lleva `relatedColumnDetails/groupByColumn` y la de campos `extendedProperty ParameterMetadata = { "version": 3, "kind": 2 }`.
 - Nombres de medida con punto interno (`Val · Dif. Conciliación`) confunden al parser `Tabla.Campo` de `-d`. Evitar puntos dentro del nombre.
+- Pasar una tabla de calculada a M (o al revés) editando TMDL hace que Desktop no abra el PBIP (`PFE_TM_DDL_CHANGED_PARTITION_FROM_OR_TO_CALC`): el `.pbi/cache.abf` guarda la partición vieja. Mover o borrar el `cache.abf` (está en .gitignore) y reabrir.

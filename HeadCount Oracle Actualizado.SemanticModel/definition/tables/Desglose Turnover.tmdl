@@ -44,13 +44,13 @@ table 'Desglose Turnover'
 		mode: import
 		source =
 				{
-				    ( "País", NAMEOF ( 'Excel HC Oracle'[País Overview] ), 0 ),
-				    ( "Función (EPM)", NAMEOF ( 'Excel HC Oracle'[EPM Main Function Name] ), 1 ),
-				    ( "Grade", NAMEOF ( 'Excel HC Oracle'[Grade Grupo] ), 2 ),
-				    ( "Nivel", NAMEOF ( 'Excel HC Oracle'[Nivel] ), 3 ),
-				    ( "Entidad Legal", NAMEOF ( 'Excel HC Oracle'[Legal Employer Name] ), 4 ),
-				    ( "Motivo de la baja", NAMEOF ( 'Excel HC Oracle'[Action Name] ), 5 ),
-				    ( "Rango de antigüedad", NAMEOF ( 'Excel HC Oracle'[Rango Antigüedad] ), 6 )
+				    ( "País", NAMEOF ( 'Asignaciones'[País Overview] ), 0 ),
+				    ( "Función (EPM)", NAMEOF ( 'Asignaciones'[EPM Main Function Name] ), 1 ),
+				    ( "Grade", NAMEOF ( 'Asignaciones'[Grade Grupo] ), 2 ),
+				    ( "Nivel", NAMEOF ( 'Asignaciones'[Nivel] ), 3 ),
+				    ( "Entidad Legal", NAMEOF ( 'Dim Persona'[Entidad Legal] ), 4 ),
+				    ( "Motivo de la baja", NAMEOF ( 'Asignaciones'[Action Name] ), 5 ),
+				    ( "Rango de antigüedad", NAMEOF ( 'Asignaciones'[Rango Antigüedad] ), 6 )
 				}
 
 	annotation PBI_Id = DesgloseTurnover

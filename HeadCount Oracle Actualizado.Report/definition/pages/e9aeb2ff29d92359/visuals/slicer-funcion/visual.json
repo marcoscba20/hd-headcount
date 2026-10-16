@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "EPM Main Function Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "queryRef": "Asignaciones.EPM Main Function Name",
               "nativeQueryRef": "EPM Main Function Name",
               "active": true
             }

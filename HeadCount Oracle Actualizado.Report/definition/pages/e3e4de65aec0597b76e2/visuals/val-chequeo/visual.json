@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · Chequeo Conciliación"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · Chequeo Conciliación",
+              "queryRef": "Asignaciones.Val · Chequeo Conciliación",
               "nativeQueryRef": "Val · Chequeo Conciliación"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Val · Chequeo Conciliación"

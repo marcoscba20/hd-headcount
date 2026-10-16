@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Esquema MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "queryRef": "Dim Persona.Esquema MBO",
               "nativeQueryRef": "Esquema MBO",
               "active": true
             }

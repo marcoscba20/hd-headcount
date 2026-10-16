@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% Cross-Entity"
                 }
               },
-              "queryRef": "Excel HC Oracle.% Cross-Entity",
+              "queryRef": "Asignaciones.% Cross-Entity",
               "nativeQueryRef": "% Cross-Entity"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "% Cross-Entity"

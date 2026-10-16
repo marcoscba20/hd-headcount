@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Bonus Swap"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bonus Swap",
+              "queryRef": "Dim Persona.Bonus Swap",
               "nativeQueryRef": "Bonus Swap",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             }
           ]
@@ -58,7 +58,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo"

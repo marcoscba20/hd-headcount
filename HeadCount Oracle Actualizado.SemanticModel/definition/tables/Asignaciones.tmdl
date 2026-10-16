@@ -1,8 +1,9 @@
-table 'Excel HC Oracle'
+/// Asignaciones del export semanal de Oracle (una fila por asignación). Guarda lo que cambia entre asignaciones de una misma persona (área, puesto, grade, nivel, país, función, cross charge, MBO, fechas y estado). Lo fijo de la persona está en Dim Persona. Calendario NO se relaciona con esta tabla: las medidas de headcount leen el rango de Calendario y filtran fechas de ingreso/baja ellas mismas.
+table Asignaciones
 	lineageTag: bf125006-48c8-47d6-8c24-a4fa9ce54e0c
 
 	/// Personas distintas, NO filas. El export trae una fila por asignación: 2464 filas para 1904 personas. Por eso cuenta Person Number distintos y el total de una matriz no es la suma de sus filas (una persona con dos entidades legales aparece en ambas y se cuenta una sola vez en el total).
-	measure Dotación = DISTINCTCOUNT('Excel HC Oracle'[Person Number])
+	measure Dotación = DISTINCTCOUNT('Asignaciones'[Person Number])
 		formatString: #,##0
 		displayFolder: 01 · Dotación
 		lineageTag: 6d30c71e-e338-444c-8dda-f59e08f2955a
@@ -15,8 +16,8 @@ table 'Excel HC Oracle'
 	/// Promedio POR PERSONA, no por fila: el export trae una fila por asignación, así que se colapsa cada Person Number antes de promediar.
 	measure 'Antigüedad Promedio (años)' =
 			AVERAGEX (
-			    VALUES ( 'Excel HC Oracle'[Person Number] ),
-			    CALCULATE ( MAX ( 'Excel HC Oracle'[Antigüedad (años)] ) )
+			    VALUES ( 'Asignaciones'[Person Number] ),
+			    CALCULATE ( MAX ( 'Asignaciones'[Antigüedad (años)] ) )
 			)
 		formatString: #,##0.0
 		displayFolder: 02 · Ingresos y Antigüedad
@@ -25,34 +26,37 @@ table 'Excel HC Oracle'
 	/// Mediana POR PERSONA. Ver la nota de [Antigüedad Promedio (años)].
 	measure 'Antigüedad Mediana (años)' =
 			MEDIANX (
-			    VALUES ( 'Excel HC Oracle'[Person Number] ),
-			    CALCULATE ( MAX ( 'Excel HC Oracle'[Antigüedad (años)] ) )
+			    VALUES ( 'Asignaciones'[Person Number] ),
+			    CALCULATE ( MAX ( 'Asignaciones'[Antigüedad (años)] ) )
 			)
 		formatString: #,##0.0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 576bd567-25f9-4dc5-aef1-fa2287ff4178
 
-	measure 'Nº Entidades Legales' = DISTINCTCOUNT('Excel HC Oracle'[Legal Employer Name])
+	measure 'Nº Entidades Legales' =
+			VAR Personas = VALUES ( 'Asignaciones'[Person Number] )
+			RETURN
+			    CALCULATE ( DISTINCTCOUNT ( 'Dim Persona'[Entidad Legal] ), TREATAS ( Personas, 'Dim Persona'[Person Number] ) )
 		formatString: 0
 		displayFolder: 05 · Conteos y Estructura
 		lineageTag: 5f4c3c7d-e318-411a-aa5f-248db19aadee
 
-	measure 'Nº Países' = DISTINCTCOUNT('Excel HC Oracle'[Country])
+	measure 'Nº Países' = DISTINCTCOUNT('Asignaciones'[Country])
 		formatString: 0
 		displayFolder: 05 · Conteos y Estructura
 		lineageTag: 87e41fa7-84a9-4a30-94f2-229132f420ba
 
-	measure 'Nº Funciones' = DISTINCTCOUNT('Excel HC Oracle'[EPM Main Function Name])
+	measure 'Nº Funciones' = DISTINCTCOUNT('Asignaciones'[EPM Main Function Name])
 		formatString: 0
 		displayFolder: 05 · Conteos y Estructura
 		lineageTag: 7c62a8fa-ebc2-4b9c-99a7-bb2d7ed10347
 
-	measure '% del Total Dotación' = DIVIDE([Dotación], CALCULATE([Dotación], ALLSELECTED('Excel HC Oracle')))
+	measure '% del Total Dotación' = DIVIDE([Dotación], CALCULATE([Dotación], ALLSELECTED('Asignaciones')))
 		formatString: 0.0%
 		displayFolder: 01 · Dotación
 		lineageTag: ac9f29e0-685e-4fb7-957b-d0a147f9f45d
 
-	measure 'Nuevas Incorporaciones (<1 año)' = CALCULATE([Dotación], 'Excel HC Oracle'[Antigüedad (años)] < 1)
+	measure 'Nuevas Incorporaciones (<1 año)' = CALCULATE([Dotación], 'Asignaciones'[Antigüedad (años)] < 1)
 		formatString: #,##0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 8dfebb0a-9bed-4d91-a281-0b7f231c2690
@@ -62,7 +66,7 @@ table 'Excel HC Oracle'
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 4fca5228-3377-4b6d-b36e-3187891951b3
 
-	measure 'Dotación +10 años' = CALCULATE([Dotación], 'Excel HC Oracle'[Antigüedad (años)] >= 10)
+	measure 'Dotación +10 años' = CALCULATE([Dotación], 'Asignaciones'[Antigüedad (años)] >= 10)
 		formatString: #,##0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 420fc517-0386-4cb4-a5d9-9712767cdb2b
@@ -72,7 +76,7 @@ table 'Excel HC Oracle'
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 97b5e777-f4f7-4dcc-a451-ada778c8259c
 
-	measure 'Dotación Cross-Entity' = CALCULATE([Dotación], NOT 'Excel HC Oracle'[Cross Charge Entity Name] IN {"None", "Sin Datos"})
+	measure 'Dotación Cross-Entity' = CALCULATE([Dotación], NOT 'Asignaciones'[Cross Charge Entity Name] IN {"None", "Sin Datos"})
 		formatString: #,##0
 		displayFolder: 06 · Costo y Cross-Entity
 		lineageTag: e0fb8d29-fc2c-4bd4-a180-44fe9208af4c
@@ -82,7 +86,7 @@ table 'Excel HC Oracle'
 		displayFolder: 06 · Costo y Cross-Entity
 		lineageTag: 538dcfc4-405d-4b9b-a1e5-3259745d2fb5
 
-	measure 'Dotación Directa (COGS)' = CALCULATE([Dotación], 'Excel HC Oracle'[Labor Type] = "Direct")
+	measure 'Dotación Directa (COGS)' = CALCULATE([Dotación], 'Asignaciones'[Labor Type] = "Direct")
 		formatString: #,##0
 		displayFolder: 06 · Costo y Cross-Entity
 		lineageTag: ee7ddc27-5c5e-4f2b-959e-c7c03e530e01
@@ -92,12 +96,12 @@ table 'Excel HC Oracle'
 		displayFolder: 06 · Costo y Cross-Entity
 		lineageTag: 1dc406a7-cd16-4efe-b034-a0878e51a124
 
-	measure 'Ingresos Año Actual' = CALCULATE([Dotación], 'Excel HC Oracle'[Año Ingreso] = YEAR(TODAY()))
+	measure 'Ingresos Año Actual' = CALCULATE([Dotación], 'Asignaciones'[Año Ingreso] = YEAR(TODAY()))
 		formatString: #,##0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 6f4fb49c-8eae-4a74-90ec-937d891ca356
 
-	measure 'Ingresos Año Anterior' = CALCULATE([Dotación], 'Excel HC Oracle'[Año Ingreso] = YEAR(TODAY()) - 1)
+	measure 'Ingresos Año Anterior' = CALCULATE([Dotación], 'Asignaciones'[Año Ingreso] = YEAR(TODAY()) - 1)
 		formatString: #,##0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: 60d4a335-be6d-4d2b-a0d5-1f144ff7e8b7
@@ -108,13 +112,13 @@ table 'Excel HC Oracle'
 		lineageTag: 0b46bb8c-8cea-4c93-b04b-9dc368581338
 
 	/// Dotación activa (ACTIVE = 1). Base de headcount para todas las hojas.
-	measure 'HC Activo' = CALCULATE([Dotación], 'Excel HC Oracle'[ACTIVE] = "1")
+	measure 'HC Activo' = CALCULATE([Dotación], 'Asignaciones'[ACTIVE] = "1")
 		formatString: #,##0
 		displayFolder: 03 · Headcount Activo
 		lineageTag: 9c95b852-c2f8-4e05-8fb9-3b3873998c98
 
 	/// Dotación inactiva / dada de baja (ACTIVE = 0).
-	measure 'HC Inactivo' = CALCULATE([Dotación], 'Excel HC Oracle'[ACTIVE] = "0")
+	measure 'HC Inactivo' = CALCULATE([Dotación], 'Asignaciones'[ACTIVE] = "0")
 		formatString: #,##0
 		displayFolder: 03 · Headcount Activo
 		lineageTag: 5192e2d1-6e1d-4937-94b3-b52ef4c6ba50
@@ -130,13 +134,13 @@ table 'Excel HC Oracle'
 			VAR D = MIN ( 'Calendario'[Date] ) - 1
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -149,13 +153,13 @@ table 'Excel HC Oracle'
 			VAR D = MAX ( 'Calendario'[Date] )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -169,47 +173,55 @@ table 'Excel HC Oracle'
 		displayFolder: 03 · Headcount Activo
 		lineageTag: a9cbb2cd-3fb0-43cd-a50b-d3da0e2f2e41
 
-	/// Bajas: empleados cuya fecha de baja cae dentro del período seleccionado.
+	/// Egresos reales del período: personas que dejan de tener asignaciones activas. Una asignación cerrada que se reemplaza por otra (reasignación) no cuenta.
 	measure Bajas =
 			VAR Ini = MIN ( 'Calendario'[Date] )
 			VAR Fin = MAX ( 'Calendario'[Date] )
 			RETURN
 			    CALCULATE (
-			        COUNTROWS ( 'Excel HC Oracle' ),
-			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Termination Date] >= Ini
-			                && 'Excel HC Oracle'[Termination Date] <= Fin
-			        )
+			        COUNTROWS ( 'Fact Movimientos' ),
+			        'Fact Movimientos'[Tipo] = "Baja",
+			        'Fact Movimientos'[Fecha] >= Ini,
+			        'Fact Movimientos'[Fecha] <= Fin
 			    )
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: b3cbe3a2-e363-4cdb-9904-1da140c16fa4
 
 	/// Bajas voluntarias (renuncias) del período.
-	measure 'Bajas Voluntarias' = CALCULATE([Bajas], 'Excel HC Oracle'[Action Name] = "Voluntary Termination")
+	measure 'Bajas Voluntarias' = CALCULATE ( [Bajas], 'Fact Movimientos'[Action Name] = "Voluntary Termination" )
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: 3779a3c8-6b02-44f1-b5bf-f8700c69bb46
 
 	/// Bajas involuntarias (despidos / fin de contrato) del período.
-	measure 'Bajas Involuntarias' = CALCULATE([Bajas], 'Excel HC Oracle'[Action Name] = "Involuntary Termination")
+	measure 'Bajas Involuntarias' = CALCULATE ( [Bajas], 'Fact Movimientos'[Action Name] = "Involuntary Termination" )
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: 13f0272e-03da-4a34-a064-35353fe3d597
 
-	/// Altas: empleados cuya fecha de ingreso cae dentro del período seleccionado.
+	/// Asignaciones cerradas en el período que NO son egreso porque la persona siguió activa en otra asignación. Diferencia entre el conteo por fila de Oracle y [Bajas].
+	measure 'Val · Reasignaciones Excluidas' =
+			VAR Ini = MIN ( 'Calendario'[Date] )
+			VAR Fin = MAX ( 'Calendario'[Date] )
+			VAR CerradasEnPeriodo =
+			    CALCULATE ( COUNTROWS ( 'Asignaciones' ), 'Asignaciones'[Termination Date] >= Ini, 'Asignaciones'[Termination Date] <= Fin )
+			RETURN
+			    CerradasEnPeriodo - [Bajas]
+		formatString: #,##0
+		displayFolder: 08 · Validación (Data Quality)
+		lineageTag: 15603ef6-69a2-4ef5-bb30-0f48c433b810
+
+	/// Altas reales del período: personas que pasan de no tener ninguna asignación activa a tener una. Una reasignación (se cierra una asignación y se abre otra) no cuenta.
 	measure Altas =
 			VAR Ini = MIN ( 'Calendario'[Date] )
 			VAR Fin = MAX ( 'Calendario'[Date] )
 			RETURN
 			    CALCULATE (
-			        COUNTROWS ( 'Excel HC Oracle' ),
-			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] >= Ini
-			                && 'Excel HC Oracle'[Enterprise Hire Date] <= Fin
-			        )
+			        COUNTROWS ( 'Fact Movimientos' ),
+			        'Fact Movimientos'[Tipo] = "Alta",
+			        'Fact Movimientos'[Fecha] >= Ini,
+			        'Fact Movimientos'[Fecha] <= Fin
 			    )
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
@@ -252,7 +264,7 @@ table 'Excel HC Oracle'
 		lineageTag: b724f629-af4b-4f82-82e9-c8096e2f1835
 
 	/// Antigüedad promedio limitada a empleados activos.
-	measure 'Antigüedad Promedio Activos' = CALCULATE([Antigüedad Promedio (años)], 'Excel HC Oracle'[ACTIVE] = "1")
+	measure 'Antigüedad Promedio Activos' = CALCULATE([Antigüedad Promedio (años)], 'Asignaciones'[ACTIVE] = "1")
 		formatString: #,##0.0
 		displayFolder: 02 · Ingresos y Antigüedad
 		lineageTag: da7b15e7-570b-4fb9-ae0a-996a69b4962c
@@ -261,15 +273,15 @@ table 'Excel HC Oracle'
 	/// Grade promedio POR PERSONA. Colapsa con MIN, así una persona con una asignación sin grade (sentinel 99) toma su grade real. Si todas sus filas son 99, sigue pesando 99.
 	measure 'Grade Promedio' =
 			AVERAGEX (
-			    VALUES ( 'Excel HC Oracle'[Person Number] ),
-			    CALCULATE ( MIN ( 'Excel HC Oracle'[Grade Nº] ) )
+			    VALUES ( 'Asignaciones'[Person Number] ),
+			    CALCULATE ( MIN ( 'Asignaciones'[Grade Nº] ) )
 			)
 		formatString: #,##0.0
 		displayFolder: 07 · Grades
 		lineageTag: 8dfee0df-9b5b-4178-993b-59a4afb40489
 
 	/// Cantidad de grades distintos presentes en el contexto.
-	measure 'Nº Grades' = DISTINCTCOUNT('Excel HC Oracle'[Grade Name])
+	measure 'Nº Grades' = DISTINCTCOUNT('Asignaciones'[Grade Name])
 		formatString: 0
 		displayFolder: 07 · Grades
 		lineageTag: f20c9356-dd61-4aac-9ef9-feb08f5f5bfe
@@ -279,13 +291,13 @@ table 'Excel HC Oracle'
 			VAR D = TODAY ()
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -298,13 +310,13 @@ table 'Excel HC Oracle'
 			VAR D = EDATE ( TODAY (), -1 )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -317,13 +329,13 @@ table 'Excel HC Oracle'
 			VAR D = EDATE ( TODAY (), -12 )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -355,27 +367,17 @@ table 'Excel HC Oracle'
 		displayFolder: 03 · Headcount Activo
 		lineageTag: 7a1d6f3b-2c44-4e9a-8b11-501122aa0004
 
-	/// Cantidad de Person Number distintos en el conjunto filtrado.
-	measure 'Nº Personas Únicas' = DISTINCTCOUNT('Excel HC Oracle'[Person Number])
-		formatString: #,##0
-		displayFolder: 08 · Validación (Data Quality)
-		lineageTag: 1b2c3d4e-0001-4a10-9f01-aa1100000001
-
 	/// Registros de más respecto de personas únicas. > 0 indica Person Number duplicados.
-	measure 'Person Number Duplicados' = COUNTROWS('Excel HC Oracle') - DISTINCTCOUNT('Excel HC Oracle'[Person Number])
+	measure 'Person Number Duplicados' = COUNTROWS('Asignaciones') - DISTINCTCOUNT('Asignaciones'[Person Number])
 		formatString: #,##0
 		displayFolder: 08 · Validación (Data Quality)
 		lineageTag: 1b2c3d4e-0002-4a10-9f01-aa1100000002
 
-	/// Registros sin National ID (local ID) cargado. > 0 indica datos incompletos.
+	/// Asignaciones cuya persona no tiene National ID en Oracle ("Sin Datos" o vacío).
 	measure 'Registros sin National ID' =
 			CALCULATE (
-			    COUNTROWS ( 'Excel HC Oracle' ),
-			    FILTER (
-			        'Excel HC Oracle',
-			        ISBLANK ( 'Excel HC Oracle'[National ID] )
-			            || TRIM ( 'Excel HC Oracle'[National ID] ) = ""
-			    )
+			    COUNTROWS ( 'Asignaciones' ),
+			    KEEPFILTERS ( 'Dim Persona'[ID Nacional Oracle] IN { "Sin Datos", "" } )
 			)
 		formatString: #,##0
 		displayFolder: 08 · Validación (Data Quality)
@@ -385,7 +387,7 @@ table 'Excel HC Oracle'
 	measure 'Registros sin Centro de Costo' =
 			CALCULATE (
 			    [HC Activo],
-			    'Excel HC Oracle'[Local Cost Center] IN { "Sin Datos", "" }
+			    'Asignaciones'[Local Cost Center] IN { "Sin Datos", "" }
 			)
 		formatString: #,##0
 		displayFolder: 08 · Validación (Data Quality)
@@ -402,13 +404,13 @@ table 'Excel HC Oracle'
 			VAR D = DATE ( 2025, 12, 31 )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -421,13 +423,13 @@ table 'Excel HC Oracle'
 			VAR D = EOMONTH ( TODAY (), -1 )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -440,13 +442,13 @@ table 'Excel HC Oracle'
 			VAR D = EDATE ( EOMONTH ( TODAY (), -1 ), -12 )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -471,7 +473,7 @@ table 'Excel HC Oracle'
 		displayFolder: 03 · Headcount Activo
 		lineageTag: 2c3d4e5f-0005-4b20-8e02-bb2200000005
 
-	/// Activos al cierre del período del contexto de 'Calendario', recortado al último mes COMPLETO: nunca informa un mes parcial. Es la medida para la EVOLUCIÓN mes a mes: poner 'Calendario'[Año-Mes] en el eje. El mes en curso y los futuros quedan en blanco a propósito; sin contexto de fecha devuelve el HC al cierre del mes anterior. Requiere que 'Calendario' siga desconectado.
+	/// Activos al cierre del período del contexto de 'Calendario', recortado al último mes COMPLETO: nunca informa un mes parcial. Es la medida para la EVOLUCIÓN mes a mes: poner 'Calendario'[Año-Mes] en el eje. El mes en curso y los futuros quedan en blanco a propósito; sin contexto de fecha devuelve el HC al cierre del mes anterior. Requiere que 'Calendario' no se relacione con Asignaciones.
 	measure 'HC Activo PIT' =
 			VAR FinCerrado = EOMONTH ( TODAY (), -1 )
 			VAR D = MIN ( MAX ( 'Calendario'[Date] ), FinCerrado )
@@ -479,13 +481,13 @@ table 'Excel HC Oracle'
 			    IF (
 			        MIN ( 'Calendario'[Date] ) <= FinCerrado,
 			        CALCULATE (
-			            DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			            DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			            FILTER (
-			                'Excel HC Oracle',
-			                'Excel HC Oracle'[Enterprise Hire Date] <= D
+			                'Asignaciones',
+			                'Asignaciones'[Enterprise Hire Date] <= D
 			                    && (
-			                        'Excel HC Oracle'[Termination Date] > D
-			                            || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                        'Asignaciones'[Termination Date] > D
+			                            || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                    )
 			            )
 			        )
@@ -502,13 +504,13 @@ table 'Excel HC Oracle'
 			VAR D = EOMONTH ( Fin, -1 )
 			VAR Previo =
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= D
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= D
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > D
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > D
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -535,34 +537,33 @@ table 'Excel HC Oracle'
 			VAR Ini = EDATE ( Fin, -12 ) + 1
 			VAR BajasTramo =
 			    CALCULATE (
-			        COUNTROWS ( 'Excel HC Oracle' ),
-			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Termination Date] >= Ini
-			                && 'Excel HC Oracle'[Termination Date] <= Fin
-			        )
+			        COUNTROWS ( 'Fact Movimientos' ),
+			        'Fact Movimientos'[Tipo] = "Baja",
+			        REMOVEFILTERS ( 'Calendario' ),
+			        'Fact Movimientos'[Fecha] >= Ini,
+			        'Fact Movimientos'[Fecha] <= Fin
 			    )
 			VAR HCIni =
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= Ini - 1
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= Ini - 1
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > Ini - 1
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > Ini - 1
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
 			VAR HCFin =
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			        DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Enterprise Hire Date] <= Fin
+			            'Asignaciones',
+			            'Asignaciones'[Enterprise Hire Date] <= Fin
 			                && (
-			                    'Excel HC Oracle'[Termination Date] > Fin
-			                        || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                    'Asignaciones'[Termination Date] > Fin
+			                        || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                )
 			        )
 			    )
@@ -576,7 +577,7 @@ table 'Excel HC Oracle'
 		lineageTag: 2c3d4e5f-0009-4b20-8e02-bb2200000009
 
 	/// Bajas del período en los niveles ejecutivos L1 a L3. Equivale al KPI "L1-L3 TO" de la presentación People Excellence.
-	measure 'Bajas L1-L3' = CALCULATE([Bajas], 'Excel HC Oracle'[Nivel Orden] <= 3)
+	measure 'Bajas L1-L3' = CALCULATE([Bajas], 'Asignaciones'[Nivel Orden] <= 3)
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: 2c3d4e5f-0010-4b20-8e02-bb2200000010
@@ -585,7 +586,7 @@ table 'Excel HC Oracle'
 	measure 'Rotación % L1-L3' =
 			DIVIDE (
 			    [Bajas L1-L3],
-			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Nivel Orden] <= 3 )
+			    CALCULATE ( [HC Activo Promedio], 'Asignaciones'[Nivel Orden] <= 3 )
 			)
 		formatString: 0.0%
 		displayFolder: 04 · Rotación (Turnover)
@@ -594,53 +595,45 @@ table 'Excel HC Oracle'
 	/// Rotación del segmento G8+ sobre el HC promedio de ese mismo segmento.
 	measure 'Rotación % G8+' =
 			DIVIDE (
-			    CALCULATE ( [Bajas], 'Excel HC Oracle'[Grade Grupo] = "G8+" ),
-			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Grade Grupo] = "G8+" )
+			    CALCULATE ( [Bajas], 'Asignaciones'[Grade Grupo] = "G8+" ),
+			    CALCULATE ( [HC Activo Promedio], 'Asignaciones'[Grade Grupo] = "G8+" )
 			)
 		formatString: 0.0%
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: 2c3d4e5f-0012-4b20-8e02-bb2200000012
 
 	/// Altas del período en el segmento G8+. Equivale al KPI "New Hires (# G8+)" de la presentación.
-	measure 'Altas G8+' = CALCULATE([Altas], 'Excel HC Oracle'[Grade Grupo] = "G8+")
+	measure 'Altas G8+' = CALCULATE([Altas], 'Asignaciones'[Grade Grupo] = "G8+")
 		formatString: #,##0
 		displayFolder: 04 · Rotación (Turnover)
 		lineageTag: 2c3d4e5f-0013-4b20-8e02-bb2200000013
 
 	/// Porcentaje de mujeres sobre el headcount activo. "Sin Dato" (~4 registros) queda fuera del numerador.
-	measure '% Femenino' = DIVIDE(CALCULATE([HC Activo], 'Excel HC Oracle'[Género] = "Femenino"), [HC Activo])
+	measure '% Femenino' = DIVIDE ( CALCULATE ( [HC Activo], 'Dim Persona'[Género] = "Femenino" ), [HC Activo] )
 		formatString: 0.0%
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0014-4b20-8e02-bb2200000014
 
 	/// Porcentaje de varones sobre el headcount activo.
-	measure '% Masculino' = DIVIDE(CALCULATE([HC Activo], 'Excel HC Oracle'[Género] = "Masculino"), [HC Activo])
+	measure '% Masculino' = DIVIDE ( CALCULATE ( [HC Activo], 'Dim Persona'[Género] = "Masculino" ), [HC Activo] )
 		formatString: 0.0%
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0015-4b20-8e02-bb2200000015
 
 	/// Edad promedio de los activos. Ignora los registros con fecha de nacimiento inválida.
 	measure 'Edad Promedio' =
-			CALCULATE (
-			    AVERAGEX (
-			        VALUES ( 'Excel HC Oracle'[Person Number] ),
-			        CALCULATE ( MAX ( 'Excel HC Oracle'[Edad] ) )
-			    ),
-			    'Excel HC Oracle'[ACTIVE] = "1"
-			)
+			VAR Activos = CALCULATETABLE ( VALUES ( 'Asignaciones'[Person Number] ), 'Asignaciones'[ACTIVE] = "1" )
+			RETURN
+			    CALCULATE ( AVERAGE ( 'Dim Persona'[Edad] ), TREATAS ( Activos, 'Dim Persona'[Person Number] ) )
 		formatString: #,##0.0
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0016-4b20-8e02-bb2200000016
 
 	/// Edad mediana de los activos. Menos sensible a outliers que el promedio.
 	measure 'Edad Mediana' =
-			CALCULATE (
-			    MEDIANX (
-			        VALUES ( 'Excel HC Oracle'[Person Number] ),
-			        CALCULATE ( MAX ( 'Excel HC Oracle'[Edad] ) )
-			    ),
-			    'Excel HC Oracle'[ACTIVE] = "1"
-			)
+			VAR Activos = CALCULATETABLE ( VALUES ( 'Asignaciones'[Person Number] ), 'Asignaciones'[ACTIVE] = "1" )
+			RETURN
+			    CALCULATE ( MEDIAN ( 'Dim Persona'[Edad] ), TREATAS ( Activos, 'Dim Persona'[Person Number] ) )
 		formatString: #,##0.0
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0017-4b20-8e02-bb2200000017
@@ -649,27 +642,23 @@ table 'Excel HC Oracle'
 	measure 'Antigüedad Mediana (meses)' =
 			CALCULATE (
 			    MEDIANX (
-			        VALUES ( 'Excel HC Oracle'[Person Number] ),
-			        CALCULATE ( MAX ( 'Excel HC Oracle'[Antigüedad (años)] ) )
+			        VALUES ( 'Asignaciones'[Person Number] ),
+			        CALCULATE ( MAX ( 'Asignaciones'[Antigüedad (años)] ) )
 			    ),
-			    'Excel HC Oracle'[ACTIVE] = "1"
+			    'Asignaciones'[ACTIVE] = "1"
 			) * 12
 		formatString: #,##0
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0018-4b20-8e02-bb2200000018
 
 	/// Participación de cada categoría sobre el headcount activo visible. Es el "% por Grade / género / antigüedad" del Overview.
-	measure '% del Total HC Activo' = DIVIDE([HC Activo], CALCULATE([HC Activo], ALLSELECTED('Excel HC Oracle')))
+	measure '% del Total HC Activo' = DIVIDE([HC Activo], CALCULATE([HC Activo], ALLSELECTED('Asignaciones')))
 		formatString: 0.0%
 		displayFolder: 03 · Headcount Activo
 		lineageTag: 2c3d4e5f-0020-4b20-8e02-bb2200000020
 
 	/// Cobertura del dato de edad: porcentaje de activos con fecha de nacimiento utilizable.
-	measure '% Cobertura Edad' =
-			DIVIDE (
-			    CALCULATE ( [HC Activo], NOT ISBLANK ( 'Excel HC Oracle'[Edad] ) ),
-			    [HC Activo]
-			)
+	measure '% Cobertura Edad' = DIVIDE ( CALCULATE ( [HC Activo], NOT ISBLANK ( 'Dim Persona'[Edad] ) ), [HC Activo] )
 		formatString: 0.0%
 		displayFolder: 11 · Demografía
 		lineageTag: 2c3d4e5f-0019-4b20-8e02-bb2200000019
@@ -696,18 +685,16 @@ table 'Excel HC Oracle'
 			VAR Fin = MAX ( 'Calendario'[Date] )
 			RETURN
 			    CALCULATE (
-			        DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
-			        FILTER (
-			            'Excel HC Oracle',
-			            'Excel HC Oracle'[Termination Date] >= Ini
-			                && 'Excel HC Oracle'[Termination Date] <= Fin
-			        )
+			        DISTINCTCOUNT ( 'Fact Movimientos'[Person Number] ),
+			        'Fact Movimientos'[Tipo] = "Baja",
+			        'Fact Movimientos'[Fecha] >= Ini,
+			        'Fact Movimientos'[Fecha] <= Fin
 			    )
 		formatString: #,##0
 		displayFolder: 09 · Validación Turnover
 		lineageTag: 3d4e5f60-0004-4c30-9f03-cc3300000004
 
-	/// VALIDACIÓN · Filas de baja que exceden a las personas únicas dadas de baja. Debe ser 0; si no, el numerador de la rotación está inflado por registros duplicados.
+	/// Personas con más de un egreso en el período (salieron, reingresaron y volvieron a salir).
 	measure 'Val · Bajas Duplicadas' = [Bajas] - [Val · Bajas (personas únicas)]
 		formatString: #,##0
 		displayFolder: 09 · Validación Turnover
@@ -772,12 +759,11 @@ table 'Excel HC Oracle'
 			    IF (
 			        MIN ( 'Calendario'[Date] ) <= FinCerrado,
 			        CALCULATE (
-			            COUNTROWS ( 'Excel HC Oracle' ),
-			            FILTER (
-			                'Excel HC Oracle',
-			                'Excel HC Oracle'[Termination Date] >= Ini
-			                    && 'Excel HC Oracle'[Termination Date] <= Fin
-			            )
+			            COUNTROWS ( 'Fact Movimientos' ),
+			            'Fact Movimientos'[Tipo] = "Baja",
+			            REMOVEFILTERS ( 'Calendario' ),
+			            'Fact Movimientos'[Fecha] >= Ini,
+			            'Fact Movimientos'[Fecha] <= Fin
 			        ) + 0
 			    )
 		formatString: #,##0
@@ -794,13 +780,13 @@ table 'Excel HC Oracle'
 			    IF (
 			        MIN ( 'Calendario'[Date] ) <= FinCerrado,
 			        CALCULATE (
-			            DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			            DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			            FILTER (
-			                'Excel HC Oracle',
-			                'Excel HC Oracle'[Enterprise Hire Date] <= D
+			                'Asignaciones',
+			                'Asignaciones'[Enterprise Hire Date] <= D
 			                    && (
-			                        'Excel HC Oracle'[Termination Date] > D
-			                            || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                        'Asignaciones'[Termination Date] > D
+			                            || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                    )
 			            )
 			        )
@@ -817,13 +803,13 @@ table 'Excel HC Oracle'
 			    IF (
 			        MIN ( 'Calendario'[Date] ) <= FinCerrado,
 			        CALCULATE (
-			            DISTINCTCOUNT ( 'Excel HC Oracle'[Person Number] ),
+			            DISTINCTCOUNT ( 'Asignaciones'[Person Number] ),
 			            FILTER (
-			                'Excel HC Oracle',
-			                'Excel HC Oracle'[Enterprise Hire Date] <= Fin
+			                'Asignaciones',
+			                'Asignaciones'[Enterprise Hire Date] <= Fin
 			                    && (
-			                        'Excel HC Oracle'[Termination Date] > Fin
-			                            || 'Excel HC Oracle'[Termination Date] = DATE ( 1900, 1, 1 )
+			                        'Asignaciones'[Termination Date] > Fin
+			                            || 'Asignaciones'[Termination Date] = DATE ( 1900, 1, 1 )
 			                    )
 			            )
 			        )
@@ -852,13 +838,13 @@ table 'Excel HC Oracle'
 		lineageTag: 3d4e5f60-0015-4c30-9f03-cc3300000015
 
 	/// Activos que participan del esquema MBO ([Esquema MBO] = "Con MBO").
-	measure 'HC con MBO' = CALCULATE([HC Activo], 'Excel HC Oracle'[Esquema MBO] = "Con MBO")
+	measure 'HC con MBO' = CALCULATE([HC Activo], 'Asignaciones'[Esquema MBO] = "Con MBO")
 		formatString: #,##0
 		displayFolder: 12 · Compensación Variable
 		lineageTag: 4e5f6071-0101-4d40-9004-dd4400000101
 
 	/// Activos alcanzados por el esquema pero marcados explícitamente fuera de él ([Esquema MBO] = "Sin MBO"). No incluye a los "No Aplica".
-	measure 'HC sin MBO' = CALCULATE([HC Activo], 'Excel HC Oracle'[Esquema MBO] = "Sin MBO")
+	measure 'HC sin MBO' = CALCULATE([HC Activo], 'Asignaciones'[Esquema MBO] = "Sin MBO")
 		formatString: #,##0
 		displayFolder: 12 · Compensación Variable
 		lineageTag: 4e5f6071-0102-4d40-9004-dd4400000102
@@ -876,7 +862,7 @@ table 'Excel HC Oracle'
 		lineageTag: 4e5f6071-0104-4d40-9004-dd4400000104
 
 	/// Activos elegibles para el canje de bonus ([Bonus Swap] = "Elegible").
-	measure 'HC Elegible Bonus Swap' = CALCULATE([HC Activo], 'Excel HC Oracle'[Bonus Swap] = "Elegible")
+	measure 'HC Elegible Bonus Swap' = CALCULATE([HC Activo], 'Asignaciones'[Bonus Swap] = "Elegible")
 		formatString: #,##0
 		displayFolder: 12 · Compensación Variable
 		lineageTag: 4e5f6071-0105-4d40-9004-dd4400000105
@@ -890,9 +876,9 @@ table 'Excel HC Oracle'
 	/// Grade más bajo que participa del esquema MBO en el contexto actual. Muestra dónde arranca de hecho el esquema. Descarta el sentinel 99 ("Sin Grade").
 	measure 'Grade Mínimo con MBO' =
 			CALCULATE (
-			    MIN ( 'Excel HC Oracle'[Grade Nº] ),
-			    'Excel HC Oracle'[Esquema MBO] = "Con MBO",
-			    'Excel HC Oracle'[Grade Nº] <> 99
+			    MIN ( 'Asignaciones'[Grade Nº] ),
+			    'Asignaciones'[Esquema MBO] = "Con MBO",
+			    'Asignaciones'[Grade Nº] <> 99
 			)
 		formatString: 0
 		displayFolder: 12 · Compensación Variable
@@ -901,8 +887,8 @@ table 'Excel HC Oracle'
 	/// Porcentaje de las MUJERES activas que participan del esquema MBO. Denominador: solo mujeres.
 	measure '% con MBO · Femenino' =
 			DIVIDE (
-			    CALCULATE ( [HC con MBO], 'Excel HC Oracle'[Género] = "Femenino" ),
-			    CALCULATE ( [HC Activo], 'Excel HC Oracle'[Género] = "Femenino" )
+			    CALCULATE ( [HC con MBO], 'Dim Persona'[Género] = "Femenino" ),
+			    CALCULATE ( [HC Activo], 'Dim Persona'[Género] = "Femenino" )
 			)
 		formatString: 0.0%
 		displayFolder: 12 · Compensación Variable
@@ -911,8 +897,8 @@ table 'Excel HC Oracle'
 	/// Porcentaje de los VARONES activos que participan del esquema MBO. Denominador: solo varones.
 	measure '% con MBO · Masculino' =
 			DIVIDE (
-			    CALCULATE ( [HC con MBO], 'Excel HC Oracle'[Género] = "Masculino" ),
-			    CALCULATE ( [HC Activo], 'Excel HC Oracle'[Género] = "Masculino" )
+			    CALCULATE ( [HC con MBO], 'Dim Persona'[Género] = "Masculino" ),
+			    CALCULATE ( [HC Activo], 'Dim Persona'[Género] = "Masculino" )
 			)
 		formatString: 0.0%
 		displayFolder: 12 · Compensación Variable
@@ -925,7 +911,7 @@ table 'Excel HC Oracle'
 		lineageTag: 4e5f6071-0110-4d40-9004-dd4400000110
 
 	/// Bajas del período entre quienes hoy figuran con MBO. Recordar que el esquema es una foto actual: la persona pudo tener otro estado al momento de la baja.
-	measure 'Bajas con MBO' = CALCULATE([Bajas], 'Excel HC Oracle'[Esquema MBO] = "Con MBO")
+	measure 'Bajas con MBO' = CALCULATE([Bajas], 'Asignaciones'[Esquema MBO] = "Con MBO")
 		formatString: #,##0
 		displayFolder: 12 · Compensación Variable
 		lineageTag: 4e5f6071-0111-4d40-9004-dd4400000111
@@ -934,7 +920,7 @@ table 'Excel HC Oracle'
 	measure 'Rotación % con MBO' =
 			DIVIDE (
 			    [Bajas con MBO],
-			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Esquema MBO] = "Con MBO" )
+			    CALCULATE ( [HC Activo Promedio], 'Asignaciones'[Esquema MBO] = "Con MBO" )
 			)
 		formatString: 0.0%
 		displayFolder: 12 · Compensación Variable
@@ -943,8 +929,8 @@ table 'Excel HC Oracle'
 	/// Rotación del período en todo el resto de la dotación ("Sin MBO" + "No Aplica"). Es el término de comparación de [Rotación % con MBO].
 	measure 'Rotación % sin MBO' =
 			DIVIDE (
-			    CALCULATE ( [Bajas], 'Excel HC Oracle'[Esquema MBO] <> "Con MBO" ),
-			    CALCULATE ( [HC Activo Promedio], 'Excel HC Oracle'[Esquema MBO] <> "Con MBO" )
+			    CALCULATE ( [Bajas], 'Asignaciones'[Esquema MBO] <> "Con MBO" ),
+			    CALCULATE ( [HC Activo Promedio], 'Asignaciones'[Esquema MBO] <> "Con MBO" )
 			)
 		formatString: 0.0%
 		displayFolder: 12 · Compensación Variable
@@ -959,8 +945,8 @@ table 'Excel HC Oracle'
 	/// VALIDACIÓN · Personas con más de una asignación cuyo [MBO Bonus Scheme] difiere entre filas. Debería ser 0; si no, el segmento MBO de esa persona depende de qué fila se lea.
 	measure 'Val · MBO Inconsistente' =
 			SUMX (
-			    VALUES ( 'Excel HC Oracle'[Person Number] ),
-			    IF ( CALCULATE ( DISTINCTCOUNT ( 'Excel HC Oracle'[MBO Bonus Scheme] ) ) > 1, 1 )
+			    VALUES ( 'Asignaciones'[Person Number] ),
+			    IF ( CALCULATE ( DISTINCTCOUNT ( 'Asignaciones'[MBO Bonus Scheme] ) ) > 1, 1 )
 			)
 		formatString: #,##0
 		displayFolder: 08 · Validación (Data Quality)
@@ -976,6 +962,17 @@ table 'Excel HC Oracle'
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
+
+	/// Clave de la fila del export. Une Fact Movimientos con su asignación.
+	column 'Id Asignación'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1d397e21-e018-44fc-9999-010990640243
+		summarizeBy: none
+		sourceColumn: Id Asignación
+
+		annotation SummarizationSetBy = Automatic
 
 	column 'Person Number'
 		dataType: int64
@@ -998,102 +995,6 @@ table 'Excel HC Oracle'
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 01 Person Number'
-		dataType: double
-		lineageTag: 805e18bf-5e95-4ad3-88d5-9146716b30bf
-		summarizeBy: sum
-		sourceColumn: Parent Manager 01 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 02 Person Number'
-		dataType: double
-		lineageTag: f4d30ba9-3145-4c9d-bec8-7c3a2569d6d9
-		summarizeBy: sum
-		sourceColumn: Parent Manager 02 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 03 Person Number'
-		dataType: double
-		lineageTag: b66774ca-5ac4-4000-a217-663e559124ec
-		summarizeBy: sum
-		sourceColumn: Parent Manager 03 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 04 Person Number'
-		dataType: double
-		lineageTag: 2d3b1b15-3cb6-49e6-8f03-0505a26eea23
-		summarizeBy: sum
-		sourceColumn: Parent Manager 04 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 05 Person Number'
-		dataType: double
-		lineageTag: c023f7ec-884c-4676-93d4-564c53c2d7ed
-		summarizeBy: sum
-		sourceColumn: Parent Manager 05 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 06 Person Number'
-		dataType: double
-		lineageTag: 77382045-48c7-4430-af53-9f89a74825e8
-		summarizeBy: sum
-		sourceColumn: Parent Manager 06 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 07 Person Number'
-		dataType: double
-		lineageTag: 676aa2b5-ca20-4453-9638-3653503f7288
-		summarizeBy: sum
-		sourceColumn: Parent Manager 07 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'Parent Manager 08 Person Number'
-		dataType: double
-		lineageTag: 629c9adf-4ebb-4040-be77-79464fcfb73e
-		summarizeBy: sum
-		sourceColumn: Parent Manager 08 Person Number
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	column 'National ID'
-		dataType: string
-		lineageTag: 01f4cff2-b890-4e97-b30f-5a853dc01443
-		summarizeBy: none
-		sourceColumn: National ID
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Display Name'
-		dataType: string
-		lineageTag: a3bb4c82-7ad9-411e-bed9-34ce6393dcd7
-		summarizeBy: none
-		sourceColumn: Display Name
-
-		annotation SummarizationSetBy = Automatic
 
 	column 'Position Name'
 		dataType: string
@@ -1119,14 +1020,6 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Manager Type'
-		dataType: string
-		lineageTag: fa918933-3ba2-45ef-8fa2-7aa264750e7c
-		summarizeBy: none
-		sourceColumn: Manager Type
-
-		annotation SummarizationSetBy = Automatic
-
 	column 'Manager Display Name'
 		dataType: string
 		lineageTag: e8d04f76-6582-44a2-90c6-54ceaf2be215
@@ -1135,27 +1028,11 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'E-Mail Address'
-		dataType: string
-		lineageTag: 896ec616-58cd-4909-94d0-5a66589a497e
-		summarizeBy: none
-		sourceColumn: E-Mail Address
-
-		annotation SummarizationSetBy = Automatic
-
 	column 'Department Name'
 		dataType: string
 		lineageTag: 045e9229-80ba-47af-9574-891c18cf34ad
 		summarizeBy: none
 		sourceColumn: Department Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Legal Employer Name'
-		dataType: string
-		lineageTag: b9168db9-6e15-4f37-8e37-16c09e895931
-		summarizeBy: none
-		sourceColumn: Legal Employer Name
 
 		annotation SummarizationSetBy = Automatic
 
@@ -1175,44 +1052,12 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Country Code'
-		dataType: string
-		lineageTag: d1833ff0-2076-432d-8425-aae0f980d5d1
-		summarizeBy: none
-		sourceColumn: Country Code
-
-		annotation SummarizationSetBy = Automatic
-
-	column Country_1
-		dataType: string
-		lineageTag: e03ea68c-1890-472e-a2f6-ee218179b702
-		summarizeBy: none
-		sourceColumn: Country_1
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Legislation Code'
-		dataType: string
-		lineageTag: 09767a0c-0a37-4e40-9e43-6ceba9c97879
-		summarizeBy: none
-		sourceColumn: Legislation Code
-
-		annotation SummarizationSetBy = Automatic
-
 	column 'Grade Name'
 		dataType: string
 		lineageTag: 52e17cee-4372-46ef-a442-899c3c2cf901
 		summarizeBy: none
 		sourceColumn: Grade Name
 		sortByColumn: 'Grade Nº'
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Work Email'
-		dataType: string
-		lineageTag: 5a755d5a-b92a-49f5-bff6-376c0e638bff
-		summarizeBy: none
-		sourceColumn: Work Email
 
 		annotation SummarizationSetBy = Automatic
 
@@ -1232,86 +1077,6 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Parent Manager 01 Name'
-		dataType: string
-		lineageTag: 95b11fed-f9b8-4d6f-bea4-243c374d412e
-		summarizeBy: none
-		sourceColumn: Parent Manager 01 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 01 Work Email'
-		dataType: string
-		lineageTag: 943da520-edf7-4569-a940-9079384fc835
-		summarizeBy: none
-		sourceColumn: Parent Manager 01 Work Email
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 02 Name'
-		dataType: string
-		lineageTag: 6ab656f6-d08c-4b9e-be2e-212d2c8e9044
-		summarizeBy: none
-		sourceColumn: Parent Manager 02 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 03 Name'
-		dataType: string
-		lineageTag: 854c4ee5-a050-485b-9057-90c99de4b1c7
-		summarizeBy: none
-		sourceColumn: Parent Manager 03 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 04 Name'
-		dataType: string
-		lineageTag: 734b6b1b-2cf9-4e9d-a07e-c28a540a82c8
-		summarizeBy: none
-		sourceColumn: Parent Manager 04 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 05 Name'
-		dataType: string
-		lineageTag: 8a289304-d2b9-4ae2-b0c3-cd2c86ce1e48
-		summarizeBy: none
-		sourceColumn: Parent Manager 05 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 06 Name'
-		dataType: string
-		lineageTag: 9d1de0ab-8d29-47ab-a94e-586bd392f18e
-		summarizeBy: none
-		sourceColumn: Parent Manager 06 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 07 Name'
-		dataType: string
-		lineageTag: 1573626d-6395-40bd-b7a9-0aafad9c20b1
-		summarizeBy: none
-		sourceColumn: Parent Manager 07 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Parent Manager 08 Name'
-		dataType: string
-		lineageTag: 100c25a3-d68b-4b88-9391-0ca633389676
-		summarizeBy: none
-		sourceColumn: Parent Manager 08 Name
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Manager Job Name'
-		dataType: string
-		lineageTag: 64115dcc-6b66-4146-87dc-fe22d8bc4f78
-		summarizeBy: none
-		sourceColumn: Manager Job Name
-
-		annotation SummarizationSetBy = Automatic
-
 	column 'EPM Main Function Name'
 		dataType: string
 		lineageTag: 50f5958c-ad37-462b-ac53-0645ffae1f5d
@@ -1320,21 +1085,21 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Año Ingreso' = YEAR('Excel HC Oracle'[Enterprise Hire Date])
+	column 'Año Ingreso' = YEAR('Asignaciones'[Enterprise Hire Date])
 		dataType: int64
 		lineageTag: 778197b8-c5b7-4d1a-ad8c-d979bcc43e21
 		summarizeBy: none
 
 		annotation SummarizationSetBy = User
 
-	column 'Mes Ingreso Nº' = MONTH('Excel HC Oracle'[Enterprise Hire Date])
+	column 'Mes Ingreso Nº' = MONTH('Asignaciones'[Enterprise Hire Date])
 		dataType: int64
 		lineageTag: 041ecd55-9f9a-4f24-a915-5534e6f19a80
 		summarizeBy: none
 
 		annotation SummarizationSetBy = User
 
-	column 'Mes Ingreso' = FORMAT('Excel HC Oracle'[Enterprise Hire Date], "MMM")
+	column 'Mes Ingreso' = FORMAT('Asignaciones'[Enterprise Hire Date], "MMM")
 		dataType: string
 		lineageTag: 8a54b930-3e15-403d-b249-75845cf94be3
 		summarizeBy: none
@@ -1342,14 +1107,14 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Año-Mes Ingreso' = FORMAT('Excel HC Oracle'[Enterprise Hire Date], "yyyy-MM")
+	column 'Año-Mes Ingreso' = FORMAT('Asignaciones'[Enterprise Hire Date], "yyyy-MM")
 		dataType: string
 		lineageTag: c15f6db2-9fa4-45be-9abc-570d5ee83d74
 		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Trimestre Ingreso' = "T" & ROUNDUP(MONTH('Excel HC Oracle'[Enterprise Hire Date]) / 3, 0)
+	column 'Trimestre Ingreso' = "T" & ROUNDUP(MONTH('Asignaciones'[Enterprise Hire Date]) / 3, 0)
 		dataType: string
 		lineageTag: 5e7415e7-38b5-4c2d-b2dd-9de1eb1f6d78
 		summarizeBy: none
@@ -1359,11 +1124,11 @@ table 'Excel HC Oracle'
 	column 'Rango Antigüedad' =
 			SWITCH(
 			    TRUE(),
-			    'Excel HC Oracle'[Antigüedad (años)] < 1, "< 1 año",
-			    'Excel HC Oracle'[Antigüedad (años)] < 3, "1 a 3 años",
-			    'Excel HC Oracle'[Antigüedad (años)] < 5, "3 a 5 años",
-			    'Excel HC Oracle'[Antigüedad (años)] < 10, "5 a 10 años",
-			    'Excel HC Oracle'[Antigüedad (años)] < 20, "10 a 20 años",
+			    'Asignaciones'[Antigüedad (años)] < 1, "< 1 año",
+			    'Asignaciones'[Antigüedad (años)] < 3, "1 a 3 años",
+			    'Asignaciones'[Antigüedad (años)] < 5, "3 a 5 años",
+			    'Asignaciones'[Antigüedad (años)] < 10, "5 a 10 años",
+			    'Asignaciones'[Antigüedad (años)] < 20, "10 a 20 años",
 			    "20+ años"
 			)
 		dataType: string
@@ -1376,11 +1141,11 @@ table 'Excel HC Oracle'
 	column 'Rango Antigüedad Orden' =
 			SWITCH(
 			    TRUE(),
-			    'Excel HC Oracle'[Antigüedad (años)] < 1, 1,
-			    'Excel HC Oracle'[Antigüedad (años)] < 3, 2,
-			    'Excel HC Oracle'[Antigüedad (años)] < 5, 3,
-			    'Excel HC Oracle'[Antigüedad (años)] < 10, 4,
-			    'Excel HC Oracle'[Antigüedad (años)] < 20, 5,
+			    'Asignaciones'[Antigüedad (años)] < 1, 1,
+			    'Asignaciones'[Antigüedad (años)] < 3, 2,
+			    'Asignaciones'[Antigüedad (años)] < 5, 3,
+			    'Asignaciones'[Antigüedad (años)] < 10, 4,
+			    'Asignaciones'[Antigüedad (años)] < 20, 5,
 			    6
 			)
 		dataType: int64
@@ -1399,14 +1164,6 @@ table 'Excel HC Oracle'
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
-
-	column 'Business Unit Name'
-		dataType: string
-		lineageTag: c7c97e49-f563-463f-92d2-89d059f2531e
-		summarizeBy: none
-		sourceColumn: Business Unit Name
-
-		annotation SummarizationSetBy = Automatic
 
 	column ACTIVE
 		dataType: string
@@ -1483,111 +1240,9 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Código de posición en Oracle.
-	column 'Position Code'
-		dataType: string
-		lineageTag: c50a3f18-72be-49d1-8306-e4b97fa2c015
-		summarizeBy: none
-		sourceColumn: Position Code
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Código numérico de 3 dígitos de la entidad legal, extraído de "Legal Employer Name". Clave de cruce contra el archivo Manual.
-	column 'Código Entidad' = LEFT ( 'Excel HC Oracle'[Legal Employer Name], 3 )
-		dataType: string
-		lineageTag: 8a41e6b2-0f57-4c93-a2d8-6b13e97c50fa
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Género según Oracle, en inglés ("Male"/"Female"). Usar la columna "Género" para visualizar.
-	column 'Person Gender'
-		dataType: string
-		isHidden
-		lineageTag: 3c81f0a5-6e24-4f7b-9d13-5a0e28b7c614
-		summarizeBy: none
-		sourceColumn: Person Gender
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Fecha de nacimiento según Oracle. OJO: ~23 registros traen basura (fecha de ingreso cargada acá, 1900-01-02, nacimientos futuros). Usar la columna "Edad", que los descarta.
-	column 'Person Date of Birth'
-		dataType: dateTime
-		isHidden
-		formatString: dd/MM/yyyy
-		lineageTag: 7b2e94d1-08c3-4a56-b7e0-1f9d63a48205
-		summarizeBy: none
-		sourceColumn: Person Date of Birth
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
-	/// Género en castellano. "Sin Dato" cuando Oracle no lo informa (~4 registros).
-	column Género =
-			SWITCH(
-			    'Excel HC Oracle'[Person Gender],
-			    "Male", "Masculino",
-			    "Female", "Femenino",
-			    "Sin Dato"
-			)
-		dataType: string
-		lineageTag: 9f4a1c67-b230-4e85-8a19-c7d504e3b8f2
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Edad en años cumplidos al día de hoy. En blanco si la fecha de nacimiento es inválida (sentinel 1900-01-01 o edad fuera del rango 15-80).
-	column Edad =
-			
-			VAR Birth = 'Excel HC Oracle'[Person Date of Birth]
-			VAR E = DATEDIFF ( Birth, TODAY (), YEAR )
-			RETURN
-			    IF ( Birth = DATE ( 1900, 1, 1 ) || E < 15 || E > 80, BLANK (), E )
-		dataType: int64
-		formatString: 0
-		lineageTag: 2d8b5e40-91af-4c73-a6d2-e05f18734b9c
-		summarizeBy: sum
-
-		annotation SummarizationSetBy = Automatic
-
-	/// Bucket etario. "Sin Dato" cuando la fecha de nacimiento es inválida.
-	column 'Rango Etario' =
-			SWITCH(
-			    TRUE(),
-			    ISBLANK ( 'Excel HC Oracle'[Edad] ), "Sin Dato",
-			    'Excel HC Oracle'[Edad] < 25, "< 25",
-			    'Excel HC Oracle'[Edad] < 35, "25 a 34",
-			    'Excel HC Oracle'[Edad] < 45, "35 a 44",
-			    'Excel HC Oracle'[Edad] < 55, "45 a 54",
-			    "55+"
-			)
-		dataType: string
-		lineageTag: 6a03d7f2-4e18-4b90-9c25-8f710e3a4b61
-		summarizeBy: none
-		sortByColumn: 'Rango Etario Orden'
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Rango Etario Orden' =
-			SWITCH(
-			    TRUE(),
-			    ISBLANK ( 'Excel HC Oracle'[Edad] ), 6,
-			    'Excel HC Oracle'[Edad] < 25, 1,
-			    'Excel HC Oracle'[Edad] < 35, 2,
-			    'Excel HC Oracle'[Edad] < 45, 3,
-			    'Excel HC Oracle'[Edad] < 55, 4,
-			    5
-			)
-		dataType: int64
-		lineageTag: 4e91c8a3-7d52-4f16-b80e-3a2c96d15f78
-		summarizeBy: none
-
-		annotation SummarizationSetBy = Automatic
-
 	/// Nivel jerárquico legible: L1 (más alto) a L9. "Sin Nivel" para el valor 0 de Oracle, mayormente mano de obra directa.
 	column Nivel =
-			VAR L = 'Excel HC Oracle'[Level]
+			VAR L = 'Asignaciones'[Level]
 			RETURN
 			    IF ( L IN { "0", "", "Sin Datos" } || ISBLANK ( L ), "Sin Nivel", "L" & L )
 		dataType: string
@@ -1599,7 +1254,7 @@ table 'Excel HC Oracle'
 
 	/// Orden de Nivel: 1..9 según el nivel; 99 para "Sin Nivel", que queda al final.
 	column 'Nivel Orden' =
-			VAR L = 'Excel HC Oracle'[Level]
+			VAR L = 'Asignaciones'[Level]
 			RETURN
 			    IF (
 			        L IN { "0", "", "Sin Datos" } || ISBLANK ( L ),
@@ -1616,8 +1271,8 @@ table 'Excel HC Oracle'
 	column 'Grade Grupo' =
 			SWITCH(
 			    TRUE(),
-			    'Excel HC Oracle'[Grade Nº] = 99, "Sin Grade",
-			    'Excel HC Oracle'[Grade Nº] >= 8, "G8+",
+			    ISBLANK ( 'Asignaciones'[Grade Nº] ) || 'Asignaciones'[Grade Nº] = 99, "Sin Grade",
+			    'Asignaciones'[Grade Nº] >= 8, "G8+",
 			    "G1-G7"
 			)
 		dataType: string
@@ -1629,7 +1284,7 @@ table 'Excel HC Oracle'
 	/// Esquema de bonus por objetivos: "Con MBO" / "Sin MBO" / "No Aplica" (campo vacío en Oracle = la persona no participa del esquema). OJO: es una FOTO del estado actual, no un histórico. Al cruzarla con [Bajas] se segmenta por el esquema vigente al momento del export, no al momento de la baja.
 	column 'Esquema MBO' =
 			SWITCH (
-			    'Excel HC Oracle'[MBO Bonus Scheme],
+			    'Asignaciones'[MBO Bonus Scheme],
 			    "Yes", "Con MBO",
 			    "No", "Sin MBO",
 			    "No Aplica"
@@ -1642,7 +1297,7 @@ table 'Excel HC Oracle'
 		annotation SummarizationSetBy = Automatic
 
 	/// Orden de [Esquema MBO]: 1 Con MBO, 2 Sin MBO, 3 No Aplica.
-	column 'Orden Esquema MBO' = SWITCH ( 'Excel HC Oracle'[MBO Bonus Scheme], "Yes", 1, "No", 2, 3 )
+	column 'Orden Esquema MBO' = SWITCH ( 'Asignaciones'[MBO Bonus Scheme], "Yes", 1, "No", 2, 3 )
 		dataType: int64
 		lineageTag: 4e5f6071-0004-4d40-9004-dd4400000004
 		summarizeBy: none
@@ -1652,7 +1307,7 @@ table 'Excel HC Oracle'
 	/// Elegibilidad de Bonus Swap: "Elegible" / "No Elegible" / "No Aplica". Igual que [Esquema MBO], es una foto del estado actual y no un histórico.
 	column 'Bonus Swap' =
 			SWITCH (
-			    'Excel HC Oracle'[Bonus Swap Eligible],
+			    'Asignaciones'[Bonus Swap Eligible],
 			    "Yes", "Elegible",
 			    "No", "No Elegible",
 			    "No Aplica"
@@ -1665,7 +1320,7 @@ table 'Excel HC Oracle'
 		annotation SummarizationSetBy = Automatic
 
 	/// Orden de [Bonus Swap]: 1 Elegible, 2 No Elegible, 3 No Aplica.
-	column 'Orden Bonus Swap' = SWITCH ( 'Excel HC Oracle'[Bonus Swap Eligible], "Yes", 1, "No", 2, 3 )
+	column 'Orden Bonus Swap' = SWITCH ( 'Asignaciones'[Bonus Swap Eligible], "Yes", 1, "No", 2, 3 )
 		dataType: int64
 		lineageTag: 4e5f6071-0006-4d40-9004-dd4400000006
 		summarizeBy: none
@@ -1714,86 +1369,15 @@ table 'Excel HC Oracle'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Ámbito de trabajo según Cross Charge Entity Name (incluye el parche Global Employees). Local = sin cross charge o cargado a una entidad LATAM que es Legal Employer del export; LATAM = 243 HD LAO o zona LATAM; Global = cualquier otra entidad/zona (Holdings, HDNA, Friar/GBP, Europa, etc.). Se asigna por persona (Global > LATAM > Local): todas las filas de una persona tienen el mismo ámbito.
-	column Ámbito
-		dataType: string
-		lineageTag: 5e2a9c17-4b3d-4f86-a0e1-9d7c3b6f2a58
-		summarizeBy: none
-		sourceColumn: Ámbito
-
-		annotation SummarizationSetBy = Automatic
-
-	partition 'Excel HC Oracle' = m
+	partition Asignaciones = m
 		mode: import
-		source = ```
+		source =
 				let
-				    Origen = Excel.Workbook(File.Contents("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\pbi-headcount - Reporte Semanal LATAM.xlsx"), null, true),
-				    #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
-				    #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
-				    #"Columnas con nombre cambiado1" = Table.RenameColumns(#"Encabezados promovidos",{{"PER_ASG_DF_BONUS_SWAP_ELIGIBLE_v", "Bonus Swap Eligible"}, {"PER_ASG_DF_MBO_BONUS_SCHEME_v", "MBO Bonus Scheme"}}),
-				    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columnas con nombre cambiado1",{{"PER_ASG_DF_LOCAL_COST_CENTER_", "Local Cost Center"}, {"PER_ASG_DF_CRS_CHRG_NTY_N_v", "Cross Charge Entity Name"}}),
-				    #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Columnas con nombre cambiado", {{"National ID", type text}, {"Person Number", Int64.Type}, {"Display Name", type text}, {"Enterprise Hire Date", type date}, {"Antigüedad (años)", Int64.Type}, {"Position Name", type text}, {"Job Name", type text}, {"ZBB / COGS", type text}, {"Manager Type", type text}, {"Manager Display Name", type text}, {"E-Mail Address", type text}, {"Department Name", type text}, {"Local Cost Center", type text}, {"Level", type text}, {"Position Code", type text}, {"Legal Employer Name", type text}, {"Country", type text}, {"Cross Charge Entity Name", type text}, {"Assignment Status Code", type text}, {"Country Code", type text}, {"Country_1", type text}, {"Legislation Code", type text}, {"Grade Name", type text}, {"Work Email", type text}, {"Labor Type", type text}, {"Base OHI", type text}, {"Parent Manager 01 Person Number", Int64.Type}, {"Parent Manager 01 Name", type text}, {"Parent Manager 01 Work Email", type text}, {"Parent Manager 02 Person Number", Int64.Type}, {"Parent Manager 02 Name", type text}, {"Parent Manager 03 Person Number", Int64.Type}, {"Parent Manager 03 Name", type text}, {"Parent Manager 04 Person Number", Int64.Type}, {"Parent Manager 04 Name", type text}, {"Parent Manager 05 Person Number", Int64.Type}, {"Parent Manager 05 Name", type text}, {"Parent Manager 06 Person Number", Int64.Type}, {"Parent Manager 06 Name", type text}, {"Parent Manager 07 Person Number", Int64.Type}, {"Parent Manager 07 Name", type text}, {"Parent Manager 08 Person Number", Int64.Type}, {"Parent Manager 08 Name", type text}, {"Manager Job Name", type text}, {"EPM Main Function Name", type text}, {"Person Gender", type text}, {"Bonus Swap Eligible", type text}, {"MBO Bonus Scheme", type text}}, "es"),
-				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Tipo de columna cambiado",{{"Termination Date", type date}, {"Person Date of Birth", type date}}),
-				
-				    // --- INICIO DEL BLINDAJE DINÁMICO ---
-				    
-				    // 1. Clasificamos las columnas por su tipo de dato leyendo el esquema desde el último paso
-				    Esquema = Table.Schema(#"Tipo cambiado"),
-				    ColsFechas = Table.SelectRows(Esquema, each [Kind] = "date" or [Kind] = "datetime")[Name],
-				    ColsNumeros = Table.SelectRows(Esquema, each [Kind] = "number")[Name],
-				    ColsTextos = Table.SelectRows(Esquema, each [Kind] = "text" or [Kind] = "any")[Name],
-				
-				    // 2. Blindaje contra ERRORES
-				    ErroresFechas = List.Transform(ColsFechas, each {_, #date(1900, 1, 1)}),
-				    ErroresNumeros = List.Transform(ColsNumeros, each {_, 99}),
-				    ErroresTextos = List.Transform(ColsTextos, each {_, "Sin Datos"}),
-				    ListaErrores = ErroresFechas & ErroresNumeros & ErroresTextos,
-				    
-				    // Si no hay errores definidos, pasamos de largo
-				    #"Blindaje Errores" = if List.IsEmpty(ListaErrores) then #"Tipo cambiado" else Table.ReplaceErrorValues(#"Tipo cambiado", ListaErrores),
-				
-				    // 3. Blindaje contra NULOS (Vacíos)
-				    #"Blindaje Nulos Fechas" = if List.IsEmpty(ColsFechas) then #"Blindaje Errores" else Table.ReplaceValue(#"Blindaje Errores", null, #date(1900, 1, 1), Replacer.ReplaceValue, ColsFechas),
-				    #"Blindaje Nulos Numeros" = if List.IsEmpty(ColsNumeros) then #"Blindaje Nulos Fechas" else Table.ReplaceValue(#"Blindaje Nulos Fechas", null, 99, Replacer.ReplaceValue, ColsNumeros),
-				    #"Blindaje Nulos Textos" = if List.IsEmpty(ColsTextos) then #"Blindaje Nulos Numeros" else Table.ReplaceValue(#"Blindaje Nulos Numeros", null, "Sin Datos", Replacer.ReplaceValue, ColsTextos),
-				    
-				    // 4. Blindaje extra para Textos: Celdas en blanco ("") que no aparecen como null
-				    #"Blindaje Vacios Textos" = if List.IsEmpty(ColsTextos) then #"Blindaje Nulos Textos" else Table.ReplaceValue(#"Blindaje Nulos Textos", "", "Sin Datos", Replacer.ReplaceValue, ColsTextos),
-				
-				    // Country vacío en Oracle (mayormente bajas en proceso): se completa con Country_1 (país de la legislación de la entidad legal)
-				    #"Country Completado" = Table.ReplaceValue(#"Blindaje Vacios Textos", each [Country], each if List.Contains({"Sin Datos", "None"}, [Country]) and not List.Contains({"Sin Datos", "None"}, [Country_1]) then [Country_1] else [Country], Replacer.ReplaceValue, {"Country"}),
-				
-				    // --- PARCHE TEMPORAL Cross Charge (2026-09-23) - ver docs/parches/cross-charge-global.md ---
-				    // Solo completa personas sin Cross Charge en NINGUNA fila de Oracle; nunca pisa un valor de Oracle.
-				    PersonasConCC = List.Buffer(List.Distinct(Table.SelectRows(#"Blindaje Vacios Textos", each not List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]))[Person Number])),
-				    #"Parche Unido" = Table.NestedJoin(#"Country Completado", {"Person Number"}, #"Parche Cross Charge Global", {"Person Number"}, "Parche", JoinKind.LeftOuter),
-				    #"Parche Expandido" = Table.ExpandTableColumn(#"Parche Unido", "Parche", {"Zona Parche"}),
-				    #"Parche Marcado" = Table.AddColumn(#"Parche Expandido", "Cross Charge Origen", each if [Zona Parche] <> null and [Cross Charge Entity Name] = "Sin Datos" and not List.Contains(PersonasConCC, [Person Number]) then "Parche manual (Global Employees)" else if List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]) then "Sin Datos" else "Oracle", type text),
-				    #"Parche Aplicado" = Table.ReplaceValue(#"Parche Marcado", each [Cross Charge Entity Name], each if [Cross Charge Origen] = "Parche manual (Global Employees)" then [Zona Parche] else [Cross Charge Entity Name], Replacer.ReplaceValue, {"Cross Charge Entity Name"}),
-				    #"Cross Charge Parcheado" = Table.RemoveColumns(#"Parche Aplicado", {"Zona Parche"}),
-				
-				    // Ámbito desde Cross Charge: sin dato -> Local; 243 HD LAO o zona LATAM -> LATAM; entidad que es Legal Employer del export (países LATAM) -> Local; resto -> Global
-				    CodigosLocales = List.Buffer(List.Distinct(List.Transform(#"Blindaje Vacios Textos"[Legal Employer Name], each Text.BeforeDelimiter(Text.Trim(_), " ")))),
-				    #"Ambito Fila" = Table.AddColumn(#"Cross Charge Parcheado", "Ámbito Fila", each let cc = Text.Trim([Cross Charge Entity Name]), cod = Text.BeforeDelimiter(cc, " ") in if List.Contains({"Sin Datos", "None", ""}, cc) then "Local" else if cod = "243" or Text.Upper(cc) = "LATAM" then "LATAM" else if List.Contains(CodigosLocales, cod) then "Local" else "Global", type text),
-				    // Se lleva a nivel persona (prioridad Global > LATAM > Local) para que una persona no quede en dos ámbitos por sus filas sin cross charge
-				    PersonasGlobal = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "Global")[Person Number])),
-				    PersonasLATAM = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "LATAM")[Person Number])),
-				    #"Ambito Persona" = Table.AddColumn(#"Ambito Fila", "Ámbito", each if List.Contains(PersonasGlobal, [Person Number]) then "Global" else if List.Contains(PersonasLATAM, [Person Number]) then "LATAM" else "Local", type text),
-				    #"Ambito Agregado" = Table.RemoveColumns(#"Ambito Persona", {"Ámbito Fila"}),
-				
-				    // Grade Nº: extrae el número de "Grade N" (proxy salarial). "Sin Datos"/errores -> 99
-				    #"Grade Nº Agregado" = Table.AddColumn(#"Ambito Agregado", "Grade Nº", each try Number.From(Text.AfterDelimiter([Grade Name], "Grade ")) otherwise 99, Int64.Type),
-				
-				    // --- Mapeos para la hoja Overview ---
-				    #"Grupo Funcional Agregado" = Table.AddColumn(#"Grade Nº Agregado", "Grupo Funcional", each let f = [EPM Main Function Name] in if f = "Operations" then "Total COGS Functions" else if f = "Selling" then "Total Selling Functions" else if f = "Marketing" then "Total Marketing Functions" else if f = "Research & Development" then "Research & Development" else if f = "General & Administrative" or f = "FP&A" then "Total G&A Functions" else "Sin Definir", type text),
-				    #"Orden Grupo Agregado" = Table.AddColumn(#"Grupo Funcional Agregado", "Orden Grupo Funcional", each let g = [Grupo Funcional] in if g = "Total COGS Functions" then 1 else if g = "Total Selling Functions" then 2 else if g = "Total Marketing Functions" then 3 else if g = "Research & Development" then 4 else if g = "Total G&A Functions" then 5 else 6, Int64.Type),
-				    #"Pais Overview Agregado" = Table.AddColumn(#"Orden Grupo Agregado", "País Overview", each let c = [Country] in if c = "Chile" or c = "Peru" then "Chile & Perú" else if c = "Colombia" or c = "Panama" then "Colombia & Panamá" else if c = "Sin Datos" then "Global" else c, type text),
-				    #"Orden Pais Agregado" = Table.AddColumn(#"Pais Overview Agregado", "Orden País", each let p = [País Overview] in if p = "Argentina" then 1 else if p = "Brazil" then 2 else if p = "Mexico" then 3 else if p = "Chile & Perú" then 4 else if p = "Colombia & Panamá" then 5 else if p = "Global" then 6 else 9, Int64.Type)
+				    Base = #"Oracle Base",
+				    // Los atributos fijos de la persona viven en Dim Persona
+				    SinPersona = Table.RemoveColumns(Base, {"National ID", "Display Name", "Business Unit Name", "Legal Employer Name", "Country Code", "Country_1", "Legislation Code", "Work Email", "Person Gender", "Person Date of Birth", "Ámbito", "Manager Type", "E-Mail Address", "Manager Job Name", "Position Code", "Parent Manager 01 Work Email", "Parent Manager 01 Person Number", "Parent Manager 01 Name", "Parent Manager 02 Person Number", "Parent Manager 02 Name", "Parent Manager 03 Person Number", "Parent Manager 03 Name", "Parent Manager 04 Person Number", "Parent Manager 04 Name", "Parent Manager 05 Person Number", "Parent Manager 05 Name", "Parent Manager 06 Person Number", "Parent Manager 06 Name", "Parent Manager 07 Person Number", "Parent Manager 07 Name", "Parent Manager 08 Person Number", "Parent Manager 08 Name"})
 				in
-				    #"Orden Pais Agregado"
-				```
-
-	annotation PBI_NavigationStepName = Navegación
+				    SinPersona
 
 	annotation PBI_ResultType = Table
 

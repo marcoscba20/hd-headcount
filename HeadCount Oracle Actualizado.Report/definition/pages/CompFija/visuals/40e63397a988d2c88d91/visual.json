@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "40e63397a988d2c88d91",
   "position": {
-    "x": 39.789575140622645,
-    "y": 1039.1200584801068,
-    "z": 15000,
-    "height": 97.943569576917284,
-    "width": 299.95218182930915,
-    "tabOrder": 15000
+    "x": 39,
+    "y": 1137,
+    "z": 14000,
+    "height": 80,
+    "width": 300,
+    "tabOrder": 14000
   },
   "visual": {
     "visualType": "slicer",
@@ -70,6 +70,13 @@
                   "Value": "1D"
                 }
               }
+            },
+            "selfFilterEnabled": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
             }
           }
         }
@@ -102,7 +109,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Grade'"
+                  "Value": "'Person Number (Oracle)'"
                 }
               }
             },

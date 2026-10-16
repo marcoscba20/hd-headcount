@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Dim Persona.País Overview",
               "nativeQueryRef": "País Overview",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Actuals 2025"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Actuals 2025",
+              "queryRef": "Asignaciones.HC Actuals 2025",
               "nativeQueryRef": "HC Actuals 2025"
             },
             {
@@ -53,13 +53,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC YTD Actuals"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC YTD Actuals",
+              "queryRef": "Asignaciones.HC YTD Actuals",
               "nativeQueryRef": "HC YTD Actuals"
             },
             {
@@ -67,13 +67,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC YTD PY"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC YTD PY",
+              "queryRef": "Asignaciones.HC YTD PY",
               "nativeQueryRef": "HC YTD PY"
             },
             {
@@ -81,13 +81,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Δ HC YTD vs PY"
                 }
               },
-              "queryRef": "Excel HC Oracle.Δ HC YTD vs PY",
+              "queryRef": "Asignaciones.Δ HC YTD vs PY",
               "nativeQueryRef": "Δ HC YTD vs PY"
             }
           ]
@@ -100,7 +100,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Dim Persona"
                   }
                 },
                 "Property": "País Overview"
@@ -153,7 +153,7 @@
                                 "Measure": {
                                   "Expression": {
                                     "SourceRef": {
-                                      "Entity": "Excel HC Oracle"
+                                      "Entity": "Asignaciones"
                                     }
                                   },
                                   "Property": "Δ HC YTD vs PY"
@@ -180,7 +180,7 @@
                                 "Measure": {
                                   "Expression": {
                                     "SourceRef": {
-                                      "Entity": "Excel HC Oracle"
+                                      "Entity": "Asignaciones"
                                     }
                                   },
                                   "Property": "Δ HC YTD vs PY"
@@ -214,7 +214,7 @@
                 }
               }
             ],
-            "metadata": "Excel HC Oracle.Δ HC YTD vs PY"
+            "metadata": "Asignaciones.Δ HC YTD vs PY"
           }
         }
       ]

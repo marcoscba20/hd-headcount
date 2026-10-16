@@ -3,9 +3,9 @@
   "name": "713168bd217a788075f8",
   "position": {
     "x": 38.790580362940183,
-    "y": 1136.9652864999709,
+    "y": 1227,
     "z": 13000,
-    "height": 656.76465373115968,
+    "height": 567,
     "width": 1840.5461579105413,
     "tabOrder": 13000
   },
@@ -73,6 +73,20 @@
             },
             {
               "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim Persona"
+                    }
+                  },
+                  "Property": "Nombre"
+                }
+              },
+              "queryRef": "Dim Persona.Nombre",
+              "nativeQueryRef": "Nombre"
+            },
+            {
+              "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
@@ -115,17 +129,18 @@
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Compensación Atributos"
+                      "Entity": "Fact Compensación"
                     }
                   },
-                  "Property": "Cantidad de Salarios"
+                  "Property": "Cantidad de Salarios Aplicada"
                 }
               },
-              "queryRef": "Compensación Atributos.Cantidad de Salarios",
-              "nativeQueryRef": "Cantidad de Salarios"
+              "queryRef": "Fact Compensación.Cantidad de Salarios Aplicada",
+              "nativeQueryRef": "Cantidad de Salarios Aplicada",
+              "displayName": "Cantidad de Salarios"
             },
             {
               "field": {
@@ -154,20 +169,6 @@
               },
               "queryRef": "Fact Compensación.Salario Anual Fijo LC",
               "nativeQueryRef": "Salario Anual Fijo LC"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Tipo de Cambio"
-                    }
-                  },
-                  "Property": "TC USD x LC"
-                }
-              },
-              "queryRef": "Tipo de Cambio.TC USD x LC",
-              "nativeQueryRef": "TC USD x LC"
             },
             {
               "field": {

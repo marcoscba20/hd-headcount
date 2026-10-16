@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
+              "queryRef": "Asignaciones.Grade Name",
               "nativeQueryRef": "Grade Name",
               "active": true
             }

@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Cross Charge Entity Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Cross Charge Entity Name",
+              "queryRef": "Dim Persona.Cross Charge Entity Name",
               "nativeQueryRef": "Cross Charge Entity Name",
               "active": true
             }

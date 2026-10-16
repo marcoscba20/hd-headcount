@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo Promedio"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo Promedio",
+              "queryRef": "Asignaciones.HC Activo Promedio",
               "nativeQueryRef": "HC Activo Promedio"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo Promedio"

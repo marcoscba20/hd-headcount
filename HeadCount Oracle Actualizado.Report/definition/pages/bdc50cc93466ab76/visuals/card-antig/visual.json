@@ -7,12 +7,12 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.Antigüedad Promedio Activos",
+              "queryRef": "Asignaciones.Antigüedad Promedio Activos",
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Promedio Activos"
@@ -30,7 +30,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Antigüedad Promedio Activos"

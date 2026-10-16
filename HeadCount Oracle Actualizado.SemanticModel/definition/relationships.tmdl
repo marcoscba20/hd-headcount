@@ -1,37 +1,68 @@
-relationship a05b3134-840b-2566-b6d4-c573a4222bbf
-	fromColumn: 'Excel HC Oracle'.'Enterprise Hire Date'
-	toColumn: 'Calendario Ingreso'.Date
-
-relationship 2856fd3e-c8ca-9a59-84a4-a3c53d06d308
-	fromColumn: 'Excel HC Oracle'.'Country Code'
-	toColumn: Países.'Country Code'
-
-relationship 6c2f81ad-93e5-4b07-a15d-8e0374bc9d26
-	fromColumn: 'Excel HC Oracle'.'Termination Date'
-	toColumn: 'Calendario Baja'.Date
-
-relationship 0989377f-7ddc-44f3-8ff1-3eba4d6ae8d9
-	fromColumn: 'Compensación Atributos'.'Person Number Resuelto'
-	toColumn: 'Dim Persona'.'Person Number'
-
 relationship 27338c36-50f4-4626-981c-e666d017b436
-	crossFilteringBehavior: bothDirections
-	fromColumn: 'Excel HC Oracle'.'Person Number'
+	fromColumn: Asignaciones.'Person Number'
 	toColumn: 'Dim Persona'.'Person Number'
 
-relationship d9ab8e09-ce2f-444f-a970-6f0ab06bd2bb
-	fromColumn: 'Compensación Atributos'.'Fecha Corte'
+relationship fa432968-ec90-41aa-8aaf-764e333a10e1
+	fromColumn: 'Fact Compensación'.'Person Number Resuelto'
+	toColumn: 'Dim Persona'.'Person Number'
+
+relationship 4db0f796-ad10-405b-b94a-811f8345a2c0
+	fromColumn: 'Fact Compensación'.'Fecha Corte'
 	toColumn: Calendario.Date
 
-relationship b48d35ba-934d-40c3-bea6-cc6b28964d39
-	fromColumn: 'Fact Compensación'.'Clave TC'
-	toColumn: 'Tipo de Cambio'.'Clave TC'
+relationship 850dd5f8-fe28-4b7c-8034-059a65ae0701
+	fromColumn: 'Fact Compensación'.'País Origen'
+	toColumn: 'Dim País'.'País Origen'
 
 relationship 5f6a8291-3cf7-4987-98d5-acbd40222e25
 	fromColumn: 'Fact Compensación'.Concepto
 	toColumn: 'Dim Concepto Compensación'.Concepto
 
-relationship 77dc9134-c403-4176-9648-3c3f1168fefd
-	fromColumn: 'Fact Compensación'.'Id Fila'
-	toColumn: 'Compensación Atributos'.'Id Fila'
+relationship b48d35ba-934d-40c3-bea6-cc6b28964d39
+	fromColumn: 'Fact Compensación'.'Clave TC'
+	toColumn: 'Tipo de Cambio'.'Clave TC'
+
+relationship 0989377f-7ddc-44f3-8ff1-3eba4d6ae8d9
+	fromColumn: 'Fact Compensación Persona'.'Person Number Resuelto'
+	toColumn: 'Dim Persona'.'Person Number'
+
+relationship d9ab8e09-ce2f-444f-a970-6f0ab06bd2bb
+	fromColumn: 'Fact Compensación Persona'.'Fecha Corte'
+	toColumn: Calendario.Date
+
+relationship 46a3dcf8-12a3-4d36-8dc0-e6e820203ba4
+	fromColumn: 'Fact Compensación Persona'.'País Origen'
+	toColumn: 'Dim País'.'País Origen'
+
+relationship 06491169-a3e0-45d8-9b38-f74cf222cf13
+	fromColumn: 'Fact Movimientos'.'Id Asignación'
+	toColumn: Asignaciones.'Id Asignación'
+
+relationship b2f59dc9-331b-4ab4-b19d-033d062ac353
+	fromColumn: 'Fact Movimientos'.Fecha
+	toColumn: Calendario.Date
+
+relationship efb0b4e4-8c4a-49a4-aef0-5f52c18799de
+	fromColumn: 'Dim Persona'.'Código Entidad'
+	toColumn: 'Dim Entidad Legal'.Código
+
+relationship 088c7e2d-362a-4fb5-a943-28f12f9bc60a
+	fromColumn: 'HC Manual LATAM'.'Código Entidad'
+	toColumn: 'Dim Entidad Legal'.Código
+
+relationship a8042c56-6cb8-4f1a-a4f7-3b57bd59a581
+	fromColumn: Asignaciones.'Local Cost Center'
+	toColumn: 'Dim Centro de Costo'.'ID Centro de Costo'
+
+relationship 59047d34-9238-45ba-9ac5-0e38a8516c9f
+	fromColumn: 'HC Manual LATAM'.'ID Centro de Costo'
+	toColumn: 'Dim Centro de Costo'.'ID Centro de Costo'
+
+relationship e08b5a8b-efbe-40d5-a3d5-5d8e66437d80
+	fromColumn: Asignaciones.'ZBB / COGS'
+	toColumn: 'Dim Type'.Type
+
+relationship e63135fa-f081-4e05-af76-a44bd6baf76e
+	fromColumn: 'HC Manual LATAM'.'Type Adjusted'
+	toColumn: 'Dim Type'.Type
 

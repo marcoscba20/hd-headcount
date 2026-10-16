@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Cortes Pilar Headcount"
                 }
               },
-              "queryRef": "Excel HC Oracle.Cortes Pilar Headcount",
+              "queryRef": "Asignaciones.Cortes Pilar Headcount",
               "nativeQueryRef": "Cortes Pilar Headcount"
             }
           ]

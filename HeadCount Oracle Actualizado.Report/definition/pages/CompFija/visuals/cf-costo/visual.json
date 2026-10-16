@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Compensación Atributos"
+                      "Entity": "Fact Compensación Persona"
                     }
                   },
                   "Property": "HC con Salario"
                 }
               },
-              "queryRef": "Compensación Atributos.HC con Salario",
+              "queryRef": "Fact Compensación Persona.HC con Salario",
               "nativeQueryRef": "HC con Salario"
             },
             {

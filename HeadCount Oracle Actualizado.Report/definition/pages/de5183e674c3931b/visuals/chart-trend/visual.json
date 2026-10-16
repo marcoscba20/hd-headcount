@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación %",
+              "queryRef": "Asignaciones.Rotación %",
               "nativeQueryRef": "Rotación %"
             },
             {
@@ -53,13 +53,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación Voluntaria %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación Voluntaria %",
+              "queryRef": "Asignaciones.Rotación Voluntaria %",
               "nativeQueryRef": "Rotación Voluntaria %"
             },
             {
@@ -67,13 +67,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación Involuntaria %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación Involuntaria %",
+              "queryRef": "Asignaciones.Rotación Involuntaria %",
               "nativeQueryRef": "Rotación Involuntaria %"
             },
             {
@@ -81,13 +81,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % 12M Móvil"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % 12M Móvil",
+              "queryRef": "Asignaciones.Rotación % 12M Móvil",
               "nativeQueryRef": "Rotación % 12M Móvil"
             }
           ]

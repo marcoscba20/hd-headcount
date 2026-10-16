@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "slicer-6d74a60c",
   "position": {
-    "x": 205.99,
-    "y": 0,
-    "z": 6000,
+    "x": 206.21021329592259,
+    "y": 0.13324724552880035,
+    "z": 7000,
     "height": 77.581160725880366,
     "width": 197.99,
     "tabOrder": 6000
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Cross Charge Entity Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Cross Charge Entity Name",
+              "queryRef": "Dim Persona.Cross Charge Entity Name",
               "nativeQueryRef": "Cross Charge Entity Name",
               "active": true
             }

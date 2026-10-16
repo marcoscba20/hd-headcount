@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Registros sin Centro de Costo"
                 }
               },
-              "queryRef": "Excel HC Oracle.Registros sin Centro de Costo",
+              "queryRef": "Asignaciones.Registros sin Centro de Costo",
               "nativeQueryRef": "Registros sin Centro de Costo"
             }
           ]

@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Ingresos Año Anterior"
                 }
               },
-              "queryRef": "Excel HC Oracle.Ingresos Año Anterior",
+              "queryRef": "Asignaciones.Ingresos Año Anterior",
               "nativeQueryRef": "Ingresos Año Anterior"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Ingresos Año Anterior"

@@ -1,19 +1,19 @@
-/// Importes fijos de compensación en moneda local, formato largo (una fila por persona, mes y concepto). Fuente confidencial.
+/// Fact central de compensación: importes en moneda local, formato largo (una fila por persona, corte y concepto). Solo claves e importes; se relaciona con Dim Persona, Calendario, Dim País, Dim Concepto Compensación y Tipo de Cambio (clave de la hoja TC: Entidad Legal, fallback País). Fuente confidencial.
 table 'Fact Compensación'
 	lineageTag: c550220a-c0e7-4a64-ae34-3df3a79707fb
 
 	/// Moneda local del contexto; 'Varias' si hay más de una.
 	measure 'Moneda Seleccionada' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
-			    VALUES ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
+			    VALUES ( 'Fact Compensación'[Moneda] ),
 			    "Varias"
 			)
 		formatString: General
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: cb825459-9879-4746-9ed3-f1cecdca49e0
 
-	/// Salario base mensual convertido a USD con el tipo de cambio del año de la fecha de corte.
+	/// Salario base mensual convertido a USD con el tipo de cambio fijo de la hoja TC.
 	measure 'Salario Base USD' =
 			CALCULATE (
 			    SUMX ( 'Fact Compensación', 'Fact Compensación'[Importe LC] * RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ),
@@ -36,7 +36,7 @@ table 'Fact Compensación'
 	/// Importes fijos en moneda local. Solo se muestra cuando el contexto tiene una única moneda.
 	measure 'Salario Mensual Fijo LC' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    CALCULATE (
 			        SUM ( 'Fact Compensación'[Importe LC] ),
 			        'Dim Concepto Compensación'[Grupo] = "Fijo"
@@ -46,7 +46,7 @@ table 'Fact Compensación'
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: ddfcfa3e-8e55-46fb-afdc-4042d1b40630
 
-	/// Fijo mensual x Cantidad de Salarios (del Excel o, si falta, de la tabla por país). En blanco si queda en 0.
+	/// Fijo mensual x Cantidad de Salarios (hoja TC; si falta, columna del archivo o tabla por país). En blanco si queda en 0.
 	measure 'Salario Anual Fijo USD' =
 			CALCULATE (
 			    SUMX (
@@ -64,27 +64,27 @@ table 'Fact Compensación'
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: e5c839bd-65b6-42a7-95ec-d3649e3b987d
 
-	measure 'Promedio Fijo x FTE USD' = DIVIDE ( [Salario Mensual Fijo USD], SUM ( 'Compensación Atributos'[FTE] ) )
+	measure 'Promedio Fijo x FTE USD' = DIVIDE ( [Salario Mensual Fijo USD], SUM ( 'Fact Compensación Persona'[FTE] ) )
 		formatString: #,##0
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: 16b2df5b-d5ca-4213-ae2e-580bed06e8e3
 
 	/// Variación % del fijo mensual en USD del último corte en contexto contra el corte anterior disponible.
 	measure 'Variación Fijo vs Mes Anterior' =
-			VAR Corte = MAX ( 'Compensación Atributos'[Fecha Corte] )
+			VAR Corte = MAX ( 'Fact Compensación'[Fecha Corte] )
 			VAR CorteAnt =
-			    CALCULATE ( MAX ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( Calendario ), 'Compensación Atributos'[Fecha Corte] < Corte )
+			    CALCULATE ( MAX ( 'Fact Compensación'[Fecha Corte] ), REMOVEFILTERS ( Calendario ), 'Fact Compensación'[Fecha Corte] < Corte )
 			VAR Ant =
-			    CALCULATE ( [Salario Mensual Fijo USD], REMOVEFILTERS ( 'Compensación Atributos'[Fecha Corte] ), REMOVEFILTERS ( Calendario ), 'Compensación Atributos'[Fecha Corte] = CorteAnt )
+			    CALCULATE ( [Salario Mensual Fijo USD], REMOVEFILTERS ( Calendario ), Calendario[Date] = CorteAnt )
 			VAR Act =
-			    CALCULATE ( [Salario Mensual Fijo USD], 'Compensación Atributos'[Fecha Corte] = Corte )
+			    CALCULATE ( [Salario Mensual Fijo USD], REMOVEFILTERS ( Calendario ), Calendario[Date] = Corte )
 			RETURN
 			    IF ( NOT ISBLANK ( CorteAnt ), DIVIDE ( Act - Ant, Ant ) )
 		formatString: 0.0%;-0.0%;0.0%
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: 2e8fd216-6dad-412f-ad26-09500fc49bf7
 
-	/// Filas de la fact sin tipo de cambio (moneda no mapeada o año sin FX).
+	/// Filas de la fact sin tipo de cambio (ni la entidad legal ni el país están en la hoja TC).
 	measure 'Filas sin TC' =
 			COUNTROWS (
 			    FILTER ( 'Fact Compensación', ISBLANK ( RELATED ( 'Tipo de Cambio'[TC USD x LC] ) ) )
@@ -96,7 +96,7 @@ table 'Fact Compensación'
 	/// Salario base en moneda local (solo con una única moneda en contexto).
 	measure 'Salario Base LC' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Salario Base" )
 			)
 		formatString: #,##0
@@ -106,7 +106,7 @@ table 'Fact Compensación'
 	/// Asignación transporte en moneda local (solo con una única moneda en contexto).
 	measure 'Asignación Transporte LC' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Asignación Transporte" )
 			)
 		formatString: #,##0
@@ -116,7 +116,7 @@ table 'Fact Compensación'
 	/// Asignación alimentación en moneda local (solo con una única moneda en contexto).
 	measure 'Asignación Alimentación LC' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    CALCULATE ( SUM ( 'Fact Compensación'[Importe LC] ), 'Fact Compensación'[Concepto] = "Asignación Alimentación" )
 			)
 		formatString: #,##0
@@ -126,7 +126,7 @@ table 'Fact Compensación'
 	/// Fijo mensual en moneda local x Cantidad de Salarios (solo con una única moneda en contexto).
 	measure 'Salario Anual Fijo LC' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    CALCULATE (
 			        SUMX (
 			            FILTER ( 'Fact Compensación', 'Fact Compensación'[Cantidad de Salarios] > 0 ),
@@ -148,22 +148,35 @@ table 'Fact Compensación'
 	/// Tipo de cambio USD por unidad de moneda local usado en la conversión.
 	measure 'TC USD x LC Aplicado' =
 			IF (
-			    HASONEVALUE ( 'Compensación Atributos'[Moneda] ),
+			    HASONEVALUE ( 'Fact Compensación'[Moneda] ),
 			    MAXX ( 'Fact Compensación', RELATED ( 'Tipo de Cambio'[TC USD x LC] ) )
 			)
 		formatString: 0.000000
 		displayFolder: 13 · Compensación (USD)
 		lineageTag: 0dfc08c8-1164-4484-9060-c51ac7729e6d
 
-	column 'Id Fila'
-		dataType: int64
-		isHidden
-		formatString: 0
-		lineageTag: db11d028-10a7-4df8-8097-07169d58e821
-		summarizeBy: none
-		sourceColumn: Id Fila
+	/// Cantidad de salarios anuales con la que se anualiza el fijo (hoja TC; si falta, columna del archivo o tabla por país). Se calcula sobre las filas de salario fijo en contexto: queda en blanco si la persona no tiene fijo o si hay varios valores (totales).
+	measure 'Cantidad de Salarios Aplicada' =
+			CALCULATE (
+			    SELECTEDVALUE ( 'Fact Compensación'[Cantidad de Salarios] ),
+			    'Dim Concepto Compensación'[Grupo] = "Fijo"
+			)
+		formatString: 0.00
+		displayFolder: 13 · Compensación (USD)
+		lineageTag: e6aa8b5f-dfbf-4210-811e-7af8585da5c9
 
-		annotation SummarizationSetBy = Automatic
+	/// Filas cuya moneda (país de Oracle) no coincide con la moneda del TC aplicado por entidad legal: revisar la hoja TC o el cruce.
+	measure 'Filas con Moneda distinta al TC' =
+			COUNTROWS (
+			    FILTER (
+			        'Fact Compensación',
+			        NOT ISBLANK ( RELATED ( 'Tipo de Cambio'[Moneda] ) )
+			            && 'Fact Compensación'[Moneda] <> RELATED ( 'Tipo de Cambio'[Moneda] )
+			    )
+			)
+		formatString: #,##0
+		displayFolder: 14 · Calidad Compensación
+		lineageTag: f91815da-f591-4af5-b68d-6d76158277d6
 
 	column 'Fecha Corte'
 		dataType: dateTime
@@ -184,25 +197,6 @@ table 'Fact Compensación'
 		lineageTag: 844cb41e-4096-41e6-bd33-b9cacb374a83
 		summarizeBy: none
 		sourceColumn: Person Number Resuelto
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Método Cruce'
-		dataType: string
-		isHidden
-		lineageTag: fb01260a-6ff8-4647-8e86-d3bd9168ffbf
-		summarizeBy: none
-		sourceColumn: Método Cruce
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Oracle ID'
-		dataType: int64
-		isHidden
-		formatString: 0
-		lineageTag: 719c0bc0-a21f-412a-91f6-1571b233eff9
-		summarizeBy: none
-		sourceColumn: Oracle ID
 
 		annotation SummarizationSetBy = Automatic
 
@@ -236,6 +230,7 @@ table 'Fact Compensación'
 
 	column Concepto
 		dataType: string
+		isHidden
 		lineageTag: 3fdd9dc4-e605-482f-b195-050f74026b9b
 		summarizeBy: none
 		sourceColumn: Concepto
@@ -266,11 +261,10 @@ table 'Fact Compensación'
 		source =
 				let
 				    Base = #"Compensación Base",
-				    Sel = Table.SelectColumns(Base, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "País Origen", "Moneda", "Cantidad de Salarios", "Salario Base", "Asignación Transporte", "Asignación Alimentación"}),
-				    Largo = Table.UnpivotOtherColumns(Sel, {"Id Fila", "Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "País Origen", "Moneda", "Cantidad de Salarios"}, "Concepto", "Importe LC"),
+				    Sel = Table.SelectColumns(Base, {"Fecha Corte", "Person Number Resuelto", "País Origen", "Moneda", "Clave TC", "Cantidad de Salarios", "Salario Base", "Asignación Transporte", "Asignación Alimentación"}),
+				    Largo = Table.UnpivotOtherColumns(Sel, {"Fecha Corte", "Person Number Resuelto", "País Origen", "Moneda", "Clave TC", "Cantidad de Salarios"}, "Concepto", "Importe LC"),
 				    SinNulos = Table.SelectRows(Largo, each [Importe LC] <> null),
-				    Clave = Table.AddColumn(SinNulos, "Clave TC", each if [Moneda] = null then null else [Moneda] & "|" & Number.ToText(Date.Year([Fecha Corte]), "0", "en-US"), type text),
-				    Tipos = Table.TransformColumnTypes(Clave, {{"Importe LC", type number}, {"Concepto", type text}})
+				    Tipos = Table.TransformColumnTypes(SinNulos, {{"Importe LC", type number}, {"Concepto", type text}})
 				in
 				    Tipos
 

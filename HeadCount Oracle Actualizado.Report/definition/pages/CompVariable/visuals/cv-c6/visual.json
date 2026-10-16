@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Brecha MBO Género (pp)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Brecha MBO Género (pp)",
+              "queryRef": "Asignaciones.Brecha MBO Género (pp)",
               "nativeQueryRef": "Brecha MBO Género (pp)"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Brecha MBO Género (pp)"

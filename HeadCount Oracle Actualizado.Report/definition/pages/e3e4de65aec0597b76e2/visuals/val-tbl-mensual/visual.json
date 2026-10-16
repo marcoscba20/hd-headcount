@@ -34,13 +34,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo Inicio"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo Inicio",
+              "queryRef": "Asignaciones.HC Activo Inicio",
               "nativeQueryRef": "HC Activo Inicio"
             },
             {
@@ -48,13 +48,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Altas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Altas",
+              "queryRef": "Asignaciones.Altas",
               "nativeQueryRef": "Altas"
             },
             {
@@ -62,13 +62,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bajas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bajas",
+              "queryRef": "Asignaciones.Bajas",
               "nativeQueryRef": "Bajas"
             },
             {
@@ -76,13 +76,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo Fin"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo Fin",
+              "queryRef": "Asignaciones.HC Activo Fin",
               "nativeQueryRef": "HC Activo Fin"
             },
             {
@@ -90,13 +90,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · HC Fin Teórico"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · HC Fin Teórico",
+              "queryRef": "Asignaciones.Val · HC Fin Teórico",
               "nativeQueryRef": "Val · HC Fin Teórico"
             },
             {
@@ -104,13 +104,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · Dif Conciliación"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · Dif Conciliación",
+              "queryRef": "Asignaciones.Val · Dif Conciliación",
               "nativeQueryRef": "Val · Dif Conciliación"
             },
             {
@@ -118,13 +118,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo Promedio"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo Promedio",
+              "queryRef": "Asignaciones.HC Activo Promedio",
               "nativeQueryRef": "HC Activo Promedio"
             },
             {
@@ -132,13 +132,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación %",
+              "queryRef": "Asignaciones.Rotación %",
               "nativeQueryRef": "Rotación %"
             },
             {
@@ -146,13 +146,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % 12M Móvil"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % 12M Móvil",
+              "queryRef": "Asignaciones.Rotación % 12M Móvil",
               "nativeQueryRef": "Rotación % 12M Móvil"
             }
           ]

@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% Mano de Obra Directa"
                 }
               },
-              "queryRef": "Excel HC Oracle.% Mano de Obra Directa",
+              "queryRef": "Asignaciones.% Mano de Obra Directa",
               "nativeQueryRef": "% Mano de Obra Directa"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "% Mano de Obra Directa"
