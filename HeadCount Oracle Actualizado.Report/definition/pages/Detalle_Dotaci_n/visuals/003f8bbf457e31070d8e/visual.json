@@ -260,6 +260,34 @@
           "selector": {
             "metadata": "Asignaciones.Enterprise Hire Date"
           }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "118.1837826825329D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Fact Compensación.Salario Mensual Fijo USD"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "99.76924829503167D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Asignaciones.Cross Charge Entity Name"
+          }
         }
       ],
       "columnHeaders": [
