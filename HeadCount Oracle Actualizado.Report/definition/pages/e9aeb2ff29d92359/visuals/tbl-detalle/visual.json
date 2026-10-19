@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Person Number"
                 }
               },
-              "queryRef": "Excel HC Oracle.Person Number",
+              "queryRef": "Asignaciones.Person Number",
               "nativeQueryRef": "Person Number"
             },
             {
@@ -34,27 +34,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Display Name"
+                  "Property": "Nombre"
                 }
               },
-              "queryRef": "Excel HC Oracle.Display Name",
-              "nativeQueryRef": "Display Name"
+              "queryRef": "Dim Persona.Nombre",
+              "nativeQueryRef": "Nombre",
+              "displayName": "Display Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Country"
                 }
               },
-              "queryRef": "Excel HC Oracle.Country",
+              "queryRef": "Asignaciones.Country",
               "nativeQueryRef": "Country"
             },
             {
@@ -62,27 +63,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Legal Employer Name"
+                  "Property": "Entidad Legal"
                 }
               },
-              "queryRef": "Excel HC Oracle.Legal Employer Name",
-              "nativeQueryRef": "Legal Employer Name"
+              "queryRef": "Dim Persona.Entidad Legal",
+              "nativeQueryRef": "Entidad Legal",
+              "displayName": "Legal Employer Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "EPM Main Function Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "queryRef": "Asignaciones.EPM Main Function Name",
               "nativeQueryRef": "EPM Main Function Name"
             },
             {
@@ -90,13 +92,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
+              "queryRef": "Asignaciones.Grade Name",
               "nativeQueryRef": "Grade Name"
             },
             {
@@ -104,27 +106,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "National ID"
+                  "Property": "ID Nacional Oracle"
                 }
               },
-              "queryRef": "Excel HC Oracle.National ID",
-              "nativeQueryRef": "National ID"
+              "queryRef": "Dim Persona.ID Nacional Oracle",
+              "nativeQueryRef": "ID Nacional Oracle",
+              "displayName": "National ID"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "ACTIVE"
                 }
               },
-              "queryRef": "Excel HC Oracle.ACTIVE",
+              "queryRef": "Asignaciones.ACTIVE",
               "nativeQueryRef": "ACTIVE"
             }
           ]
@@ -144,7 +147,7 @@
             }
           },
           "selector": {
-            "metadata": "Excel HC Oracle.Country"
+            "metadata": "Asignaciones.Country"
           }
         },
         {
@@ -158,7 +161,7 @@
             }
           },
           "selector": {
-            "metadata": "Excel HC Oracle.Person Number"
+            "metadata": "Asignaciones.Person Number"
           }
         },
         {
@@ -172,7 +175,7 @@
             }
           },
           "selector": {
-            "metadata": "Excel HC Oracle.Display Name"
+            "metadata": "Dim Persona.Nombre"
           }
         }
       ],

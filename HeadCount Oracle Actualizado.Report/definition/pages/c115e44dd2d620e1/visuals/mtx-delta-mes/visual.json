@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Dim Persona.País Overview",
               "nativeQueryRef": "País Overview",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Grupo Funcional"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grupo Funcional",
+              "queryRef": "Dim Persona.Grupo Funcional",
               "nativeQueryRef": "Grupo Funcional",
               "active": true
             }
@@ -58,13 +58,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Δ HC vs Mes Anterior"
                 }
               },
-              "queryRef": "Excel HC Oracle.Δ HC vs Mes Anterior",
+              "queryRef": "Asignaciones.Δ HC vs Mes Anterior",
               "nativeQueryRef": "Δ HC vs Mes Anterior"
             }
           ]
@@ -77,7 +77,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Dim Persona"
                   }
                 },
                 "Property": "Grupo Funcional"
@@ -110,7 +110,7 @@
                                 "Measure": {
                                   "Expression": {
                                     "SourceRef": {
-                                      "Entity": "Excel HC Oracle"
+                                      "Entity": "Asignaciones"
                                     }
                                   },
                                   "Property": "Δ HC vs Mes Anterior"
@@ -137,7 +137,7 @@
                                 "Measure": {
                                   "Expression": {
                                     "SourceRef": {
-                                      "Entity": "Excel HC Oracle"
+                                      "Entity": "Asignaciones"
                                     }
                                   },
                                   "Property": "Δ HC vs Mes Anterior"
@@ -171,7 +171,7 @@
                 }
               }
             ],
-            "metadata": "Excel HC Oracle.Δ HC vs Mes Anterior"
+            "metadata": "Asignaciones.Δ HC vs Mes Anterior"
           }
         }
       ],

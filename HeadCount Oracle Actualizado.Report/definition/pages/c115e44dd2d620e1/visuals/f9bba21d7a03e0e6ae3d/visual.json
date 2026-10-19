@@ -4,10 +4,10 @@
   "position": {
     "x": 659.58872636955232,
     "y": 30.607365492786652,
-    "z": 20001,
+    "z": 21000,
     "height": 78.048782006605961,
     "width": 287.70923563219452,
-    "tabOrder": 20001
+    "tabOrder": 21000
   },
   "visual": {
     "visualType": "slicer",
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Ámbito"
                 }
               },
-              "queryRef": "Excel HC Oracle.Ámbito",
+              "queryRef": "Dim Persona.Ámbito",
               "nativeQueryRef": "Ámbito",
               "active": true
             }
@@ -69,8 +69,8 @@
                 "Version": 2,
                 "From": [
                   {
-                    "Name": "e",
-                    "Entity": "Excel HC Oracle",
+                    "Name": "dp",
+                    "Entity": "Dim Persona",
                     "Type": 0
                   }
                 ],
@@ -83,7 +83,7 @@
                             "Column": {
                               "Expression": {
                                 "SourceRef": {
-                                  "Source": "e"
+                                  "Source": "dp"
                                 }
                               },
                               "Property": "Ámbito"

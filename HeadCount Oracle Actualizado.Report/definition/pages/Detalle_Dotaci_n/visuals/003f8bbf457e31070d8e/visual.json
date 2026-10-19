@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "003f8bbf457e31070d8e",
   "position": {
     "x": 40.128186582351915,
@@ -20,27 +20,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Display Name"
+                  "Property": "Nombre"
                 }
               },
-              "queryRef": "Excel HC Oracle.Display Name",
-              "nativeQueryRef": "Display Name"
+              "queryRef": "Dim Persona.Nombre",
+              "nativeQueryRef": "Nombre",
+              "displayName": "Display Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Position Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Position Name",
+              "queryRef": "Asignaciones.Position Name",
               "nativeQueryRef": "Position Name"
             },
             {
@@ -48,27 +49,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
-                    }
-                  },
-                  "Property": "Job Name"
-                }
-              },
-              "queryRef": "Excel HC Oracle.Job Name",
-              "nativeQueryRef": "Job Name"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
+              "queryRef": "Asignaciones.Grade Name",
               "nativeQueryRef": "Grade Name"
             },
             {
@@ -76,13 +63,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Asignaciones.Nivel",
               "nativeQueryRef": "Nivel"
             },
             {
@@ -90,13 +77,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "EPM Main Function Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
+              "queryRef": "Asignaciones.EPM Main Function Name",
               "nativeQueryRef": "EPM Main Function Name"
             },
             {
@@ -104,55 +91,28 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Department Name"
+                  "Property": "Entidad Legal"
                 }
               },
-              "queryRef": "Excel HC Oracle.Department Name",
-              "nativeQueryRef": "Department Name"
+              "queryRef": "Dim Persona.Entidad Legal",
+              "nativeQueryRef": "Entidad Legal",
+              "displayName": "Legal Employer Name"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
-                    }
-                  },
-                  "Property": "Legal Employer Name"
-                }
-              },
-              "queryRef": "Excel HC Oracle.Legal Employer Name",
-              "nativeQueryRef": "Legal Employer Name"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Excel HC Oracle"
-                    }
-                  },
-                  "Property": "Country"
-                }
-              },
-              "queryRef": "Excel HC Oracle.Country",
-              "nativeQueryRef": "Country"
-            },
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Cross Charge Entity Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Cross Charge Entity Name",
+              "queryRef": "Asignaciones.Cross Charge Entity Name",
               "nativeQueryRef": "Cross Charge Entity Name"
             },
             {
@@ -160,13 +120,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Manager Display Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Manager Display Name",
+              "queryRef": "Asignaciones.Manager Display Name",
               "nativeQueryRef": "Manager Display Name"
             },
             {
@@ -174,27 +134,55 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Enterprise Hire Date"
                 }
               },
-              "queryRef": "Excel HC Oracle.Enterprise Hire Date",
+              "queryRef": "Asignaciones.Enterprise Hire Date",
               "nativeQueryRef": "Enterprise Hire Date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Mensual Fijo USD"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Mensual Fijo USD",
+              "nativeQueryRef": "Salario Mensual Fijo USD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Compensación"
+                    }
+                  },
+                  "Property": "Salario Anual Fijo USD"
+                }
+              },
+              "queryRef": "Fact Compensación.Salario Anual Fijo USD",
+              "nativeQueryRef": "Salario Anual Fijo USD"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad (años)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad (años)",
+              "queryRef": "Asignaciones.Antigüedad (años)",
               "nativeQueryRef": "Antigüedad (años)"
             },
             {
@@ -202,13 +190,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Género"
                 }
               },
-              "queryRef": "Excel HC Oracle.Género",
+              "queryRef": "Dim Persona.Género",
               "nativeQueryRef": "Género"
             },
             {
@@ -216,13 +204,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Edad"
                 }
               },
-              "queryRef": "Excel HC Oracle.Edad",
+              "queryRef": "Dim Persona.Edad",
               "nativeQueryRef": "Edad"
             },
             {
@@ -230,13 +218,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Esquema MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "queryRef": "Asignaciones.Esquema MBO",
               "nativeQueryRef": "Esquema MBO"
             },
             {
@@ -244,18 +232,69 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bonus Swap"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bonus Swap",
+              "queryRef": "Asignaciones.Bonus Swap",
               "nativeQueryRef": "Bonus Swap"
             }
           ]
         }
       }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "93.53420837369083D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Asignaciones.Enterprise Hire Date"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "118.1837826825329D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Fact Compensación.Salario Mensual Fijo USD"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "99.76924829503167D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Asignaciones.Cross Charge Entity Name"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

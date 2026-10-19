@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Dim Persona.Nivel",
               "nativeQueryRef": "Nivel",
               "active": true
             }

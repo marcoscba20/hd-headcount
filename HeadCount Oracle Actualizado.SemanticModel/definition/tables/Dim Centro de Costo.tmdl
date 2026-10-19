@@ -1,31 +1,20 @@
-/// Dimensión DESCONECTADA con los códigos de centro de costo presentes en Oracle y/o en el archivo Manual. OJO: Oracle pobla "Local Cost Center" en una minoría de registros, así que la mayoría de las filas van a figurar como "Solo Manual".
+/// Centros de costo presentes en Oracle (Local Cost Center) y/o en el archivo Manual. Relacionada con Asignaciones y HC Manual LATAM. OJO: Oracle pobla Local Cost Center en una minoría de registros, así que la mayoría figura como "Solo Manual".
 table 'Dim Centro de Costo'
-	lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab74
+	lineageTag: ca584c49-2dcc-48a8-952a-bfb492b5e371
 
 	/// HC activo de Oracle para el centro de costo seleccionado.
-	measure 'HC Oracle x CC' =
-			CALCULATE (
-			    [HC Activo],
-			    TREATAS ( VALUES ( 'Dim Centro de Costo'[ID Centro de Costo] ), 'Excel HC Oracle'[Local Cost Center] )
-			)
-		formatString: #,##0
+	measure 'HC Oracle x CC' = CALCULATE ( [HC Activo], KEEPFILTERS ( NOT ISBLANK ( 'Dim Centro de Costo'[ID Centro de Costo] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab76
+		lineageTag: 278d0696-f35c-4499-8031-1b55bcf18a67
 
-	/// HC del archivo Manual a Jun-2026 para el centro de costo seleccionado.
-	measure 'HC Manual x CC' =
-			CALCULATE (
-			    [HC Manual Jun-2026],
-			    TREATAS ( VALUES ( 'Dim Centro de Costo'[ID Centro de Costo] ), 'HC Manual LATAM'[ID Centro de Costo] )
-			)
-		formatString: #,##0
+	/// HC del archivo Manual (último snapshot) para el centro de costo seleccionado.
+	measure 'HC Manual x CC' = CALCULATE ( [HC Manual], KEEPFILTERS ( NOT ISBLANK ( 'Dim Centro de Costo'[ID Centro de Costo] ) ) )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab77
+		lineageTag: 9eff64ef-bb14-4c05-bdc7-76453ccd862c
 
 	measure 'Δ CC (Oracle - Manual)' = [HC Oracle x CC] - [HC Manual x CC]
-		formatString: +#,##0;-#,##0;0
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab78
+		lineageTag: f2054934-54cd-4262-8fa5-e55450d5604d
 
 	/// Indica si el código de centro de costo existe en los dos orígenes o en uno solo.
 	measure 'Estado Cruce CC' =
@@ -40,28 +29,26 @@ table 'Dim Centro de Costo'
 			        "—"
 			    )
 		displayFolder: 10 · Comparativo Oracle vs Manual
-		lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab79
+		lineageTag: b9d66f5e-3829-41b4-a42b-671f750e4665
 
 	column 'ID Centro de Costo'
 		dataType: string
-		lineageTag: 5a17c982-4b60-4e37-8d25-9c31f0e6ab75
+		lineageTag: c4f25948-f90c-4a0d-a187-e229875718fa
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [ID Centro de Costo]
+		sourceColumn: ID Centro de Costo
 
 		annotation SummarizationSetBy = Automatic
 
-	partition 'Dim Centro de Costo' = calculated
+	partition 'Dim Centro de Costo' = m
 		mode: import
 		source =
-				VAR Oracle =
-				    SELECTCOLUMNS ( 'Excel HC Oracle', "ID Centro de Costo", 'Excel HC Oracle'[Local Cost Center] )
-				VAR Manual =
-				    SELECTCOLUMNS ( 'HC Manual LATAM', "ID Centro de Costo", 'HC Manual LATAM'[ID Centro de Costo] )
-				VAR Todos =
-				    DISTINCT ( UNION ( Oracle, Manual ) )
-				RETURN
-				    FILTER ( Todos, NOT [ID Centro de Costo] IN { "", "Sin Datos", "0" } )
+				let
+				    Limpiar = (t as table, c as text) as table => Table.Distinct(Table.SelectRows(Table.TransformColumns(t, {{c, each if _ = null then null else Text.Trim(Text.From(_)), type text}}), each Record.Field(_, c) <> null and not List.Contains({"", "Sin", "Sin Datos", "0"}, Record.Field(_, c))), {c, Comparer.OrdinalIgnoreCase}),
+				    Ora = Table.RenameColumns(Table.SelectColumns(#"Oracle Base", {"Local Cost Center"}), {{"Local Cost Center", "ID Centro de Costo"}}),
+				    Man = Table.SelectColumns(#"HC Manual LATAM", {"ID Centro de Costo"}),
+				    Final = Limpiar(Table.Combine({Ora, Man}), "ID Centro de Costo")
+				in
+				    Final
 
-	annotation PBI_Id = c4d8091ba63f7e25
+	annotation PBI_ResultType = Table
 

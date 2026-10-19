@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% Bonus Swap sobre MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.% Bonus Swap sobre MBO",
+              "queryRef": "Asignaciones.% Bonus Swap sobre MBO",
               "nativeQueryRef": "% Bonus Swap sobre MBO"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "% Bonus Swap sobre MBO"

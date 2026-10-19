@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "slicer-133402bb",
   "position": {
-    "x": 617.97,
-    "y": 0,
-    "z": 4000,
+    "x": 618.63063988776776,
+    "y": 0.13324724552880035,
+    "z": 5000,
     "height": 77.581160725880366,
     "width": 197.99,
     "tabOrder": 4000
@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "EPM Main Function Name"
+                  "Property": "Función"
                 }
               },
-              "queryRef": "Excel HC Oracle.EPM Main Function Name",
-              "nativeQueryRef": "EPM Main Function Name",
-              "active": true
+              "queryRef": "Dim Persona.Función",
+              "nativeQueryRef": "Función",
+              "active": true,
+              "displayName": "EPM Main Function Name"
             }
           ]
         }

@@ -1,2 +1,200 @@
 cultureInfo es-AR
 
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "dim_persona.grade": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "Grade"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Grade Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_persona.entidad_legal": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "Entidad Legal"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Legal Employer Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_persona.función": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "Función"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "EPM Main Function Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_persona.país": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "País"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Country": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_persona.nombre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "Nombre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Display Name": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "dim_persona.id_nacional_oracle": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim Persona",
+			          "ConceptualProperty": "ID Nacional Oracle"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "National ID": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "hc_manual_latam.hc_manual": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "HC Manual LATAM",
+			          "ConceptualProperty": "HC Manual"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HC Manual Jun-2026": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "fact_compensación.cantidad_de_salarios_aplicada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Fact Compensación",
+			          "ConceptualProperty": "Cantidad de Salarios Aplicada"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cantidad de Salarios": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "asignaciones.hc_activo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Asignaciones",
+			          "ConceptualProperty": "HC Activo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "HC": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

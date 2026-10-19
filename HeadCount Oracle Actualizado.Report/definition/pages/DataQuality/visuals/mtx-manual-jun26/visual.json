@@ -61,11 +61,12 @@
                       "Entity": "HC Manual LATAM"
                     }
                   },
-                  "Property": "HC Manual Jun-2026"
+                  "Property": "HC Manual"
                 }
               },
-              "queryRef": "HC Manual LATAM.HC Manual Jun-2026",
-              "nativeQueryRef": "HC Manual Jun-2026"
+              "queryRef": "HC Manual LATAM.HC Manual",
+              "nativeQueryRef": "HC Manual",
+              "displayName": "HC Manual Jun-2026"
             }
           ]
         }
@@ -125,7 +126,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Situación Actual — Archivo Manual a Junio 2026'"
+                  "Value": "'Situación Actual — Archivo Manual (último snapshot)'"
                 }
               }
             }

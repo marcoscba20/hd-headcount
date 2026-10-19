@@ -4,7 +4,7 @@
   "position": {
     "x": 1199.83,
     "y": 30,
-    "z": 3000,
+    "z": 1000,
     "height": 77.58,
     "width": 227.39,
     "tabOrder": 3000
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Dim Persona.País Overview",
               "nativeQueryRef": "País Overview",
               "active": true
             }

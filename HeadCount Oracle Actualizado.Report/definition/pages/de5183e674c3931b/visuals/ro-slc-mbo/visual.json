@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Esquema MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "queryRef": "Asignaciones.Esquema MBO",
               "nativeQueryRef": "Esquema MBO",
               "active": true
             }

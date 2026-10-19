@@ -1,0 +1,71 @@
+/// Tipo de cambio fijo (USD por unidad de moneda local) y cantidad de sueldos anuales, desde la hoja 'TC' del archivo de salarios. Una fila por clave: Entidad Legal (columna "Entidad Legal" del archivo, clave "E|") o País del archivo (clave "P|"). Reemplaza al archivo FX BGT: no depende del año.
+table 'Tipo de Cambio'
+	lineageTag: b48f2228-c69f-4342-ad07-e3382c0368b2
+
+	/// Moneda del bloque por país; para las entidades se infiere por el país con el mismo TC.
+	column Moneda
+		dataType: string
+		lineageTag: 8ae798cd-1bad-488b-a8b5-fcaabb56d25f
+		summarizeBy: none
+		sourceColumn: Moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	/// USD por 1 unidad de moneda local (se multiplica). Fijo, según la hoja TC.
+	column 'TC USD x LC'
+		dataType: double
+		formatString: 0.000000000
+		lineageTag: 31393344-e3ea-4180-97e6-931d5b9f90eb
+		summarizeBy: none
+		sourceColumn: TC USD x LC
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Clave TC'
+		dataType: string
+		isHidden
+		lineageTag: b2ea4116-6346-4496-a3d2-4236c09dfaf0
+		summarizeBy: none
+		sourceColumn: Clave TC
+
+		annotation SummarizationSetBy = Automatic
+
+	/// "Entidad Legal" o "País".
+	column 'Tipo Clave'
+		dataType: string
+		lineageTag: 01ab58fb-7a95-4859-a941-611429c460b0
+		summarizeBy: none
+		sourceColumn: Tipo Clave
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Nombre de la entidad legal o del país tal como figura en la hoja.
+	column Referencia
+		dataType: string
+		lineageTag: da1f6bc4-a352-427b-8457-b7b9356cc1d4
+		summarizeBy: none
+		sourceColumn: Referencia
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sueldos por año con los que se anualiza el fijo, según la hoja TC.
+	column 'Sueldos Anuales'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 812a9c83-e385-4b24-b683-516797d5c075
+		summarizeBy: none
+		sourceColumn: Sueldos Anuales
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Tipo de Cambio' = m
+		mode: import
+		source =
+				let
+				    Origen = #"TC Origen",
+				    Final = Table.SelectColumns(Origen, {"Clave TC", "Tipo Clave", "Referencia", "Moneda", "TC USD x LC", "Sueldos Anuales"})
+				in
+				    Final
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,699 @@
+/// Dimensión de personas conformada: un Person Number por fila. Filtra headcount, movimientos y compensación. Lo fijo de la persona (nombre, ID, género, edad, entidad, ámbito) vive solo acá; lo que cambia entre asignaciones aparece con el valor de la asignación vigente (activa primero, si no la de mayor Person Number). Las columnas sin uso del export están ocultas en la carpeta 'Oracle · otros'. -1 = salarios sin cruce con Oracle.
+table 'Dim Persona'
+	lineageTag: ec53350e-cd3a-4c01-9903-5845106a26ab
+
+	/// Clave única de persona. -1 = fila de salarios que no cruzó con Oracle.
+	column 'Person Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7bb863fd-5f37-4fdd-9b0c-8913d2688efb
+		summarizeBy: none
+		sourceColumn: Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nombre
+		dataType: string
+		lineageTag: bd3fa45d-0da7-4cfd-9234-c446bad559c6
+		summarizeBy: none
+		sourceColumn: Nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Nacional Oracle'
+		dataType: string
+		lineageTag: dfac54c1-9dcf-483b-b9d8-57bf4b8dd7d5
+		summarizeBy: none
+		sourceColumn: ID Nacional Oracle
+
+		annotation SummarizationSetBy = Automatic
+
+	column Género
+		dataType: string
+		lineageTag: 2f560309-7b84-4cc8-8907-926eaf2facc1
+		summarizeBy: none
+		sourceColumn: Género
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fecha Nacimiento'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 4b9fe6fe-48de-4e10-8d38-d91bca0f175c
+		summarizeBy: none
+		sourceColumn: Fecha Nacimiento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Años cumplidos a hoy. En blanco si la fecha de nacimiento falta o la edad queda fuera de 15-80.
+	column Edad =
+			VAR Birth = 'Dim Persona'[Fecha Nacimiento]
+			VAR E = DATEDIFF ( Birth, TODAY (), YEAR )
+			RETURN
+			    IF ( ISBLANK ( Birth ) || E < 15 || E > 80, BLANK (), E )
+		dataType: int64
+		formatString: 0
+		lineageTag: 14f0d6ec-ed0a-4b7b-bbf5-84327fc8a6a4
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rango Etario' =
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( 'Dim Persona'[Edad] ), "Sin Dato",
+			    'Dim Persona'[Edad] < 25, "< 25",
+			    'Dim Persona'[Edad] < 35, "25 a 34",
+			    'Dim Persona'[Edad] < 45, "35 a 44",
+			    'Dim Persona'[Edad] < 55, "45 a 54",
+			    "55+"
+			)
+		dataType: string
+		lineageTag: 0769ab9a-aa26-4875-b2f4-17c66ac1a7da
+		summarizeBy: none
+		sortByColumn: 'Rango Etario Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rango Etario Orden' =
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( 'Dim Persona'[Edad] ), 6,
+			    'Dim Persona'[Edad] < 25, 1,
+			    'Dim Persona'[Edad] < 35, 2,
+			    'Dim Persona'[Edad] < 45, 3,
+			    'Dim Persona'[Edad] < 55, 4,
+			    5
+			)
+		dataType: int64
+		isHidden
+		lineageTag: 453b54be-dce4-46e2-9af7-cae2a99c0e0a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Enterprise Hire Date de la asignación vigente.
+	column 'Fecha Ingreso'
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 15550984-bd02-44f6-8e5b-c5a4d38727d0
+		summarizeBy: none
+		sourceColumn: Fecha Ingreso
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Antigüedad (años)'
+		dataType: int64
+		formatString: 0
+		lineageTag: d3814687-f09c-4d80-a155-080285b6971f
+		summarizeBy: none
+		sourceColumn: Antigüedad (años)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rango Antigüedad' =
+			VAR A = 'Dim Persona'[Antigüedad (años)]
+			RETURN
+			    SWITCH (
+			        TRUE (),
+			        ISBLANK ( A ), "Sin Dato",
+			        A < 1, "< 1 año",
+			        A < 3, "1 a 3 años",
+			        A < 5, "3 a 5 años",
+			        A < 10, "5 a 10 años",
+			        A < 20, "10 a 20 años",
+			        "20+ años"
+			    )
+		dataType: string
+		lineageTag: f5d57fb9-3a7e-47c5-ba55-242750606b04
+		summarizeBy: none
+		sortByColumn: 'Rango Antigüedad Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Rango Antigüedad Orden' =
+			VAR A = 'Dim Persona'[Antigüedad (años)]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( A ), 7, A < 1, 1, A < 3, 2, A < 5, 3, A < 10, 4, A < 20, 5, 6 )
+		dataType: int64
+		isHidden
+		lineageTag: 4c9b70bf-bf96-421d-be0f-c8596bcf5b7d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Año Ingreso' = YEAR ( 'Dim Persona'[Fecha Ingreso] )
+		dataType: int64
+		formatString: 0
+		lineageTag: 121b450f-3baf-47ae-97b2-7fc82cada864
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Ingreso Nº' = MONTH ( 'Dim Persona'[Fecha Ingreso] )
+		dataType: int64
+		isHidden
+		lineageTag: 0e181d9e-a72a-477d-a467-747db8be52a8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Ingreso' = FORMAT ( 'Dim Persona'[Fecha Ingreso], "MMM" )
+		dataType: string
+		lineageTag: 44e118d7-ae27-4bf5-8106-68c3ad4ef1db
+		summarizeBy: none
+		sortByColumn: 'Mes Ingreso Nº'
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Global / LATAM / Local según Cross Charge (prioridad Global > LATAM > Local entre todas las asignaciones de la persona).
+	column Ámbito
+		dataType: string
+		lineageTag: 25e6e990-70a1-489b-a98f-11696f9a712f
+		summarizeBy: none
+		sourceColumn: Ámbito
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Country de la asignación vigente.
+	column País
+		dataType: string
+		lineageTag: 988b7389-2f63-4735-b38e-6d111c53d283
+		summarizeBy: none
+		sourceColumn: País
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'País Overview'
+		dataType: string
+		lineageTag: 49bd0bf0-bd5a-474a-8556-308ad6414484
+		summarizeBy: none
+		sourceColumn: País Overview
+		sortByColumn: 'Orden País'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden País'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02456a6f-8077-4b86-b98d-76f1ef7a0ac1
+		summarizeBy: none
+		sourceColumn: Orden País
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entidad Legal'
+		dataType: string
+		lineageTag: b811a686-f284-4f42-8c9f-81fa2debb6f2
+		summarizeBy: none
+		sourceColumn: Entidad Legal
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Tres primeros caracteres de la entidad legal. Une con Dim Entidad Legal.
+	column 'Código Entidad'
+		dataType: string
+		lineageTag: c1b88a79-4cfe-477a-9b92-99541c3b0a7c
+		summarizeBy: none
+		sourceColumn: Código Entidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Business Unit'
+		dataType: string
+		lineageTag: 54958cff-5457-46c5-95f4-bec964909ad0
+		summarizeBy: none
+		sourceColumn: Business Unit
+
+		annotation SummarizationSetBy = Automatic
+
+	/// EPM Main Function Name de la asignación vigente.
+	column Función
+		dataType: string
+		lineageTag: 40aba55d-ec6d-42dd-be74-d5540579a12f
+		summarizeBy: none
+		sourceColumn: Función
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Grupo Funcional'
+		dataType: string
+		lineageTag: 5d0d7763-6435-45ce-aa24-da4635949aa8
+		summarizeBy: none
+		sourceColumn: Grupo Funcional
+		sortByColumn: 'Orden Grupo Funcional'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Grupo Funcional'
+		dataType: int64
+		isHidden
+		lineageTag: 64389340-b7f4-4b77-a9b5-64a5c6ae05d2
+		summarizeBy: none
+		sourceColumn: Orden Grupo Funcional
+
+		annotation SummarizationSetBy = Automatic
+
+	column Departamento
+		dataType: string
+		lineageTag: fd67499f-35e6-4190-a68c-590b0e1f94cd
+		summarizeBy: none
+		sourceColumn: Departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Puesto
+		dataType: string
+		lineageTag: 749b7f3d-9f36-4019-8ed8-36d4f1efa0ad
+		summarizeBy: none
+		sourceColumn: Puesto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Posición
+		dataType: string
+		lineageTag: cd566ce5-20ba-4d0d-a40d-d5c64b2e7289
+		summarizeBy: none
+		sourceColumn: Posición
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manager
+		dataType: string
+		lineageTag: 5ae27df7-6503-4ebe-b6f9-9d3ec45c892d
+		summarizeBy: none
+		sourceColumn: Manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grade
+		dataType: string
+		lineageTag: e33ae88f-830c-46a3-bd58-6770476a2da6
+		summarizeBy: none
+		sourceColumn: Grade
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Número de grade (proxy salarial). Vacío o 99 = sin grade.
+	column 'Grade Nº'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b5d09a1-c2d7-459a-bedd-37cbaf903f58
+		summarizeBy: none
+		sourceColumn: Grade Nº
+
+		annotation SummarizationSetBy = Automatic
+
+	/// G1-G7 / G8+ / Sin Grade. Mismo corte que la presentación People Excellence.
+	column 'Grade Grupo'
+		dataType: string
+		lineageTag: c295c021-dff2-4110-b9ae-ea3a627d8f0b
+		summarizeBy: none
+		sourceColumn: Grade Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Nivel
+		dataType: string
+		lineageTag: d80f7f7d-b7f3-4c20-936e-1bbf1d69d0c8
+		summarizeBy: none
+		sourceColumn: Nivel
+		sortByColumn: 'Nivel Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nivel Orden'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dbdf4c2d-b762-4545-be82-fbd69ac683e0
+		summarizeBy: none
+		sourceColumn: Nivel Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// SG&A (ZBB) / COGS.
+	column 'Tipo de Costo'
+		dataType: string
+		lineageTag: 953395f6-9739-4a2a-8244-1d69a2cde147
+		summarizeBy: none
+		sourceColumn: Tipo de Costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Labor Type'
+		dataType: string
+		lineageTag: b04ed467-137b-42e9-85dc-debc30f74529
+		summarizeBy: none
+		sourceColumn: Labor Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Base OHI'
+		dataType: string
+		lineageTag: bf3db289-dd35-4428-a166-21d9accd0840
+		summarizeBy: none
+		sourceColumn: Base OHI
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Cross Charge Entity Name'
+		dataType: string
+		lineageTag: b7f1046b-e91e-48ef-bdfb-780661f46905
+		summarizeBy: none
+		sourceColumn: Cross Charge Entity Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Con MBO / Sin MBO / No Aplica. Foto del estado actual.
+	column 'Esquema MBO'
+		dataType: string
+		lineageTag: 9583993d-57be-42f2-abd4-6b3115c5f564
+		summarizeBy: none
+		sourceColumn: Esquema MBO
+		sortByColumn: 'Orden Esquema MBO'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Esquema MBO'
+		dataType: int64
+		isHidden
+		lineageTag: 4c87299d-4d1d-471b-92da-065b9d5edd2b
+		summarizeBy: none
+		sourceColumn: Orden Esquema MBO
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Elegible / No Elegible / No Aplica. Foto del estado actual.
+	column 'Bonus Swap'
+		dataType: string
+		lineageTag: 0e6aefe9-4093-4f39-8d25-0de6b410eb3d
+		summarizeBy: none
+		sourceColumn: Bonus Swap
+		sortByColumn: 'Orden Bonus Swap'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orden Bonus Swap'
+		dataType: int64
+		isHidden
+		lineageTag: 69354fa9-c22e-4dd5-b40f-74f5e5d2850b
+		summarizeBy: none
+		sourceColumn: Orden Bonus Swap
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Country Code'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 34e6d9cf-781c-4338-a148-9441323d8816
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country_1
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 8c453c4c-cc37-4d45-b64e-a7240d2ca8cf
+		summarizeBy: none
+		sourceColumn: Country_1
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Legislation Code'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: b40e477f-f646-46d9-9f86-2bf8398a885f
+		summarizeBy: none
+		sourceColumn: Legislation Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Work Email'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 08b08d3a-651a-48a9-ac93-b0c350c185f0
+		summarizeBy: none
+		sourceColumn: Work Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'E-Mail Address'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 66697417-bbbf-4fa7-a268-c83f2fa72b74
+		summarizeBy: none
+		sourceColumn: E-Mail Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manager Type'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 558a8fda-eb26-437f-adff-b827c8de5b35
+		summarizeBy: none
+		sourceColumn: Manager Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Manager Job Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 2ca92997-26d0-4800-9c95-88185250d871
+		summarizeBy: none
+		sourceColumn: Manager Job Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Position Code'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: abd9e4d3-b441-42d3-a4ca-3428cf3a4f56
+		summarizeBy: none
+		sourceColumn: Position Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 01 Work Email'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: b26cd3fd-3e40-4798-8bf8-58ea5244023e
+		summarizeBy: none
+		sourceColumn: Parent Manager 01 Work Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 01 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: fc06ea88-2f08-42d0-a9ba-acc20ac352fc
+		summarizeBy: none
+		sourceColumn: Parent Manager 01 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 01 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: fb43424f-12c6-42bf-8112-552b8238c546
+		summarizeBy: none
+		sourceColumn: Parent Manager 01 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 02 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: 10a165fc-af91-4136-90a5-4e51c6763ff8
+		summarizeBy: none
+		sourceColumn: Parent Manager 02 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 02 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 630baffd-49eb-44fd-8a3d-c787e5581f56
+		summarizeBy: none
+		sourceColumn: Parent Manager 02 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 03 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: 59ede380-a3f6-4549-97db-03982ccd1a52
+		summarizeBy: none
+		sourceColumn: Parent Manager 03 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 03 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: c0e51faf-bf24-48ea-b1c7-a51c5d6f78d8
+		summarizeBy: none
+		sourceColumn: Parent Manager 03 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 04 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: c60a1634-887e-42b7-a437-26513e6b5b1b
+		summarizeBy: none
+		sourceColumn: Parent Manager 04 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 04 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 7c105589-8dc0-490f-b7f5-52623b832892
+		summarizeBy: none
+		sourceColumn: Parent Manager 04 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 05 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: f8af38c5-7194-49be-b168-0117b63d11cf
+		summarizeBy: none
+		sourceColumn: Parent Manager 05 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 05 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: ea9bfc75-9d34-4d03-9a59-bd129fac0f42
+		summarizeBy: none
+		sourceColumn: Parent Manager 05 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 06 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: 13e9d471-8c37-4d57-adc6-473856ad6b58
+		summarizeBy: none
+		sourceColumn: Parent Manager 06 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 06 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 807575a9-61a4-4be6-973c-9312a0683d34
+		summarizeBy: none
+		sourceColumn: Parent Manager 06 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 07 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: 726c928f-770b-4b32-b37e-2230889e560e
+		summarizeBy: none
+		sourceColumn: Parent Manager 07 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 07 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: 3528603c-74de-47e8-80e6-3ffb177421cc
+		summarizeBy: none
+		sourceColumn: Parent Manager 07 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 08 Person Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		displayFolder: Oracle · otros
+		lineageTag: 15db084d-7769-4e38-9409-841b5d9194a3
+		summarizeBy: none
+		sourceColumn: Parent Manager 08 Person Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parent Manager 08 Name'
+		dataType: string
+		isHidden
+		displayFolder: Oracle · otros
+		lineageTag: a097370e-f4ae-4f63-bee4-2993f99a6785
+		summarizeBy: none
+		sourceColumn: Parent Manager 08 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim Persona' = m
+		mode: import
+		source =
+				let
+				    Sel = Table.SelectColumns(#"Oracle Persona Unica", {"Person Number", "Display Name", "National ID", "Person Gender", "Person Date of Birth", "Enterprise Hire Date", "Antigüedad (años)", "Ámbito", "Country", "País Overview", "Orden País", "Legal Employer Name", "Business Unit Name", "EPM Main Function Name", "Grupo Funcional", "Orden Grupo Funcional", "Department Name", "Job Name", "Position Name", "Manager Display Name", "Grade Name", "Grade Nº", "Level", "ZBB / COGS", "Labor Type", "Base OHI", "Cross Charge Entity Name", "MBO Bonus Scheme", "Bonus Swap Eligible", "Country Code", "Country_1", "Legislation Code", "Work Email", "E-Mail Address", "Manager Type", "Manager Job Name", "Position Code", "Parent Manager 01 Work Email", "Parent Manager 01 Person Number", "Parent Manager 01 Name", "Parent Manager 02 Person Number", "Parent Manager 02 Name", "Parent Manager 03 Person Number", "Parent Manager 03 Name", "Parent Manager 04 Person Number", "Parent Manager 04 Name", "Parent Manager 05 Person Number", "Parent Manager 05 Name", "Parent Manager 06 Person Number", "Parent Manager 06 Name", "Parent Manager 07 Person Number", "Parent Manager 07 Name", "Parent Manager 08 Person Number", "Parent Manager 08 Name"}),
+				    Ren = Table.RenameColumns(Sel, {{"Display Name", "Nombre"}, {"National ID", "ID Nacional Oracle"}, {"Enterprise Hire Date", "Fecha Ingreso"}, {"Country", "País"}, {"Legal Employer Name", "Entidad Legal"}, {"Business Unit Name", "Business Unit"}, {"EPM Main Function Name", "Función"}, {"Department Name", "Departamento"}, {"Job Name", "Puesto"}, {"Position Name", "Posición"}, {"Manager Display Name", "Manager"}, {"Grade Name", "Grade"}}),
+				    // ZBB = SG&A
+				    Costo = Table.AddColumn(Ren, "Tipo de Costo", each let z = Text.Upper(Text.Trim(Text.From([#"ZBB / COGS"]))) in if z = "ZBB" then "SG&A" else if z = "COGS" then "COGS" else "Sin dato", type text),
+				    // Mismas reglas que las columnas calculadas de Asignaciones (Grade Grupo, Nivel, Esquema MBO, Bonus Swap)
+				    GradeGrupo = Table.AddColumn(Costo, "Grade Grupo", each if [#"Grade Nº"] = null or [#"Grade Nº"] = 99 then "Sin Grade" else if [#"Grade Nº"] >= 8 then "G8+" else "G1-G7", type text),
+				    NivelTxt = Table.AddColumn(GradeGrupo, "NivelTxt", each if [Level] = null then "" else Text.Trim(Text.From([Level])), type text),
+				    NivelOrden = Table.AddColumn(NivelTxt, "Nivel Orden", each if List.Contains({"0", "", "Sin Datos"}, [NivelTxt]) then 99 else (try Int64.From(Number.FromText([NivelTxt])) otherwise 99), Int64.Type),
+				    Nivel = Table.AddColumn(NivelOrden, "Nivel", each if List.Contains({"0", "", "Sin Datos"}, [NivelTxt]) then "Sin Nivel" else "L" & [NivelTxt], type text),
+				    Genero = Table.AddColumn(Nivel, "Género", each if [Person Gender] = "Male" then "Masculino" else if [Person Gender] = "Female" then "Femenino" else "Sin Dato", type text),
+				    Mbo = Table.AddColumn(Genero, "Esquema MBO", each if [MBO Bonus Scheme] = "Yes" then "Con MBO" else if [MBO Bonus Scheme] = "No" then "Sin MBO" else "No Aplica", type text),
+				    MboOrden = Table.AddColumn(Mbo, "Orden Esquema MBO", each if [MBO Bonus Scheme] = "Yes" then 1 else if [MBO Bonus Scheme] = "No" then 2 else 3, Int64.Type),
+				    Swap = Table.AddColumn(MboOrden, "Bonus Swap", each if [Bonus Swap Eligible] = "Yes" then "Elegible" else if [Bonus Swap Eligible] = "No" then "No Elegible" else "No Aplica", type text),
+				    SwapOrden = Table.AddColumn(Swap, "Orden Bonus Swap", each if [Bonus Swap Eligible] = "Yes" then 1 else if [Bonus Swap Eligible] = "No" then 2 else 3, Int64.Type),
+				    Codigo = Table.AddColumn(SwapOrden, "Código Entidad", each Text.Start(Text.From([Entidad Legal]), 3), type text),
+				    // Fecha de nacimiento: el blindaje de Oracle usa 1900-01-01 como vacío
+				    Nacimiento = Table.TransformColumns(Codigo, {{"Person Date of Birth", each if _ = #date(1900, 1, 1) then null else _, type date}}),
+				    Ren2 = Table.RenameColumns(Nacimiento, {{"Person Date of Birth", "Fecha Nacimiento"}}),
+				    SinFuente = Table.RemoveColumns(Ren2, {"ZBB / COGS", "Level", "Person Gender", "NivelTxt", "MBO Bonus Scheme", "Bonus Swap Eligible"}),
+				    SinCruce = Table.FromRecords({[#"Person Number" = -1, Nombre = "Sin cruce con Oracle", #"Ámbito" = "Sin cruce", #"País Overview" = "Sin cruce", #"Orden País" = 99, #"Tipo de Costo" = "Sin cruce", #"Grade Grupo" = "Sin Grade", Nivel = "Sin Nivel", #"Nivel Orden" = 99, #"Género" = "Sin Dato", #"Grupo Funcional" = "Sin Definir", #"Orden Grupo Funcional" = 6, #"Esquema MBO" = "No Aplica", #"Orden Esquema MBO" = 3, #"Bonus Swap" = "No Aplica", #"Orden Bonus Swap" = 3]}, null, MissingField.UseNull),
+				    Todo = Table.Combine({SinFuente, SinCruce}),
+				    Tipos = Table.TransformColumnTypes(Todo, {{"Person Number", Int64.Type}, {"Nombre", type text}, {"ID Nacional Oracle", type text}, {"Género", type text}, {"Fecha Nacimiento", type date}, {"Fecha Ingreso", type date}, {"Antigüedad (años)", Int64.Type}, {"Ámbito", type text}, {"País", type text}, {"País Overview", type text}, {"Orden País", Int64.Type}, {"Entidad Legal", type text}, {"Código Entidad", type text}, {"Business Unit", type text}, {"Función", type text}, {"Grupo Funcional", type text}, {"Orden Grupo Funcional", Int64.Type}, {"Departamento", type text}, {"Puesto", type text}, {"Posición", type text}, {"Manager", type text}, {"Grade", type text}, {"Grade Nº", Int64.Type}, {"Grade Grupo", type text}, {"Nivel", type text}, {"Nivel Orden", Int64.Type}, {"Tipo de Costo", type text}, {"Labor Type", type text}, {"Base OHI", type text}, {"Cross Charge Entity Name", type text}, {"Esquema MBO", type text}, {"Orden Esquema MBO", Int64.Type}, {"Bonus Swap", type text}, {"Orden Bonus Swap", Int64.Type}, {"Country Code", type text}, {"Country_1", type text}, {"Legislation Code", type text}, {"Work Email", type text}, {"E-Mail Address", type text}, {"Manager Type", type text}, {"Manager Job Name", type text}, {"Position Code", type text}, {"Parent Manager 01 Work Email", type text}, {"Parent Manager 01 Person Number", Int64.Type}, {"Parent Manager 01 Name", type text}, {"Parent Manager 02 Person Number", Int64.Type}, {"Parent Manager 02 Name", type text}, {"Parent Manager 03 Person Number", Int64.Type}, {"Parent Manager 03 Name", type text}, {"Parent Manager 04 Person Number", Int64.Type}, {"Parent Manager 04 Name", type text}, {"Parent Manager 05 Person Number", Int64.Type}, {"Parent Manager 05 Name", type text}, {"Parent Manager 06 Person Number", Int64.Type}, {"Parent Manager 06 Name", type text}, {"Parent Manager 07 Person Number", Int64.Type}, {"Parent Manager 07 Name", type text}, {"Parent Manager 08 Person Number", Int64.Type}, {"Parent Manager 08 Name", type text}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

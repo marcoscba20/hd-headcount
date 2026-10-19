@@ -1,0 +1,170 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "CompFija",
+  "displayName": "Compensación Fija",
+  "width": 1920,
+  "height": 1900,
+  "displayOption": "FitToWidth",
+  "visualInteractions": [
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "293e1c9f67b169a883f0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "4d81ec5a03d640e54934",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "a87854bdb54012592a3b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-concepto",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-costo",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-kpi-anual",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-kpi-fijo",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-kpi-hc",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-kpi-prom",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-nota",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-slc-ambito",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-slc-fecha",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-slc-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-slc-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "40e63397a988d2c88d91",
+      "target": "cf-title",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "293e1c9f67b169a883f0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "4d81ec5a03d640e54934",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "a87854bdb54012592a3b",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-concepto",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-costo",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-kpi-anual",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-kpi-fijo",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-kpi-hc",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-kpi-prom",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-nota",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-slc-ambito",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-slc-fecha",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-slc-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-slc-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cf-slc-nombre",
+      "target": "cf-title",
+      "type": "NoFilter"
+    }
+  ]
+}

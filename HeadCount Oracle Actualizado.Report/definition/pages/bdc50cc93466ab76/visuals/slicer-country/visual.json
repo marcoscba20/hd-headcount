@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Country"
+                  "Property": "País"
                 }
               },
-              "queryRef": "Excel HC Oracle.Country",
+              "queryRef": "Dim Persona.País",
               "nativeQueryRef": "Country",
-              "active": true
+              "active": true,
+              "displayName": "Country"
             }
           ]
         }

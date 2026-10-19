@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Grade Grupo"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Grupo",
+              "queryRef": "Dim Persona.Grade Grupo",
               "nativeQueryRef": "Grade Grupo",
               "active": true
             }

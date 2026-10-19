@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Los dos orígenes son snapshots independientes y no están relacionados en el modelo: los filtros de Oracle afectan sólo a las columnas Oracle y los del archivo Manual sólo a las columnas Manual. Oracle = HC activo a hoy · Manual = ACT a Jun-2026.",
+                    "value": "Los dos orígenes son snapshots independientes que comparten las dimensiones Entidad Legal, Centro de Costo y Type: los filtros de Oracle afectan sólo a las columnas Oracle y los del archivo Manual sólo a las columnas Manual. Oracle = HC activo a hoy · Manual = ACT al último snapshot del archivo.",
                     "textStyle": {
                       "fontSize": "9pt",
                       "color": "#666666",

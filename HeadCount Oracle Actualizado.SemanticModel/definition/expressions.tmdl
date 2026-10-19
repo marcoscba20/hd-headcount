@@ -1,18 +1,3 @@
-expression SharePoint =
-		let
-		  Origen = SharePoint.Files("https://hdlaoti.sharepoint.com/sites/People-LATAM/", [ApiVersion = 15]),
-		    #"Filtro Carpeta HC Oracle" = Table.SelectRows(Origen, each ([Folder Path] = "https://hdlaoti.sharepoint.com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/")),
-		    #"Reporte Semanal LATAM xlsx_https://hdlaoti sharepoint com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/" = #"Filtro Carpeta HC Oracle"{[Name="Reporte Semanal LATAM.xlsx",#"Folder Path"="https://hdlaoti.sharepoint.com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/"]}[Content],
-		    #"Libro de Excel importado" = Excel.Workbook(#"Reporte Semanal LATAM xlsx_https://hdlaoti sharepoint com/sites/People-LATAM/Documentos compartidos/Área de Trabajo - Marcos/Modelos de Datos Power BI/HeadCount Oracle/"),
-		    #"Se expandió Data" = Table.ExpandTableColumn(#"Libro de Excel importado", "Data", {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15", "Column16", "Column17", "Column18", "Column19", "Column20", "Column21", "Column22", "Column23", "Column24", "Column25", "Column26", "Column27", "Column28", "Column29", "Column30", "Column31", "Column32", "Column33", "Column34", "Column35", "Column36", "Column37", "Column38", "Column39", "Column40", "Column41", "Column42"}, {"Data.Column1", "Data.Column2", "Data.Column3", "Data.Column4", "Data.Column5", "Data.Column6", "Data.Column7", "Data.Column8", "Data.Column9", "Data.Column10", "Data.Column11", "Data.Column12", "Data.Column13", "Data.Column14", "Data.Column15", "Data.Column16", "Data.Column17", "Data.Column18", "Data.Column19", "Data.Column20", "Data.Column21", "Data.Column22", "Data.Column23", "Data.Column24", "Data.Column25", "Data.Column26", "Data.Column27", "Data.Column28", "Data.Column29", "Data.Column30", "Data.Column31", "Data.Column32", "Data.Column33", "Data.Column34", "Data.Column35", "Data.Column36", "Data.Column37", "Data.Column38", "Data.Column39", "Data.Column40", "Data.Column41", "Data.Column42"})
-		in
-		  #"Se expandió Data"
-	lineageTag: fc74a87d-ca04-4dd2-b842-aae266a5519f
-
-	annotation PBI_NavigationStepName = Navegación
-
-	annotation PBI_ResultType = Table
-
 /// PARCHE TEMPORAL (2026-09-23): zona cross-charge de personas Global que Oracle trae sin Cross Charge Entity Name. Lee la hoja auxiliar 'Parche PBI' del archivo de HR. Retirar cuando Oracle esté corregido: ver docs/parches/cross-charge-global.md.
 expression 'Parche Cross Charge Global' =
 		let
@@ -32,6 +17,236 @@ expression 'Parche Cross Charge Global' =
 		in
 		    Parche
 	lineageTag: 3b8e6a52-1f0d-4c7e-9a41-6d2f5c8b7e10
+
+	annotation PBI_ResultType = Table
+
+/// Normaliza ID Nacional: mayúsculas, solo letras y dígitos, sin ceros a la izquierda; 'Sin Datos' y vacíos devuelven texto vacío.
+expression fnNormId =
+		(v as any) as text =>
+		let
+		    t = if v = null then "" else Text.Upper(Text.From(v)),
+		    s = Text.Select(t, {"0".."9", "A".."Z"}),
+		    r = Text.TrimStart(s, "0")
+		in
+		    if s = "SINDATOS" then "" else r
+	lineageTag: 56e5b6d5-810d-4890-a871-11418297f2ae
+
+	annotation PBI_ResultType = Function
+
+/// Hoja de datos del último archivo 'Salarios HC*.xlsx' (la que no empieza con "TC"), con las columnas usadas tomadas por encabezado de la fila 3.
+expression 'Salarios Origen' =
+		let
+		    Archivos = Table.SelectRows(Folder.Files("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\"), each Text.StartsWith([Name], "Salarios HC") and Text.EndsWith([Name], ".xlsx") and not Text.StartsWith([Name], "~$")),
+		    Ultimo = Table.Sort(Archivos, {{"Name", Order.Descending}}){0}[Content],
+		    Libro = Excel.Workbook(Ultimo, null, true),
+		    Hoja = Table.SelectRows(Libro, each [Kind] = "Sheet" and not Text.StartsWith(Text.Upper(Text.Trim([Item])), "TC")){0}[Data],
+		    // Columnas por encabezado (fila 3), no por posición: aguanta columnas insertadas. Si un encabezado no está, se usa la posición histórica.
+		    Enc = List.Transform(Record.ToList(Hoja{2}), each if _ = null then "" else Text.Upper(Text.Trim(Text.From(_)))),
+		    Mapa = {{"DATE", "Fecha Corte", 1}, {"PAÍS", "País Origen", 2}, {"ID NACIONAL", "ID Nacional", 4}, {"ENTIDAD LEGAL", "Entidad Legal", 13}, {"SALARIO BASE MENSUAL", "Salario Base", 21}, {"ASIGNACIÓN DE TRANSPORTE", "Asignación Transporte", 23}, {"ASIGNACIÓN DE ALIMENTACIÓN", "Asignación Alimentación", 24}, {"ASIGNACIÓN LÍNEA COMPAÑÍA", "Línea Compañía", 25}, {"SEGURO DE SALUD", "Seguro Salud", 26}, {"SEGURO DE VIDA", "Seguro Vida", 27}, {"CANTIDAD DE SALARIOS", "Cantidad de Salarios", 30}, {"NÚMERO DE HORAS TRABAJADAS", "FTE", 36}, {"BU ADJUSTED", "ACT/OFF", 46}, {"ORACLE ID", "Oracle ID", 65}},
+		    Renombres = List.Transform(Mapa, each let p = List.PositionOf(Enc, _{0}) in {"Column" & Text.From(if p >= 0 then p + 1 else _{2}), _{1}}),
+		    Datos = Table.Skip(Hoja, 3),
+		    Sel = Table.SelectColumns(Datos, List.Transform(Renombres, each _{0}), MissingField.UseNull),
+		    Ren = Table.RenameColumns(Sel, Renombres)
+		in
+		    Ren
+	lineageTag: b8b17abc-b63f-4ac3-a29b-fdbba7bb7a73
+
+	annotation PBI_ResultType = Table
+
+/// Export semanal de Oracle limpio (blindaje de nulos/errores, parche Cross Charge, Ámbito, Grade Nº, mapeos Overview) con clave Id Asignación. Base de Asignaciones, Dim Persona y Fact Movimientos.
+expression 'Oracle Base' = ```
+		let
+		    Origen = Excel.Workbook(File.Contents("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\pbi-headcount - Reporte Semanal LATAM.xlsx"), null, true),
+		    #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
+		    #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
+		    #"Columnas con nombre cambiado1" = Table.RenameColumns(#"Encabezados promovidos",{{"PER_ASG_DF_BONUS_SWAP_ELIGIBLE_v", "Bonus Swap Eligible"}, {"PER_ASG_DF_MBO_BONUS_SCHEME_v", "MBO Bonus Scheme"}}),
+		    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columnas con nombre cambiado1",{{"PER_ASG_DF_LOCAL_COST_CENTER_", "Local Cost Center"}, {"PER_ASG_DF_CRS_CHRG_NTY_N_v", "Cross Charge Entity Name"}}),
+		    #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Columnas con nombre cambiado", {{"National ID", type text}, {"Person Number", Int64.Type}, {"Display Name", type text}, {"Enterprise Hire Date", type date}, {"Antigüedad (años)", Int64.Type}, {"Position Name", type text}, {"Job Name", type text}, {"ZBB / COGS", type text}, {"Manager Type", type text}, {"Manager Display Name", type text}, {"E-Mail Address", type text}, {"Department Name", type text}, {"Local Cost Center", type text}, {"Level", type text}, {"Position Code", type text}, {"Legal Employer Name", type text}, {"Country", type text}, {"Cross Charge Entity Name", type text}, {"Assignment Status Code", type text}, {"Country Code", type text}, {"Country_1", type text}, {"Legislation Code", type text}, {"Grade Name", type text}, {"Work Email", type text}, {"Labor Type", type text}, {"Base OHI", type text}, {"Parent Manager 01 Person Number", Int64.Type}, {"Parent Manager 01 Name", type text}, {"Parent Manager 01 Work Email", type text}, {"Parent Manager 02 Person Number", Int64.Type}, {"Parent Manager 02 Name", type text}, {"Parent Manager 03 Person Number", Int64.Type}, {"Parent Manager 03 Name", type text}, {"Parent Manager 04 Person Number", Int64.Type}, {"Parent Manager 04 Name", type text}, {"Parent Manager 05 Person Number", Int64.Type}, {"Parent Manager 05 Name", type text}, {"Parent Manager 06 Person Number", Int64.Type}, {"Parent Manager 06 Name", type text}, {"Parent Manager 07 Person Number", Int64.Type}, {"Parent Manager 07 Name", type text}, {"Parent Manager 08 Person Number", Int64.Type}, {"Parent Manager 08 Name", type text}, {"Manager Job Name", type text}, {"EPM Main Function Name", type text}, {"Person Gender", type text}, {"Bonus Swap Eligible", type text}, {"MBO Bonus Scheme", type text}}, "es"),
+		    #"Tipo cambiado" = Table.TransformColumnTypes(#"Tipo de columna cambiado",{{"Termination Date", type date}, {"Person Date of Birth", type date}}),
+		
+		    // --- INICIO DEL BLINDAJE DINÁMICO ---
+		    
+		    // 1. Clasificamos las columnas por su tipo de dato leyendo el esquema desde el último paso
+		    Esquema = Table.Schema(#"Tipo cambiado"),
+		    ColsFechas = Table.SelectRows(Esquema, each [Kind] = "date" or [Kind] = "datetime")[Name],
+		    ColsNumeros = Table.SelectRows(Esquema, each [Kind] = "number")[Name],
+		    ColsTextos = Table.SelectRows(Esquema, each [Kind] = "text" or [Kind] = "any")[Name],
+		
+		    // 2. Blindaje contra ERRORES
+		    ErroresFechas = List.Transform(ColsFechas, each {_, #date(1900, 1, 1)}),
+		    ErroresNumeros = List.Transform(ColsNumeros, each {_, 99}),
+		    ErroresTextos = List.Transform(ColsTextos, each {_, "Sin Datos"}),
+		    ListaErrores = ErroresFechas & ErroresNumeros & ErroresTextos,
+		    
+		    // Si no hay errores definidos, pasamos de largo
+		    #"Blindaje Errores" = if List.IsEmpty(ListaErrores) then #"Tipo cambiado" else Table.ReplaceErrorValues(#"Tipo cambiado", ListaErrores),
+		
+		    // 3. Blindaje contra NULOS (Vacíos)
+		    #"Blindaje Nulos Fechas" = if List.IsEmpty(ColsFechas) then #"Blindaje Errores" else Table.ReplaceValue(#"Blindaje Errores", null, #date(1900, 1, 1), Replacer.ReplaceValue, ColsFechas),
+		    #"Blindaje Nulos Numeros" = if List.IsEmpty(ColsNumeros) then #"Blindaje Nulos Fechas" else Table.ReplaceValue(#"Blindaje Nulos Fechas", null, 99, Replacer.ReplaceValue, ColsNumeros),
+		    #"Blindaje Nulos Textos" = if List.IsEmpty(ColsTextos) then #"Blindaje Nulos Numeros" else Table.ReplaceValue(#"Blindaje Nulos Numeros", null, "Sin Datos", Replacer.ReplaceValue, ColsTextos),
+		    
+		    // 4. Blindaje extra para Textos: Celdas en blanco ("") que no aparecen como null
+		    #"Blindaje Vacios Textos" = if List.IsEmpty(ColsTextos) then #"Blindaje Nulos Textos" else Table.ReplaceValue(#"Blindaje Nulos Textos", "", "Sin Datos", Replacer.ReplaceValue, ColsTextos),
+		
+		    // Country vacío en Oracle (mayormente bajas en proceso): se completa con Country_1 (país de la legislación de la entidad legal)
+		    #"Country Completado" = Table.ReplaceValue(#"Blindaje Vacios Textos", each [Country], each if List.Contains({"Sin Datos", "None"}, [Country]) and not List.Contains({"Sin Datos", "None"}, [Country_1]) then [Country_1] else [Country], Replacer.ReplaceValue, {"Country"}),
+		
+		    // --- PARCHE TEMPORAL Cross Charge (2026-09-23) - ver docs/parches/cross-charge-global.md ---
+		    // Solo completa personas sin Cross Charge en NINGUNA fila de Oracle; nunca pisa un valor de Oracle.
+		    PersonasConCC = List.Buffer(List.Distinct(Table.SelectRows(#"Blindaje Vacios Textos", each not List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]))[Person Number])),
+		    #"Parche Unido" = Table.NestedJoin(#"Country Completado", {"Person Number"}, #"Parche Cross Charge Global", {"Person Number"}, "Parche", JoinKind.LeftOuter),
+		    #"Parche Expandido" = Table.ExpandTableColumn(#"Parche Unido", "Parche", {"Zona Parche"}),
+		    #"Parche Marcado" = Table.AddColumn(#"Parche Expandido", "Cross Charge Origen", each if [Zona Parche] <> null and [Cross Charge Entity Name] = "Sin Datos" and not List.Contains(PersonasConCC, [Person Number]) then "Parche manual (Global Employees)" else if List.Contains({"Sin Datos", "None"}, [Cross Charge Entity Name]) then "Sin Datos" else "Oracle", type text),
+		    #"Parche Aplicado" = Table.ReplaceValue(#"Parche Marcado", each [Cross Charge Entity Name], each if [Cross Charge Origen] = "Parche manual (Global Employees)" then [Zona Parche] else [Cross Charge Entity Name], Replacer.ReplaceValue, {"Cross Charge Entity Name"}),
+		    #"Cross Charge Parcheado" = Table.RemoveColumns(#"Parche Aplicado", {"Zona Parche"}),
+		
+		    // Ámbito desde Cross Charge: sin dato -> Local; 243 HD LAO o zona LATAM -> LATAM; entidad que es Legal Employer del export (países LATAM) -> Local; resto -> Global
+		    CodigosLocales = List.Buffer(List.Distinct(List.Transform(#"Blindaje Vacios Textos"[Legal Employer Name], each Text.BeforeDelimiter(Text.Trim(_), " ")))),
+		    #"Ambito Fila" = Table.AddColumn(#"Cross Charge Parcheado", "Ámbito Fila", each let cc = Text.Trim([Cross Charge Entity Name]), cod = Text.BeforeDelimiter(cc, " ") in if List.Contains({"Sin Datos", "None", ""}, cc) then "Local" else if cod = "243" or Text.Upper(cc) = "LATAM" then "LATAM" else if List.Contains(CodigosLocales, cod) then "Local" else "Global", type text),
+		    // Se lleva a nivel persona (prioridad Global > LATAM > Local) para que una persona no quede en dos ámbitos por sus filas sin cross charge
+		    PersonasGlobal = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "Global")[Person Number])),
+		    PersonasLATAM = List.Buffer(List.Distinct(Table.SelectRows(#"Ambito Fila", each [Ámbito Fila] = "LATAM")[Person Number])),
+		    #"Ambito Persona" = Table.AddColumn(#"Ambito Fila", "Ámbito", each if List.Contains(PersonasGlobal, [Person Number]) then "Global" else if List.Contains(PersonasLATAM, [Person Number]) then "LATAM" else "Local", type text),
+		    #"Ambito Agregado" = Table.RemoveColumns(#"Ambito Persona", {"Ámbito Fila"}),
+		
+		    // Grade Nº: extrae el número de "Grade N" (proxy salarial). "Sin Datos"/errores -> 99
+		    #"Grade Nº Agregado" = Table.AddColumn(#"Ambito Agregado", "Grade Nº", each try Number.From(Text.AfterDelimiter([Grade Name], "Grade ")) otherwise 99, Int64.Type),
+		
+		    // --- Mapeos para la hoja Overview ---
+		    #"Grupo Funcional Agregado" = Table.AddColumn(#"Grade Nº Agregado", "Grupo Funcional", each let f = [EPM Main Function Name] in if f = "Operations" then "Total COGS Functions" else if f = "Selling" then "Total Selling Functions" else if f = "Marketing" then "Total Marketing Functions" else if f = "Research & Development" then "Research & Development" else if f = "General & Administrative" or f = "FP&A" then "Total G&A Functions" else "Sin Definir", type text),
+		    #"Orden Grupo Agregado" = Table.AddColumn(#"Grupo Funcional Agregado", "Orden Grupo Funcional", each let g = [Grupo Funcional] in if g = "Total COGS Functions" then 1 else if g = "Total Selling Functions" then 2 else if g = "Total Marketing Functions" then 3 else if g = "Research & Development" then 4 else if g = "Total G&A Functions" then 5 else 6, Int64.Type),
+		    #"Pais Overview Agregado" = Table.AddColumn(#"Orden Grupo Agregado", "País Overview", each let c = [Country] in if c = "Chile" or c = "Peru" then "Chile & Perú" else if c = "Colombia" or c = "Panama" then "Colombia & Panamá" else if c = "Sin Datos" then "Global" else c, type text),
+		    #"Orden Pais Agregado" = Table.AddColumn(#"Pais Overview Agregado", "Orden País", each let p = [País Overview] in if p = "Argentina" then 1 else if p = "Brazil" then 2 else if p = "Mexico" then 3 else if p = "Chile & Perú" then 4 else if p = "Colombia & Panamá" then 5 else if p = "Global" then 6 else 9, Int64.Type),
+		    // Clave de asignación (fila del export). La usan Asignaciones y Fact Movimientos.
+		    Indice = Table.AddIndexColumn(#"Orden Pais Agregado", "Id Asignación", 1, 1, Int64.Type)
+		in
+		    Indice
+		```
+	lineageTag: 427ac140-3355-4049-8271-b1d8a0dcc771
+
+	annotation PBI_ResultType = Table
+
+/// Oracle ordenado por activo y Person Number desc, con ID Nacional normalizado. Regla de desempate para el cruce por ID Nacional.
+expression 'Oracle Ordenado' =
+		let
+		    Oracle = Table.SelectRows(#"Oracle Base", each [Person Number] <> 99),
+		    Activo = Table.AddColumn(Oracle, "Activo", each if [Assignment Status Code] = "ACTIVE_PROCESS" then 1 else 0, Int64.Type),
+		    Nid = Table.AddColumn(Activo, "NID Norm", each fnNormId([National ID]), type text),
+		    Ordenado = Table.Buffer(Table.Sort(Nid, {{"Activo", Order.Descending}, {"Person Number", Order.Descending}}))
+		in
+		    Ordenado
+	lineageTag: c1f69105-18ee-4146-b290-33176d382bf5
+
+	annotation PBI_ResultType = Table
+
+/// Una fila por Person Number de Oracle (se queda con la asignación activa, si no la de mayor orden).
+expression 'Oracle Persona Unica' =
+		let
+		    Unica = Table.Distinct(#"Oracle Ordenado", {"Person Number"})
+		in
+		    Unica
+	lineageTag: db667955-32dd-430d-b2f8-6d213171d89c
+
+	annotation PBI_ResultType = Table
+
+/// Base de compensación: una fila por persona y mes del archivo de salarios, con cruce a Oracle (Oracle ID, fallback ID Nacional), moneda, clave TC (hoja TC: Entidad Legal, fallback País), cantidad de salarios y flags de calidad.
+expression 'Compensación Base' =
+		let
+		    Origen = #"Salarios Origen",
+		    Cols = Table.SelectColumns(Origen, {"Fecha Corte", "País Origen", "ID Nacional", "Entidad Legal", "Salario Base", "Asignación Transporte", "Asignación Alimentación", "Línea Compañía", "Seguro Salud", "Seguro Vida", "Cantidad de Salarios", "FTE", "ACT/OFF", "Oracle ID"}, MissingField.UseNull),
+		    SinErrores = Table.ReplaceErrorValues(Cols, List.Transform(Table.ColumnNames(Cols), each {_, null})),
+		    Ren = SinErrores,
+		    ToDate = (v as any) as nullable date => try Date.From(v) otherwise null,
+		    ToNum = (v as any) as nullable number => try (if v = null then null else if v is number then v else Number.FromText(Text.Trim(Text.From(v)), "en-US")) otherwise null,
+		    ToNum0 = (v as any) as number => let n = ToNum(v) in if n = null then 0 else n,
+		    ToId = (v as any) as nullable number => try (let n = ToNum(v) in if n = null or n <= 0 then null else Int64.From(n)) otherwise null,
+		    YN = (v as any) as text => let t = if v = null then "" else Text.Upper(Text.Trim(Text.From(v))) in if t = "Y" then "Sí" else if t = "N" or t = "0" then "No" else "Sin dato",
+		    Fechas = Table.TransformColumns(Ren, {{"Fecha Corte", ToDate, type date}}),
+		    ConFecha = Table.SelectRows(Fechas, each [Fecha Corte] <> null and [País Origen] <> null),
+		    Tipos = Table.TransformColumns(ConFecha, {{"Oracle ID", ToId, Int64.Type}, {"ID Nacional", each if _ = null then null else Text.Trim(Text.From(_)), type text}, {"País Origen", each Text.Trim(Text.From(_)), type text}, {"Salario Base", ToNum, type number}, {"Asignación Transporte", ToNum, type number}, {"Asignación Alimentación", ToNum, type number}, {"Línea Compañía", YN, type text}, {"Seguro Salud", YN, type text}, {"Seguro Vida", YN, type text}, {"Cantidad de Salarios", ToNum0, type number}, {"FTE", ToNum0, type number}, {"ACT/OFF", each if _ = null then null else Text.Trim(Text.From(_)), type text}, {"Entidad Legal", each if _ = null then null else Text.Trim(Text.From(_)), type text}}),
+		    NidN = Table.AddColumn(Tipos, "NID Norm", each fnNormId([ID Nacional]), type text),
+		    // Paso 1: Oracle ID = Person Number
+		    J1 = Table.NestedJoin(NidN, {"Oracle ID"}, #"Oracle Persona Unica", {"Person Number"}, "O1", JoinKind.LeftOuter),
+		    E1 = Table.ExpandTableColumn(J1, "O1", {"Person Number", "Country Code", "NID Norm"}, {"PN Oracle ID", "CC Oracle ID", "NID Persona"}),
+		    // Paso 2 (fallback): ID Nacional normalizado -> Person Number (activo primero, luego mayor)
+		    MapNid = Table.Distinct(Table.SelectRows(#"Oracle Ordenado", each [NID Norm] <> ""), {"NID Norm"}),
+		    J2 = Table.NestedJoin(E1, {"NID Norm"}, MapNid, {"NID Norm"}, "O2", JoinKind.LeftOuter),
+		    E2 = Table.ExpandTableColumn(J2, "O2", {"Person Number", "Country Code"}, {"PN Nacional", "CC Nacional"}),
+		    Resuelto = Table.AddColumn(E2, "Person Number Resuelto", each if [PN Oracle ID] <> null then [PN Oracle ID] else if [NID Norm] <> "" and [PN Nacional] <> null then [PN Nacional] else -1, Int64.Type),
+		    Metodo = Table.AddColumn(Resuelto, "Método Cruce", each if [PN Oracle ID] <> null then "Oracle ID" else if [NID Norm] <> "" and [PN Nacional] <> null then "ID Nacional" else "Sin cruce", type text),
+		    CC = Table.AddColumn(Metodo, "Country Code", each if [PN Oracle ID] <> null then [CC Oracle ID] else if [NID Norm] <> "" and [PN Nacional] <> null then [CC Nacional] else null, type text),
+		    // Moneda: por Country Code de Oracle; si no hay cruce, por el código del archivo de salarios
+		    PaisesOracle = Table.SelectRows(#"Dim País", each [Country Code] <> null),
+		    RecCC = Record.FromList(PaisesOracle[Moneda], PaisesOracle[Country Code]),
+		    RecMan = Record.FromList(#"Dim País"[Moneda], #"Dim País"[País Origen]),
+		    Moneda = Table.AddColumn(CC, "Moneda", each if [Country Code] <> null and Record.HasFields(RecCC, [Country Code]) then Record.Field(RecCC, [Country Code]) else if Record.HasFields(RecMan, [País Origen]) then Record.Field(RecMan, [País Origen]) else null, type text),
+		    // Cantidad de Salarios: si viene vacía o en 0, se toma la de ley del país ('Dim País'[Sueldos Anuales]). AE (Area Expense) usa el país de empleo de Oracle.
+		    PaisesLey = Table.SelectRows(#"Dim País", each [Sueldos Anuales] <> null),
+		    RecSal = Record.FromList(PaisesLey[Sueldos Anuales], PaisesLey[País Origen]),
+		    RecCM = Record.FromList(PaisesOracle[País Origen], PaisesOracle[Country Code]),
+		    PaisLey = Table.AddColumn(Moneda, "País Ley", each if [País Origen] <> "AE" then [País Origen] else if [Country Code] <> null and Record.HasFields(RecCM, [Country Code]) then Record.Field(RecCM, [Country Code]) else null, type text),
+		    // Clave TC (hoja TC del archivo): primero la columna "Entidad Legal" (M), igual que la fórmula del archivo, también para AE; si no está en la hoja, el País Ley (código del archivo; AE usa el país de empleo de Oracle, no la fila AE de la hoja).
+		    TC = Table.Buffer(#"TC Origen"),
+		    ClavesTC = List.Buffer(TC[Clave TC]),
+		    RecTCSal = Record.FromList(TC[Sueldos Anuales], TC[Clave TC]),
+		    ClaveTC = Table.AddColumn(PaisLey, "Clave TC", each let e = if [Entidad Legal] = null then null else "E|" & Text.Upper([Entidad Legal]), p = if [País Ley] = null then null else "P|" & Text.Upper([País Ley]) in if e <> null and List.Contains(ClavesTC, e) then e else if p <> null and List.Contains(ClavesTC, p) then p else null, type text),
+		    // Cantidad de Salarios: hoja TC (entidad o país); si falta, la columna del archivo; si viene vacía o en 0, la de ley del país ('Dim País'[Sueldos Anuales]).
+		    SalHoja = Table.AddColumn(ClaveTC, "Sal Hoja", each if [Clave TC] = null then null else Record.FieldOrDefault(RecTCSal, [Clave TC], null), type nullable number),
+		    ConOrigenSal = Table.AddColumn(SalHoja, "Origen Cantidad Salarios", each if [Sal Hoja] <> null and [Sal Hoja] > 0 then (if Text.StartsWith([Clave TC], "E|") then "Hoja TC (Entidad)" else "Hoja TC (País)") else if [Cantidad de Salarios] > 0 then "Archivo" else if [País Ley] <> null and Record.HasFields(RecSal, [País Ley]) then "Tabla por país" else "Sin dato", type text),
+		    ConSal = Table.ReplaceValue(ConOrigenSal, each [Cantidad de Salarios], each if Text.StartsWith([Origen Cantidad Salarios], "Hoja TC") then [Sal Hoja] else if [Origen Cantidad Salarios] = "Tabla por país" then Record.Field(RecSal, [País Ley]) else [Cantidad de Salarios], Replacer.ReplaceValue, {"Cantidad de Salarios"}),
+		    SalTipo = Table.TransformColumnTypes(ConSal, {{"Cantidad de Salarios", type number}}),
+		    // Flags de calidad
+		    Disc = Table.AddColumn(SalTipo, "ID Nacional Discrepante", each [PN Oracle ID] <> null and [NID Norm] <> "" and [NID Persona] <> null and [NID Persona] <> "" and [NID Persona] <> [NID Norm], type logical),
+		    Conteo = Table.Group(Table.SelectRows(Disc, each [Oracle ID] <> null), {"Fecha Corte", "Oracle ID"}, {{"Cant", each Table.RowCount(_), Int64.Type}}),
+		    JD = Table.NestedJoin(Disc, {"Fecha Corte", "Oracle ID"}, Conteo, {"Fecha Corte", "Oracle ID"}, "D", JoinKind.LeftOuter),
+		    ED = Table.ExpandTableColumn(JD, "D", {"Cant"}, {"Cant Oracle ID"}),
+		    Dup = Table.AddColumn(ED, "Oracle ID Duplicado", each [Cant Oracle ID] <> null and [Cant Oracle ID] > 1, type logical),
+		    Final = Table.SelectColumns(Dup, {"Fecha Corte", "Person Number Resuelto", "Método Cruce", "Oracle ID", "ID Nacional", "País Origen", "Country Code", "Moneda", "Salario Base", "Asignación Transporte", "Asignación Alimentación", "Línea Compañía", "Seguro Salud", "Seguro Vida", "FTE", "ACT/OFF", "Clave TC", "Cantidad de Salarios", "Origen Cantidad Salarios", "ID Nacional Discrepante", "Oracle ID Duplicado"})
+		in
+		    Final
+	lineageTag: 0f090066-fdb4-4d00-86dd-7371371a396c
+
+	annotation PBI_ResultType = Table
+
+/// Hoja 'TC' (o 'TC y Salarios Anuales') del archivo de salarios: tipo de cambio fijo (USD por unidad de moneda local) y cantidad de sueldos anuales. Dos bloques en una sola tabla: por Entidad Legal (columnas H:J, clave "E|") y por País del archivo (columnas A:E, clave "P|"). Base de 'Tipo de Cambio' y de la clave TC de 'Compensación Base'.
+expression 'TC Origen' =
+		let
+		    Archivos = Table.SelectRows(Folder.Files("C:\Users\Marcos\OneDrive - hdlaoti\People LATAM - Documentos\Área de Trabajo - Marcos\Modelos de Datos Power BI\HeadCount Oracle\"), each Text.StartsWith([Name], "Salarios HC") and Text.EndsWith([Name], ".xlsx") and not Text.StartsWith([Name], "~$")),
+		    Ultimo = Table.Sort(Archivos, {{"Name", Order.Descending}}){0}[Content],
+		    Libro = Excel.Workbook(Ultimo, null, true),
+		    Hoja = Table.SelectRows(Libro, each [Kind] = "Sheet" and Text.StartsWith(Text.Upper(Text.Trim([Item])), "TC")){0}[Data],
+		    Datos = Table.Skip(Hoja, 1),
+		    Txt = (v as any) as nullable text => let t = if v = null then null else Text.Trim(Text.From(v)) in if t = "" then null else t,
+		    ToNum = (v as any) as nullable number => try (if v = null then null else if v is number then v else Number.FromText(Text.Replace(Text.Trim(Text.From(v)), "=", ""), "en-US")) otherwise null,
+		    Campo = (r as record, c as text) as any => Record.FieldOrDefault(r, c, null),
+		    Tipo = type table [#"Clave TC" = text, #"Tipo Clave" = text, Referencia = text, Moneda = nullable text, #"TC USD x LC" = nullable number, #"Sueldos Anuales" = nullable number],
+		    // Bloque por país: A = código del archivo, B = país, C = TC, D = moneda, E = sueldos al año
+		    Pais = Table.FromRecords(List.Transform(List.Select(Table.ToRecords(Datos), each Txt(Campo(_, "Column1")) <> null), each [
+		        #"Clave TC" = "P|" & Text.Upper(Txt(Campo(_, "Column1"))),
+		        #"Tipo Clave" = "País",
+		        Referencia = Txt(Campo(_, "Column2")),
+		        Moneda = if Txt(Campo(_, "Column4")) = null then null else Text.Upper(Txt(Campo(_, "Column4"))),
+		        #"TC USD x LC" = ToNum(Campo(_, "Column3")),
+		        #"Sueldos Anuales" = ToNum(Campo(_, "Column5"))
+		    ]), Tipo),
+		    PaisOk = Table.SelectRows(Pais, each [#"TC USD x LC"] <> null),
+		    // Bloque por entidad legal: H = entidad (como viene en la columna "Entidad Legal" del archivo), I = TC, J = sueldos al año. La moneda se infiere del bloque por país con el mismo TC.
+		    MonedaPorTC = (tc as nullable number) as nullable text => let m = Table.SelectRows(PaisOk, each [#"TC USD x LC"] = tc)[Moneda] in if tc = null or List.IsEmpty(m) then null else m{0},
+		    Entidad = Table.FromRecords(List.Transform(List.Select(Table.ToRecords(Datos), each Txt(Campo(_, "Column8")) <> null), each [
+		        #"Clave TC" = "E|" & Text.Upper(Txt(Campo(_, "Column8"))),
+		        #"Tipo Clave" = "Entidad Legal",
+		        Referencia = Txt(Campo(_, "Column8")),
+		        Moneda = MonedaPorTC(ToNum(Campo(_, "Column9"))),
+		        #"TC USD x LC" = ToNum(Campo(_, "Column9")),
+		        #"Sueldos Anuales" = ToNum(Campo(_, "Column10"))
+		    ]), Tipo),
+		    EntidadOk = Table.SelectRows(Entidad, each [#"TC USD x LC"] <> null),
+		    Union = Table.Combine({EntidadOk, PaisOk}),
+		    Final = Table.Distinct(Union, {"Clave TC"})
+		in
+		    Final
+	lineageTag: c4fe315c-6b1e-4a6d-8d14-27fd28c44d45
 
 	annotation PBI_ResultType = Table
 

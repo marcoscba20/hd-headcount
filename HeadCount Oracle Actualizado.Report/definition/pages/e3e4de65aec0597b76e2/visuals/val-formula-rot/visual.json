@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · Fórmula Rotación"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · Fórmula Rotación",
+              "queryRef": "Asignaciones.Val · Fórmula Rotación",
               "nativeQueryRef": "Val · Fórmula Rotación"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Val · Fórmula Rotación"

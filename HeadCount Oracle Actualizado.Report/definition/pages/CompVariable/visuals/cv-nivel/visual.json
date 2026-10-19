@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "cv-nivel",
   "position": {
-    "x": 980,
-    "y": 290,
+    "x": 980.46535882879846,
+    "y": 290.26054961234553,
     "z": 7000,
-    "height": 340,
-    "width": 900,
+    "height": 339.75197973057954,
+    "width": 918.93547273585887,
     "tabOrder": 7000
   },
   "visual": {
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Esquema MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "queryRef": "Dim Persona.Esquema MBO",
               "nativeQueryRef": "Esquema MBO",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Dim Persona.Nivel",
               "nativeQueryRef": "Nivel",
               "active": true
             }
@@ -58,13 +58,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             },
             {
@@ -72,13 +72,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "% del Total HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.% del Total HC Activo",
+              "queryRef": "Asignaciones.% del Total HC Activo",
               "nativeQueryRef": "% del Total HC Activo"
             }
           ]
@@ -91,7 +91,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Dim Persona"
                   }
                 },
                 "Property": "Nivel"
@@ -102,6 +102,181 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "67.24758500793581D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Dim Persona.Nivel"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "92.1709766302684D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "Dim Persona"
+                          }
+                        },
+                        "Property": "Esquema MBO"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'No Aplica'"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "metadata": "Asignaciones.% del Total HC Activo"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58.62392320748014D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "Dim Persona"
+                          }
+                        },
+                        "Property": "Esquema MBO"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'No Aplica'"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "metadata": "Asignaciones.HC Activo"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "90.83337075211756D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "Dim Persona"
+                          }
+                        },
+                        "Property": "Esquema MBO"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Sin MBO'"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "metadata": "Asignaciones.% del Total HC Activo"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "93.50858250841922D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "Dim Persona"
+                          }
+                        },
+                        "Property": "Esquema MBO"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Con MBO'"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "metadata": "Asignaciones.% del Total HC Activo"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [

@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rango Antigüedad"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rango Antigüedad",
+              "queryRef": "Asignaciones.Rango Antigüedad",
               "nativeQueryRef": "Rango Antigüedad",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Grade Name"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
+              "queryRef": "Asignaciones.Grade Name",
               "nativeQueryRef": "Grade Name",
               "active": true
             }
@@ -58,13 +58,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Bajas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Bajas",
+              "queryRef": "Asignaciones.Bajas",
               "nativeQueryRef": "Bajas"
             }
           ]
@@ -77,7 +77,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Bajas"

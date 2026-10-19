@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "dd-slc-mbo",
   "position": {
-    "x": 1441.92,
-    "y": 0,
-    "z": 1000,
-    "height": 77.581160725880366,
-    "width": 197.99,
+    "x": 1376.5669025738077,
+    "y": 0.13324724552880035,
+    "z": 2000,
+    "height": 78.048782006605961,
+    "width": 198.94787570311323,
     "tabOrder": 1000
   },
   "visual": {
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Esquema MBO"
                 }
               },
-              "queryRef": "Excel HC Oracle.Esquema MBO",
+              "queryRef": "Dim Persona.Esquema MBO",
               "nativeQueryRef": "Esquema MBO",
               "active": true
             }

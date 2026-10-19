@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · MBO Inconsistente"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · MBO Inconsistente",
+              "queryRef": "Asignaciones.Val · MBO Inconsistente",
               "nativeQueryRef": "Val · MBO Inconsistente"
             }
           ]
