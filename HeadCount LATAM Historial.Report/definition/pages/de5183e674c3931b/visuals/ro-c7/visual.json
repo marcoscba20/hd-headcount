@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Tasa Contratación %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Tasa Contratación %",
+              "queryRef": "Asignaciones.Tasa Contratación %",
               "nativeQueryRef": "Tasa Contratación %"
             }
           ]

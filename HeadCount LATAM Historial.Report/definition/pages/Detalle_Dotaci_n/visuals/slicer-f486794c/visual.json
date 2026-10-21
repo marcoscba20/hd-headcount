@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "slicer-f486794c",
   "position": {
-    "x": 411.98,
-    "y": 0,
-    "z": 5000,
+    "x": 412.42042659184517,
+    "y": 0.13324724552880035,
+    "z": 6000,
     "height": 77.581160725880366,
     "width": 197.99,
     "tabOrder": 5000
@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Country"
+                  "Property": "País"
                 }
               },
-              "queryRef": "Excel HC Oracle.Country",
+              "queryRef": "Dim Persona.País",
               "nativeQueryRef": "Country",
-              "active": true
+              "active": true,
+              "displayName": "Country"
             }
           ]
         }

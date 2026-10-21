@@ -3,6 +3,208 @@
   "name": "CompVariable",
   "displayName": "Compensación Variable",
   "width": 1920,
-  "height": 1400,
-  "displayOption": "FitToWidth"
+  "height": 1950,
+  "displayOption": "FitToWidth",
+  "visualInteractions": [
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c1",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c4",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c5",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-c6",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-gen-bar",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-gen-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-nivel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-nota",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-rot-mes",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-rot-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-slc-entidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-slc-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-slc-nivel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-slc-nombre",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-slc-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-swap-donut",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-person",
+      "target": "cv-title",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c1",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c3",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c4",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c5",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-c6",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-gen-bar",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-gen-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-nivel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-nota",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-rot-mes",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-rot-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-slc-entidad",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-slc-grade",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-slc-nivel",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-slc-pais",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-slc-person",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-swap-donut",
+      "type": "NoFilter"
+    },
+    {
+      "source": "cv-slc-nombre",
+      "target": "cv-title",
+      "type": "NoFilter"
+    }
+  ]
 }

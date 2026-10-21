@@ -1,10 +1,10 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "slicer-392e8bf3",
   "position": {
     "x": 0,
-    "y": 0,
-    "z": 7000,
+    "y": 0.13324724552880035,
+    "z": 8000,
     "height": 77.581160725880366,
     "width": 197.99,
     "tabOrder": 7000
@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Legal Employer Name"
+                  "Property": "Entidad Legal"
                 }
               },
-              "queryRef": "Excel HC Oracle.Legal Employer Name",
-              "nativeQueryRef": "Legal Employer Name",
-              "active": true
+              "queryRef": "Dim Persona.Entidad Legal",
+              "nativeQueryRef": "Entidad Legal",
+              "active": true,
+              "displayName": "Legal Employer Name"
             }
           ]
         }

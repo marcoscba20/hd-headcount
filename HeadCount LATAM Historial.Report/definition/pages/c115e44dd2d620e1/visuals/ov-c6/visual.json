@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Edad Promedio"
                 }
               },
-              "queryRef": "Excel HC Oracle.Edad Promedio",
+              "queryRef": "Asignaciones.Edad Promedio",
               "nativeQueryRef": "Edad Promedio"
             }
           ]

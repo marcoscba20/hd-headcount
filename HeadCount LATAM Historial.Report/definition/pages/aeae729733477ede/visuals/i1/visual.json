@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Promedio (años)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad Promedio (años)",
+              "queryRef": "Asignaciones.Antigüedad Promedio (años)",
               "nativeQueryRef": "Antigüedad Promedio (años)"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Antigüedad Promedio (años)"

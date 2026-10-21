@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Δ HC vs Mes Anterior"
                 }
               },
-              "queryRef": "Excel HC Oracle.Δ HC vs Mes Anterior",
+              "queryRef": "Asignaciones.Δ HC vs Mes Anterior",
               "nativeQueryRef": "Δ HC vs Mes Anterior"
             }
           ]

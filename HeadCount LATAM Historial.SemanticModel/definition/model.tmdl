@@ -9,24 +9,28 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["SharePoint","Parche Cross Charge Global","Fuente Historial Asignaciones","Columnas Historial","Limpiar HC","Excel HC Oracle","Asignaciones Historial","HC Manual LATAM","Países"]
+annotation PBI_QueryOrder = ["Parche Cross Charge Global","Fuente Historial Asignaciones","Columnas Historial","Limpiar HC","Oracle Base","Asignaciones","Fact Movimientos","Asignaciones Historial","HC Manual LATAM","Dim País","Salarios Origen","TC Origen","Tipo de Cambio","Oracle Ordenado","Oracle Persona Unica","Compensación Base","Dim Persona","Dim Entidad Legal","Dim Centro de Costo","Dim Type","Dim Concepto Compensación","Fact Compensación","Fact Compensación Persona","fnNormId"]
 
-annotation PBI_ProTooling = ["DevMode"]
+annotation PBI_ProTooling = ["DevMode","MCP-PBIModeling"]
 
-ref table 'Excel HC Oracle'
+ref table Asignaciones
+ref table 'Fact Movimientos'
 ref table 'Asignaciones Historial'
 ref table Calendario
 ref table 'HC Manual LATAM'
-ref table Países
 ref table 'Dim Entidad Legal'
 ref table 'Dim Centro de Costo'
 ref table 'Dim Type'
-ref table 'Calendario Ingreso'
-ref table 'Calendario Baja'
 ref table 'Movimiento HC'
 ref table 'Desglose Turnover'
 ref table 'People Excellence KPI'
 ref table 'People Excellence Columna'
+ref table 'Tipo de Cambio'
+ref table 'Dim País'
+ref table 'Dim Persona'
+ref table 'Dim Concepto Compensación'
+ref table 'Fact Compensación'
+ref table 'Fact Compensación Persona'
 
 ref cultureInfo es-AR
 

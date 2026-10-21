@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Val · Bajas Duplicadas"
                 }
               },
-              "queryRef": "Excel HC Oracle.Val · Bajas Duplicadas",
+              "queryRef": "Asignaciones.Val · Bajas Duplicadas",
               "nativeQueryRef": "Val · Bajas Duplicadas"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "Val · Bajas Duplicadas"

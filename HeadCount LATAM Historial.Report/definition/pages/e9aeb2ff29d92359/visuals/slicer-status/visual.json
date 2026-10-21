@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Assignment Status Code"
                 }
               },
-              "queryRef": "Excel HC Oracle.Assignment Status Code",
+              "queryRef": "Asignaciones.Assignment Status Code",
               "nativeQueryRef": "Assignment Status Code",
               "active": true
             }

@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "dd-slc-nivel",
   "position": {
-    "x": 1235.93,
-    "y": 0,
-    "z": 0,
+    "x": 1237.2612797755355,
+    "y": 0.13324724552880035,
+    "z": 1000,
     "height": 77.581160725880366,
-    "width": 197.99,
+    "width": 131.08540950234959,
     "tabOrder": 0
   },
   "visual": {
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Nivel"
                 }
               },
-              "queryRef": "Excel HC Oracle.Nivel",
+              "queryRef": "Dim Persona.Nivel",
               "nativeQueryRef": "Nivel",
               "active": true
             }

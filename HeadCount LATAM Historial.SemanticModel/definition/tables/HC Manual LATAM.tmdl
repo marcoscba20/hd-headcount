@@ -1,9 +1,14 @@
-/// Snapshot manual de headcount a Junio 2026 (hoja "2026" del archivo HeadCount Manual LATAM.xlsx). Tabla DESCONECTADA: no tiene relaciones con el resto del modelo.
+/// Snapshot manual de headcount: último corte (Fecha Snapshot más reciente) del archivo HeadCount Manual LATAM.xlsx, hoja "2026". Comparte con Asignaciones las dimensiones Entidad Legal, Centro de Costo y Type (hoja Data Quality).
 table 'HC Manual LATAM'
 	lineageTag: 3f8c1a92-6d47-4b05-9e21-7c4a5b8de013
 
-	/// Headcount del archivo manual a Junio 2026. Cuenta solo las personas con ACT/OFF = "ACT". Zone y País Overview se filtran desde los slicers de la página.
-	measure 'HC Manual Jun-2026' =
+	/// Headcount del archivo manual al último snapshot. Cuenta solo las personas con ACT/OFF = "ACT". Zone y País Overview se filtran desde los slicers de la página.
+	/// Fecha del snapshot del archivo manual (mmm-yyyy), para títulos.
+	measure 'Fecha Snapshot Manual' = FORMAT ( MAX ( 'HC Manual LATAM'[Fecha Snapshot] ), "mmm-yyyy" )
+		displayFolder: 09 · HeadCount Manual (Excel)
+		lineageTag: f65797d3-049e-4b71-b131-682584a0cead
+
+	measure 'HC Manual' =
 			CALCULATE (
 			    COUNTROWS ( 'HC Manual LATAM' ),
 			    'HC Manual LATAM'[ACT/OFF] = "ACT"
@@ -276,7 +281,7 @@ table 'HC Manual LATAM'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Código del centro de costo local (columna "ID Centro de Costo" del Excel Manual). Clave de cruce contra 'Excel HC Oracle'[Local Cost Center].
+	/// Código del centro de costo local (columna "ID Centro de Costo" del Excel Manual). Clave de cruce contra 'Asignaciones'[Local Cost Center].
 	column 'ID Centro de Costo'
 		dataType: string
 		lineageTag: 4d7e9c21-3a68-4f05-b912-7c0e83b45da6
@@ -285,17 +290,12 @@ table 'HC Manual LATAM'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Código numérico de 3 dígitos de la entidad legal. "TopRoller" y "Panama" no traen código en el Manual, se mapean a mano contra Oracle (283 y 241).
-	column 'Código Entidad' =
-			SWITCH (
-			    'HC Manual LATAM'[Entidad Legal],
-			    "TopRoller", "283",
-			    "Panama", "241",
-			    LEFT ( 'HC Manual LATAM'[Entidad Legal], 3 )
-			)
+	/// Código de 3 dígitos de la entidad legal. Une con Dim Entidad Legal.
+	column 'Código Entidad'
 		dataType: string
-		lineageTag: 9e35b840-c17f-42a9-85d6-0b4728fe6c31
+		lineageTag: f221b6b4-65e5-43ee-8ca2-13f5d655264d
 		summarizeBy: none
+		sourceColumn: Código Entidad
 
 		annotation SummarizationSetBy = Automatic
 
@@ -328,7 +328,9 @@ table 'HC Manual LATAM'
 				    #"Columnas renombradas" = Table.RenameColumns(#"Errores Eliminados", CambiosNombres, MissingField.Ignore),
 				    
 				    // 5. FILTRADO SEGURO: Ignora errores si la celda venía con #N/A.
-				    #"Solo Junio 2026" = Table.SelectRows(#"Columnas renombradas", each (try Date.From(Record.FieldOrDefault(_, "Fecha Snapshot", null)) = #date(2026, 6, 30) otherwise false)),
+				    FechasSnapshot = List.RemoveNulls(List.Transform(Table.Column(#"Columnas renombradas", "Fecha Snapshot"), each try Date.From(_) otherwise null)),
+				    UltimoSnapshot = List.Max(FechasSnapshot),
+				    #"Ultimo Snapshot" = Table.SelectRows(#"Columnas renombradas", each (try Date.From(Record.FieldOrDefault(_, "Fecha Snapshot", null)) = UltimoSnapshot otherwise false)),
 				
 				    // --- INICIO DEL BLINDAJE EXTREMO ---
 				    // Funciones internas para limpieza absoluta de Errores, Nulls y Textos "#N/A"
@@ -345,11 +347,11 @@ table 'HC Manual LATAM'
 				            Resultado = if v = null then #date(1900, 1, 1) else IntentarFecha
 				        in Resultado,
 				
-				    ColumnasActuales = Table.ColumnNames(#"Solo Junio 2026"),
+				    ColumnasActuales = Table.ColumnNames(#"Ultimo Snapshot"),
 				    ColsFechas = List.Intersect({{"Fecha Snapshot", "Fecha Nacimiento", "Fecha Contratación", "Fecha Salida"}, ColumnasActuales}),
 				    ColsTextosYNumeros = List.Difference(ColumnasActuales, ColsFechas),
 				
-				    #"Blindaje Fechas" = Table.TransformColumns(#"Solo Junio 2026", List.Transform(ColsFechas, each {_, LimpiarFecha, type date}), null, MissingField.Ignore),
+				    #"Blindaje Fechas" = Table.TransformColumns(#"Ultimo Snapshot", List.Transform(ColsFechas, each {_, LimpiarFecha, type date}), null, MissingField.Ignore),
 				    // Al forzar todo lo demás a text con "0", blindas el modelo para que las medidas DAX o relaciones no se rompan por type mismatch.
 				    #"Blindaje Textos" = Table.TransformColumns(#"Blindaje Fechas", List.Transform(ColsTextosYNumeros, each {_, LimpiarTexto, type text}), null, MissingField.Ignore),
 				    // --- FIN DEL BLINDAJE EXTREMO ---
@@ -394,12 +396,14 @@ table 'HC Manual LATAM'
 				        else if g = "Total Marketing Functions" then 3
 				        else if g = "Research & Development" then 4
 				        else if g = "Total G&A Functions" then 5
-				        else 6, Int64.Type)
+				        else 6, Int64.Type),
+				    // Código de 3 dígitos de la entidad legal. "TopRoller" y "Panama" no traen código: se mapean a mano contra Oracle (283 y 241).
+				    #"Codigo Entidad" = Table.AddColumn(#"Orden Grupo Agregado", "Código Entidad", each let e = Text.From([Entidad Legal]) in if e = "TopRoller" then "283" else if e = "Panama" then "241" else Text.Start(e, 3), type text)
 				in
-				    #"Orden Grupo Agregado"
+				    #"Codigo Entidad"
 				```
 
 	annotation PBI_NavigationStepName = Navegación
 
-	annotation PBI_ResultType = Table
+	annotation PBI_ResultType = Exception
 

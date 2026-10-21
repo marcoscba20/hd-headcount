@@ -7,12 +7,12 @@
         "Values": {
           "projections": [
             {
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
@@ -30,7 +30,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo"

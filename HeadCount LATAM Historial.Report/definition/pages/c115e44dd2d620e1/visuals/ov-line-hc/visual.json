@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo PIT"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo PIT",
+              "queryRef": "Asignaciones.HC Activo PIT",
               "nativeQueryRef": "HC Activo PIT"
             }
           ]

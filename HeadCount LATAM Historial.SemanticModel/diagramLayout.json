@@ -10,8 +10,8 @@
       "nodes": [
         {
           "location": {
-            "x": 0,
-            "y": 0
+            "x": 2222.5744738185081,
+            "y": 139.98942261850073
           },
           "nodeIndex": "Calendario",
           "nodeLineageTag": "ce552f0e-eef8-4118-88bd-3a8a1bd3a08a",
@@ -23,21 +23,8 @@
         },
         {
           "location": {
-            "x": 326,
-            "y": 0
-          },
-          "nodeIndex": "Excel HC Oracle",
-          "nodeLineageTag": "bf125006-48c8-47d6-8c24-a4fa9ce54e0c",
-          "size": {
-            "height": 300,
-            "width": 234
-          },
-          "zIndex": 4
-        },
-        {
-          "location": {
-            "x": 610,
-            "y": 0
+            "x": 2832.5744738185081,
+            "y": 139.98942261850073
           },
           "nodeIndex": "HC Manual LATAM",
           "nodeLineageTag": "3f8c1a92-6d47-4b05-9e21-7c4a5b8de013",
@@ -49,21 +36,8 @@
         },
         {
           "location": {
-            "x": 116.39999389648438,
-            "y": 327
-          },
-          "nodeIndex": "Países",
-          "nodeLineageTag": "b1838203-4402-42e3-9e12-7db03cfef2b5",
-          "size": {
-            "height": 128,
-            "width": 234
-          },
-          "zIndex": 3
-        },
-        {
-          "location": {
-            "x": 894,
-            "y": 79.5
+            "x": 3116.5744738185081,
+            "y": 219.48942261850073
           },
           "nodeIndex": "Dim Centro de Costo",
           "nodeLineageTag": "5a17c982-4b60-4e37-8d25-9c31f0e6ab74",
@@ -75,8 +49,8 @@
         },
         {
           "location": {
-            "x": 1178,
-            "y": 115.5
+            "x": 3400.5744738185081,
+            "y": 255.48942261850073
           },
           "nodeIndex": "Dim Entidad Legal",
           "nodeLineageTag": "3c8e50b1-7a24-4d69-9f13-6e02ab75c840",
@@ -88,8 +62,8 @@
         },
         {
           "location": {
-            "x": 1462,
-            "y": 127.5
+            "x": 3684.5744738185081,
+            "y": 267.48942261850073
           },
           "nodeIndex": "Dim Type",
           "nodeLineageTag": "b1f0d4a7-2e93-4c58-9a61-3d70b8e45f12",
@@ -101,39 +75,156 @@
         },
         {
           "location": {
-            "x": 1746,
-            "y": 79.5
-          },
-          "nodeIndex": "Calendario Baja",
-          "nodeLineageTag": "7d052ae9-31b6-4c84-95f0-6e2179ca38b4",
-          "size": {
-            "height": 296,
-            "width": 234
-          },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 2030,
-            "y": 79.5
-          },
-          "nodeIndex": "Calendario Ingreso",
-          "nodeLineageTag": "3f8a25c1-64b7-4e09-a3d5-91c47e026b8f",
-          "size": {
-            "height": 296,
-            "width": 234
-          },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 2314,
-            "y": 151.5
+            "x": 4536.5744738185076,
+            "y": 291.48942261850073
           },
           "nodeIndex": "Movimiento HC",
           "nodeLineageTag": "b81c47e0-5d92-4a06-8f31-c72e50194ab3",
           "size": {
             "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2548.5744738185081,
+            "y": 139.98942261850073
+          },
+          "nodeIndex": "Asignaciones",
+          "nodeLineageTag": "bf125006-48c8-47d6-8c24-a4fa9ce54e0c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1136.5744738185081,
+            "y": 251.73942261850073
+          },
+          "nodeIndex": "Desglose Turnover",
+          "nodeLineageTag": "4e5f6071-0001-4d40-8a04-dd4400000001",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50.010060437320362,
+            "y": -50
+          },
+          "nodeIndex": "Dim Concepto Compensación",
+          "nodeLineageTag": "5647a212-cb4c-43ec-8a95-3222aadb7dda",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 618.40330099570974,
+            "y": 381.47884523700151
+          },
+          "nodeIndex": "Dim País",
+          "nodeLineageTag": "e8348935-87aa-4b1f-a354-e3c8252882d5",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 618.40611216902641,
+            "y": -48.362498028338223
+          },
+          "nodeIndex": "Dim Persona",
+          "nodeLineageTag": "ec53350e-cd3a-4c01-9903-5845106a26ab",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 334.19197180254821,
+            "y": 118.14344195153785
+          },
+          "nodeIndex": "Fact Compensación",
+          "nodeLineageTag": "c550220a-c0e7-4a64-ae34-3df3a79707fb",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 902.5744738185083,
+            "y": 150.30597788028456
+          },
+          "nodeIndex": "Fact Compensación Persona",
+          "nodeLineageTag": "18eea52a-5863-4434-9a47-75542a33ccb8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420.5744738185081,
+            "y": 215.73942261850073
+          },
+          "nodeIndex": "Fact Movimientos",
+          "nodeLineageTag": "8180cf68-8a50-42a1-a416-c64df187b3b0",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1704.5744738185081,
+            "y": 251.73942261850073
+          },
+          "nodeIndex": "People Excellence Columna",
+          "nodeLineageTag": "b8805932-ad99-46bb-aacd-d06ada5c9537",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1988.5744738185081,
+            "y": 179.73942261850073
+          },
+          "nodeIndex": "People Excellence KPI",
+          "nodeLineageTag": "db691136-d61a-4a64-baac-01486c573b64",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 379.14912154098874
+          },
+          "nodeIndex": "Tipo de Cambio",
+          "nodeLineageTag": "b48f2228-c69f-4342-ad07-e3382c0368b2",
+          "size": {
+            "height": 224,
             "width": 234
           },
           "zIndex": 0

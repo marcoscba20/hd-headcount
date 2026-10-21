@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Rango Antigüedad"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rango Antigüedad",
+              "queryRef": "Dim Persona.Rango Antigüedad",
               "nativeQueryRef": "Rango Antigüedad",
               "active": true
             }
@@ -39,15 +39,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Grade Name"
+                  "Property": "Grade"
                 }
               },
-              "queryRef": "Excel HC Oracle.Grade Name",
-              "nativeQueryRef": "Grade Name",
-              "active": true
+              "queryRef": "Dim Persona.Grade",
+              "nativeQueryRef": "Grade",
+              "active": true,
+              "displayName": "Grade Name"
             }
           ]
         },
@@ -58,13 +59,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             }
           ]
@@ -77,7 +78,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo"
@@ -101,7 +102,7 @@
                 }
               }
             ],
-            "metadata": "Excel HC Oracle.HC Activo"
+            "metadata": "Asignaciones.HC Activo"
           }
         }
       ],
@@ -109,7 +110,7 @@
         {
           "properties": {},
           "selector": {
-            "metadata": "Excel HC Oracle.HC Activo"
+            "metadata": "Asignaciones.HC Activo"
           }
         }
       ]

@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Legal Employer Name"
+                  "Property": "Entidad Legal"
                 }
               },
-              "queryRef": "Excel HC Oracle.Legal Employer Name",
-              "nativeQueryRef": "Legal Employer Name",
-              "active": true
+              "queryRef": "Dim Persona.Entidad Legal",
+              "nativeQueryRef": "Entidad Legal",
+              "active": true,
+              "displayName": "Legal Employer Name"
             }
           ]
         }

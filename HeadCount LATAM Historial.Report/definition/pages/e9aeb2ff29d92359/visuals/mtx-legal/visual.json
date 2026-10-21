@@ -20,15 +20,16 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
-                  "Property": "Legal Employer Name"
+                  "Property": "Entidad Legal"
                 }
               },
-              "queryRef": "Excel HC Oracle.Legal Employer Name",
-              "nativeQueryRef": "Legal Employer Name",
-              "active": true
+              "queryRef": "Dim Persona.Entidad Legal",
+              "nativeQueryRef": "Entidad Legal",
+              "active": true,
+              "displayName": "Legal Employer Name"
             }
           ]
         },
@@ -39,13 +40,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo",
+              "queryRef": "Asignaciones.HC Activo",
               "nativeQueryRef": "HC Activo"
             }
           ]
@@ -58,7 +59,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Asignaciones"
                   }
                 },
                 "Property": "HC Activo"

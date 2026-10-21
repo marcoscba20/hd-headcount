@@ -4,7 +4,7 @@
   "position": {
     "x": 1672.01,
     "y": 30,
-    "z": 5000,
+    "z": 4000,
     "height": 77.58,
     "width": 227.39,
     "tabOrder": 5000
@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Ámbito"
                 }
               },
-              "queryRef": "Excel HC Oracle.Ámbito",
+              "queryRef": "Dim Persona.Ámbito",
               "nativeQueryRef": "Ámbito",
               "active": true
             }

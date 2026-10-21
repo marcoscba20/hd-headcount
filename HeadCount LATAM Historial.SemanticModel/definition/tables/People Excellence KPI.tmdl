@@ -7,14 +7,14 @@ table 'People Excellence KPI'
 			SWITCH (
 			    SELECTEDVALUE ( 'People Excellence KPI'[KPI] ),
 			    "Headcount", [HC Activo Fin],
-			    "SG&A", CALCULATE ( [HC Activo Fin], 'Excel HC Oracle'[ZBB / COGS] = "ZBB" ),
-			    "COGS", CALCULATE ( [HC Activo Fin], 'Excel HC Oracle'[ZBB / COGS] = "COGS" ),
+			    "SG&A", CALCULATE ( [HC Activo Fin], 'Asignaciones'[ZBB / COGS] = "ZBB" ),
+			    "COGS", CALCULATE ( [HC Activo Fin], 'Asignaciones'[ZBB / COGS] = "COGS" ),
 			    "Voluntary TO (All)", [Rotación Voluntaria %],
 			    "Involuntary TO (All)", [Rotación Involuntaria %],
-			    "L1 - L4 TO", CALCULATE ( [Rotación %], 'Excel HC Oracle'[Nivel Orden] <= 4 ),
+			    "L1 - L4 TO", CALCULATE ( [Rotación %], 'Asignaciones'[Nivel Orden] <= 4 ),
 			    "Promotions", [Promociones Hist],
 			    "Internal Moves", [Cambios de Puesto Hist],
-			    "New Hires L5+", CALCULATE ( [Altas], 'Excel HC Oracle'[Nivel Orden] <= 5 )
+			    "New Hires L5+", CALCULATE ( [Altas], 'Asignaciones'[Nivel Orden] <= 5 )
 			)
 		isHidden
 		displayFolder: 09 · People Excellence

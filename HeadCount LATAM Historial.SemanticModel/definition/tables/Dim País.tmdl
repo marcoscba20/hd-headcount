@@ -1,0 +1,81 @@
+/// Países LATAM. Clave = código del archivo de salarios (País Origen). Une la vieja tabla Países con la cantidad de sueldos anuales por ley (ARG 12+SAC; BRA 12+13°+1/3 vacaciones; CHI 12; COL 12+prima; MXC 12+aguinaldo 15 días+prima vacacional; PER 12+2 gratificaciones; PAN 12+décimo tercer mes). AE (Area Expense, HD LAO) no tiene país ni moneda propios: toma los del país de empleo en Oracle. Los valores se editan en la partición.
+table 'Dim País'
+	lineageTag: e8348935-87aa-4b1f-a354-e3c8252882d5
+
+	/// Código de país del archivo de salarios (ARG, BRA, CHI, COL, MXC, PER, PAN, AE).
+	column 'País Origen'
+		dataType: string
+		isKey
+		lineageTag: 5d13f5e4-0634-4611-a364-206ddea5f7b4
+		summarizeBy: none
+		sourceColumn: País Origen
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column País
+		dataType: string
+		lineageTag: 4c2bb835-2428-43bb-bb2c-cff2f79a7179
+		summarizeBy: none
+		sourceColumn: País
+		sortByColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Código ISO de Oracle (AR, BR, ...). Vacío para AE.
+	column 'Country Code'
+		dataType: string
+		lineageTag: 0edce2f7-c13e-4d98-b512-bf5fea34f1a6
+		summarizeBy: none
+		sourceColumn: Country Code
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Moneda local (ISO) que toma la fact cuando no hay cruce con Oracle. Vacía para AE.
+	column Moneda
+		dataType: string
+		lineageTag: c1af7a50-b585-45ea-baa8-10dfb4d99675
+		summarizeBy: none
+		sourceColumn: Moneda
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sueldos por año según ley. Último fallback: cuando ni la hoja TC ni la columna del archivo traen Cantidad de Salarios.
+	column 'Sueldos Anuales'
+		dataType: double
+		formatString: 0.00
+		lineageTag: ee5e6f4a-fd8a-4e2c-8601-841c84af843f
+		summarizeBy: none
+		sourceColumn: Sueldos Anuales
+
+		annotation SummarizationSetBy = Automatic
+
+	column Orden
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 159e0d1e-4e61-45cc-b4ef-e22fe8d4d8b7
+		summarizeBy: none
+		sourceColumn: Orden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Dim País' = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [#"País Origen" = text, País = text, #"Country Code" = text, Moneda = text, #"Sueldos Anuales" = number, Orden = Int64.Type], {
+				        {"ARG", "Argentina", "AR", "ARS", 13, 1},
+				        {"BRA", "Brazil", "BR", "BRL", 13.33, 2},
+				        {"MXC", "México", "MX", "MXN", 12.6, 3},
+				        {"CHI", "Chile", "CL", "CLP", 12, 4},
+				        {"PER", "Peru", "PE", "PEN", 14, 5},
+				        {"COL", "Colombia", "CO", "COP", 13, 6},
+				        {"PAN", "Panama", "PA", "USD", 13, 7},
+				        {"AE", "Area Expense (HD LAO)", null, null, null, 8}
+				    })
+				in
+				    Origen
+
+	annotation PBI_ResultType = Table
+

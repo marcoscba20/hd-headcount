@@ -2,7 +2,7 @@
 table 'Asignaciones Historial'
 	lineageTag: 791b6432-7b46-4a67-966d-e130d9174711
 
-	/// Personas con asignación activa al último día del período, según la versión efectiva de Oracle a esa fecha. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	/// Personas con asignación activa al último día del período, según la versión efectiva de Oracle a esa fecha. Respeta los slicers de 'Dim Persona' y Asignaciones aplicándolos a los atributos vigentes en cada fecha.
 	measure 'HC Hist Fin' =
 			VAR D = MAX ( 'Calendario'[Date] )
 			RETURN
@@ -12,23 +12,23 @@ table 'Asignaciones Historial'
 			    'Asignaciones Historial'[Effective Start Date] <= D,
 			    'Asignaciones Historial'[Fin Vigencia HC] >= D,
 			    'Asignaciones Historial'[Assignment Status Type] = "Active",
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			)
 		formatString: #,##0
 		displayFolder: 11 · Historial (PIT)
 		lineageTag: de6a8a91-90ca-4cb5-bb2d-df511ce8c89d
 
-	/// Personas activas el día previo al inicio del período (historial). Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	/// Personas activas el día previo al inicio del período (historial). Respeta los slicers de 'Dim Persona' y Asignaciones aplicándolos a los atributos vigentes en cada fecha.
 	measure 'HC Hist Inicio' =
 			VAR D = MIN ( 'Calendario'[Date] ) - 1
 			RETURN
@@ -38,17 +38,17 @@ table 'Asignaciones Historial'
 			    'Asignaciones Historial'[Effective Start Date] <= D,
 			    'Asignaciones Historial'[Fin Vigencia HC] >= D,
 			    'Asignaciones Historial'[Assignment Status Type] = "Active",
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			)
 		formatString: #,##0
 		displayFolder: 11 · Historial (PIT)
@@ -60,7 +60,7 @@ table 'Asignaciones Historial'
 		displayFolder: 11 · Historial (PIT)
 		lineageTag: 15415bc6-4110-401d-8232-5cae92d8a8c4
 
-	/// HC al cierre de cada mes COMPLETO con atributos de esa fecha (evolución con 'Calendario'[Año-Mes] en el eje). Equivalente histórico de [HC Activo PIT]. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	/// HC al cierre de cada mes COMPLETO con atributos de esa fecha (evolución con 'Calendario'[Año-Mes] en el eje). Equivalente histórico de [HC Activo PIT]. Respeta los slicers de 'Dim Persona' y Asignaciones aplicándolos a los atributos vigentes en cada fecha.
 	measure 'HC Hist PIT' =
 			VAR FinCerrado = EOMONTH ( TODAY (), -1 )
 			VAR D = MIN ( MAX ( 'Calendario'[Date] ), FinCerrado )
@@ -73,17 +73,17 @@ table 'Asignaciones Historial'
 			            'Asignaciones Historial'[Effective Start Date] <= D,
 			            'Asignaciones Historial'[Fin Vigencia HC] >= D,
 			            'Asignaciones Historial'[Assignment Status Type] = "Active",
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			        )
 			    )
 		formatString: #,##0
@@ -102,17 +102,17 @@ table 'Asignaciones Historial'
 			            'Asignaciones Historial'[Effective Start Date] <= D,
 			            'Asignaciones Historial'[Fin Vigencia HC] >= D,
 			            'Asignaciones Historial'[Assignment Status Type] = "Active",
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			            KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			        )
 			    )
 		formatString: #,##0
@@ -125,7 +125,7 @@ table 'Asignaciones Historial'
 		displayFolder: 11 · Historial (PIT)
 		lineageTag: 3351f65a-7c23-4c84-8391-0a5bb379f3c6
 
-	/// Eventos del período (altas, bajas, promociones, cambios de puesto y de manager), uno por asignación, fecha y tipo. Abrir por 'Asignaciones Historial'[Tipo Evento]. Respeta los slicers de 'Excel HC Oracle' aplicándolos a los atributos vigentes en cada fecha.
+	/// Eventos del período (altas, bajas, promociones, cambios de puesto y de manager), uno por asignación, fecha y tipo. Abrir por 'Asignaciones Historial'[Tipo Evento]. Respeta los slicers de 'Dim Persona' y Asignaciones aplicándolos a los atributos vigentes en cada fecha.
 	measure 'Eventos Hist' =
 			VAR Ini = MIN ( 'Calendario'[Date] )
 			VAR Fin = MAX ( 'Calendario'[Date] )
@@ -135,17 +135,17 @@ table 'Asignaciones Historial'
 			    'Asignaciones Historial'[Fecha Evento] >= Ini,
 			    'Asignaciones Historial'[Fecha Evento] <= Fin,
 			    KEEPFILTERS ( 'Asignaciones Historial'[Tipo Evento] <> "Otro" ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			)
 		formatString: #,##0
 		displayFolder: 11 · Historial (PIT)
@@ -257,17 +257,17 @@ table 'Asignaciones Historial'
 			    'Asignaciones Historial'[Asignación Efímera] = "Sí",
 			    'Asignaciones Historial'[Termination Date] >= Ini,
 			    'Asignaciones Historial'[Termination Date] <= Fin,
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), NOT ISFILTERED ( 'Excel HC Oracle'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Excel HC Oracle'[País Overview] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), NOT ISFILTERED ( 'Excel HC Oracle'[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Excel HC Oracle'[Country] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Legal Employer Name] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Excel HC Oracle'[Legal Employer Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), NOT ISFILTERED ( 'Excel HC Oracle'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Excel HC Oracle'[Ámbito] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Excel HC Oracle'[Cross Charge Entity Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Excel HC Oracle'[EPM Main Function Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), NOT ISFILTERED ( 'Excel HC Oracle'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Excel HC Oracle'[Labor Type] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Excel HC Oracle'[Grade Name] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), NOT ISFILTERED ( 'Excel HC Oracle'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Excel HC Oracle'[Grade Grupo] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), NOT ISFILTERED ( 'Excel HC Oracle'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Excel HC Oracle'[Nivel] ) ) ),
-			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), NOT ISFILTERED ( 'Excel HC Oracle'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Excel HC Oracle'[Esquema MBO] ) ) )
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[País Overview] ), ( NOT ISFILTERED ( 'Dim Persona'[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( 'Dim Persona'[País Overview] ) ) && ( NOT ISFILTERED ( Asignaciones[País Overview] ) || 'Asignaciones Historial'[País Overview] IN FILTERS ( Asignaciones[País Overview] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Country] ), ( NOT ISFILTERED ( 'Dim Persona'[País] ) || 'Asignaciones Historial'[Country] IN FILTERS ( 'Dim Persona'[País] ) ) && ( NOT ISFILTERED ( Asignaciones[Country] ) || 'Asignaciones Historial'[Country] IN FILTERS ( Asignaciones[Country] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Legal Employer Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Entidad Legal] ) || 'Asignaciones Historial'[Legal Employer Name] IN FILTERS ( 'Dim Persona'[Entidad Legal] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Ámbito] ), ( NOT ISFILTERED ( 'Dim Persona'[Ámbito] ) || 'Asignaciones Historial'[Ámbito] IN FILTERS ( 'Dim Persona'[Ámbito] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Cross Charge Entity Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( 'Dim Persona'[Cross Charge Entity Name] ) ) && ( NOT ISFILTERED ( Asignaciones[Cross Charge Entity Name] ) || 'Asignaciones Historial'[Cross Charge Entity Name] IN FILTERS ( Asignaciones[Cross Charge Entity Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[EPM Main Function Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Función] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( 'Dim Persona'[Función] ) ) && ( NOT ISFILTERED ( Asignaciones[EPM Main Function Name] ) || 'Asignaciones Historial'[EPM Main Function Name] IN FILTERS ( Asignaciones[EPM Main Function Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Labor Type] ), ( NOT ISFILTERED ( 'Dim Persona'[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( 'Dim Persona'[Labor Type] ) ) && ( NOT ISFILTERED ( Asignaciones[Labor Type] ) || 'Asignaciones Historial'[Labor Type] IN FILTERS ( Asignaciones[Labor Type] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Name] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( 'Dim Persona'[Grade] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Name] ) || 'Asignaciones Historial'[Grade Name] IN FILTERS ( Asignaciones[Grade Name] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Grade Grupo] ), ( NOT ISFILTERED ( 'Dim Persona'[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( 'Dim Persona'[Grade Grupo] ) ) && ( NOT ISFILTERED ( Asignaciones[Grade Grupo] ) || 'Asignaciones Historial'[Grade Grupo] IN FILTERS ( Asignaciones[Grade Grupo] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Nivel] ), ( NOT ISFILTERED ( 'Dim Persona'[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( 'Dim Persona'[Nivel] ) ) && ( NOT ISFILTERED ( Asignaciones[Nivel] ) || 'Asignaciones Historial'[Nivel] IN FILTERS ( Asignaciones[Nivel] ) ) ) ),
+			    KEEPFILTERS ( FILTER ( ALL ( 'Asignaciones Historial'[Esquema MBO] ), ( NOT ISFILTERED ( 'Dim Persona'[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( 'Dim Persona'[Esquema MBO] ) ) && ( NOT ISFILTERED ( Asignaciones[Esquema MBO] ) || 'Asignaciones Historial'[Esquema MBO] IN FILTERS ( Asignaciones[Esquema MBO] ) ) ) )
 			)
 		formatString: #,##0
 		displayFolder: 12 · Validación Historial
@@ -1027,7 +1027,7 @@ table 'Asignaciones Historial'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Nivel a la fecha de la versión ("L1".."L9" / "Sin Nivel"). Misma regla que 'Excel HC Oracle'[Nivel].
+	/// Nivel a la fecha de la versión ("L1".."L9" / "Sin Nivel"). Misma regla que Asignaciones[Nivel].
 	column Nivel =
 			VAR L = 'Asignaciones Historial'[Level]
 			RETURN
@@ -1038,7 +1038,7 @@ table 'Asignaciones Historial'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Agrupación de Grade a la fecha de la versión. Misma regla que 'Excel HC Oracle'[Grade Grupo].
+	/// Agrupación de Grade a la fecha de la versión. Misma regla que Asignaciones[Grade Grupo].
 	column 'Grade Grupo' =
 			SWITCH (
 			    TRUE (),
@@ -1052,7 +1052,7 @@ table 'Asignaciones Historial'
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Esquema MBO a la fecha de la versión. Misma regla que 'Excel HC Oracle'[Esquema MBO].
+	/// Esquema MBO a la fecha de la versión. Misma regla que Asignaciones[Esquema MBO].
 	column 'Esquema MBO' =
 			SWITCH (
 			    'Asignaciones Historial'[MBO Bonus Scheme],

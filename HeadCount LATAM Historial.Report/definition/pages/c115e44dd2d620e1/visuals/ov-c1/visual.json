@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "HC Activo Hoy"
                 }
               },
-              "queryRef": "Excel HC Oracle.HC Activo Hoy",
+              "queryRef": "Asignaciones.HC Activo Hoy",
               "nativeQueryRef": "HC Activo Hoy"
             }
           ]

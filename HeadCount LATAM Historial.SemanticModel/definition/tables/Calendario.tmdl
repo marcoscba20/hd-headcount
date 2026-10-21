@@ -1,4 +1,4 @@
-/// Eje de tiempo MAESTRO, deliberadamente DESCONECTADO del modelo. Define el período de análisis (rango) que leen las medidas point-in-time: HC Activo Inicio/Fin/PIT, Altas, Bajas y todas las tasas de rotación. NO relacionar con ninguna tabla: si se relaciona, esas medidas se filtran dos veces y devuelven números incorrectos. Para cortar por fecha de ingreso usar 'Calendario Ingreso'; por fecha de baja, 'Calendario Baja'. Arranca en 2025-01 porque el export no tiene bajas anteriores.
+/// Calendario único del modelo. Relacionado con Fact Movimientos (Fecha) y con las facts de compensación (Fecha Corte). Con Asignaciones NO tiene relación a propósito: las medidas de headcount point-in-time (HC Activo Inicio/Fin/PIT) leen MIN/MAX de esta tabla y filtran las fechas de ingreso/baja ellas mismas; si se relaciona con Asignaciones se filtran dos veces. Arranca en 2025-01 porque el export no tiene bajas anteriores.
 table Calendario
 	lineageTag: ce552f0e-eef8-4118-88bd-3a8a1bd3a08a
 	dataCategory: Time
@@ -93,6 +93,19 @@ table Calendario
 		lineageTag: b48f2a71-9c05-4e36-8d17-52c6039be4a8
 		summarizeBy: none
 		sourceColumn: [Año-Mes Orden]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Sí si el mes tiene un corte del archivo de salarios. Filtra el selector de corte de la hoja Compensación Fija.
+	column 'Mes con Compensación' =
+			IF (
+			    CALCULATE ( COUNTROWS ( 'Fact Compensación Persona' ), ALLEXCEPT ( Calendario, Calendario[Año-Mes] ) ) > 0,
+			    "Sí",
+			    "No"
+			)
+		dataType: string
+		lineageTag: 74e44bd8-7f8c-482c-b63f-a0a06b299502
+		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 

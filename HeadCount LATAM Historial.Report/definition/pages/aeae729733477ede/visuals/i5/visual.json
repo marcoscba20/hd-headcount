@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Dim Persona"
                     }
                   },
                   "Property": "Año Ingreso"
                 }
               },
-              "queryRef": "Excel HC Oracle.Año Ingreso",
+              "queryRef": "Dim Persona.Año Ingreso",
               "nativeQueryRef": "Año Ingreso",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Ingresos (Altas)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Ingresos (Altas)",
+              "queryRef": "Asignaciones.Ingresos (Altas)",
               "nativeQueryRef": "Ingresos (Altas)"
             }
           ]
@@ -58,7 +58,7 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "Excel HC Oracle"
+                    "Entity": "Dim Persona"
                   }
                 },
                 "Property": "Año Ingreso"

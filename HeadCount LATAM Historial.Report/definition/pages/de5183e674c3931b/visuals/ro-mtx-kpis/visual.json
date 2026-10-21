@@ -39,13 +39,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "País Overview"
                 }
               },
-              "queryRef": "Excel HC Oracle.País Overview",
+              "queryRef": "Asignaciones.País Overview",
               "nativeQueryRef": "País Overview",
               "active": true
             }
@@ -58,13 +58,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación Voluntaria %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación Voluntaria %",
+              "queryRef": "Asignaciones.Rotación Voluntaria %",
               "nativeQueryRef": "Rotación Voluntaria %"
             },
             {
@@ -72,13 +72,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación Involuntaria %"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación Involuntaria %",
+              "queryRef": "Asignaciones.Rotación Involuntaria %",
               "nativeQueryRef": "Rotación Involuntaria %"
             },
             {
@@ -86,13 +86,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % L1-L3"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % L1-L3",
+              "queryRef": "Asignaciones.Rotación % L1-L3",
               "nativeQueryRef": "Rotación % L1-L3"
             },
             {
@@ -100,13 +100,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Rotación % G8+"
                 }
               },
-              "queryRef": "Excel HC Oracle.Rotación % G8+",
+              "queryRef": "Asignaciones.Rotación % G8+",
               "nativeQueryRef": "Rotación % G8+"
             },
             {
@@ -114,13 +114,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Altas G8+"
                 }
               },
-              "queryRef": "Excel HC Oracle.Altas G8+",
+              "queryRef": "Asignaciones.Altas G8+",
               "nativeQueryRef": "Altas G8+"
             },
             {
@@ -128,13 +128,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Excel HC Oracle"
+                      "Entity": "Asignaciones"
                     }
                   },
                   "Property": "Antigüedad Mediana (meses)"
                 }
               },
-              "queryRef": "Excel HC Oracle.Antigüedad Mediana (meses)",
+              "queryRef": "Asignaciones.Antigüedad Mediana (meses)",
               "nativeQueryRef": "Antigüedad Mediana (meses)"
             }
           ]
